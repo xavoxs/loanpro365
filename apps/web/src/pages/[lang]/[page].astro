@@ -1,0 +1,16 @@
+---
+import Content from '../../components/Content.astro';
+import { LOCALES, ROUTES, type Locale } from '../../i18n';
+import { CONTENT_KEYS, type ContentKey } from '../../i18n/pages';
+
+export function getStaticPaths() {
+  return LOCALES.flatMap((lang) =>
+    CONTENT_KEYS.map((page) => ({
+      params: { lang, page: ROUTES[page][lang].split('/')[2] },
+      props: { locale: lang, key: page },
+    })),
+  );
+}
+const { locale, key } = Astro.props as { locale: Locale; key: ContentKey };
+---
+<Content locale={locale} page={key} />

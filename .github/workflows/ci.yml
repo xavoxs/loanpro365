@@ -1,0 +1,23 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Every page exists in both languages (hreflang)
+        run: |
+          cd apps/web/dist
+          missing=0
+          for f in $(find en es -name index.html); do
+            grep -q 'hreflang="en-US"' "$f" && grep -q 'hreflang="es-US"' "$f" || { echo "sin hreflang: $f"; missing=1; }
+          done
+          [ $(find en -name index.html | wc -l) -eq $(find es -name index.html | wc -l) ] || { echo "EN y ES con distinto número de páginas"; missing=1; }
+          exit $missing

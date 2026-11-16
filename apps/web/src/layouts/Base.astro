@@ -51,6 +51,7 @@ const nav = [
         · {COMPANY.broker}, {d.trust.nmls} #{COMPANY.nmlsBroker} · {d.trust.ehl}
       </p>
       <p><a href={COMPANY.phoneHref}>{COMPANY.phone}</a> · <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></p>
+      <p><a href={ROUTES.legal[locale]}>{d.footer.legal}</a> · <a href={ROUTES.learn[locale]}>{locale === "es" ? "Aprende" : "Learn"}</a> · <a href={ROUTES.assistance[locale]}>{locale === "es" ? "Ayudas en Florida" : "Florida assistance"}</a></p>
       <p class="small">{d.disclaimer}</p>
     </footer>
     <nav class="sticky-cta" aria-label="Contact">

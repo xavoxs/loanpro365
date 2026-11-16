@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { COMPANY, ROUTES, t, toolPath, type Locale } from '../i18n';
+import { PAGES, type ContentKey } from '../i18n/pages';
+interface Props { locale: Locale; page: ContentKey }
+const { locale, page } = Astro.props;
+const d = t(locale);
+const c = PAGES[locale][page];
+---
+<Base locale={locale} title={`${c.title} · LoanPro365`} description={c.lead} alternates={ROUTES[page]}>
+  <h1>{c.title}</h1>
+  <p class="lead">{c.lead}</p>
+
+  {page === 'contact' && (
+    <div class="grid">
+      <a class="card" href={COMPANY.phoneHref}><h2 class="h3">{d.cta.call}</h2><p>{COMPANY.phone}</p></a>
+      <a class="card" href={COMPANY.whatsappHref} rel="noopener"><h2 class="h3">WhatsApp</h2><p>{COMPANY.phone}</p></a>
+      <a class="card" href={`mailto:${COMPANY.email}`}><h2 class="h3">Email</h2><p>{COMPANY.email}</p></a>
+    </div>
+  )}
+
+  {c.sections.map((s) => (
+    <section>
+      <h2>{s.h}</h2>
+      {s.p && <p>{s.p}</p>}
+      {s.list && <ul>{s.list.map((li) => <li>{li}</li>)}</ul>}
+    </section>
+  ))}
+
+  {page === 'about' || page === 'legal' ? (
+    <p><a href={COMPANY.nmlsUrl} rel="noopener">NMLS Consumer Access #{COMPANY.nmlsCompany}</a></p>
+  ) : null}
+
+  {c.tools && (
+    <section>
+      <h2>{d.toolsTitle}</h2>
+      <div class="grid">
+        {c.tools.map((k) => <a class="card" href={toolPath(k, locale)}><h3>{d.tools[k].name}</h3><p>{d.tools[k].desc}</p></a>)}
+      </div>
+    </section>
+  )}
+
+  {c.cta && (
+    <p class="actions">
+      {c.cta === 'prequal' && <a class="btn" href={ROUTES.prequal[locale]}>{d.cta.prequal}</a>}
+      <a class={c.cta === 'prequal' ? 'btn ghost' : 'btn'} href={COMPANY.whatsappHref} rel="noopener">{d.cta.talk}</a>
+    </p>
+  )}
+</Base>

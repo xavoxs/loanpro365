@@ -24,7 +24,7 @@ const tools = Object.keys(TOOL_SLUGS) as ToolKey[];
     <h2 id="tools">{d.toolsTitle}</h2>
     <div class="grid">
       {tools.map((k) => (
-        <a class="card" href={toolPath(k, locale)} style="text-decoration:none">
+        <a class="card" href={toolPath(k, locale)}>
           <h3>{d.tools[k].name}</h3><p>{d.tools[k].desc}</p>
         </a>
       ))}
