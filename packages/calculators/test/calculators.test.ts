@@ -85,3 +85,18 @@ describe('refinance, dscr, credit', () => {
     expect(g.find((x) => x.program === 'fha-3.5')!.qualifies).toBe(true);
   });
 });
+
+import { loanPrograms } from '../src/index';
+describe('loanPrograms', () => {
+  it('FHA needs 10% down between 500 and 579', () => {
+    const fha = loanPrograms({ score: 550, downPct: 5, veteran: false, firstTimeBuyer: true })[0];
+    expect(fha).toMatchObject({ fits: false, minDownPct: 10, reason: 'down' });
+  });
+  it('conventional allows 3% for first-time buyers from 620', () => {
+    const c = loanPrograms({ score: 640, downPct: 3, veteran: false, firstTimeBuyer: true })[1];
+    expect(c.fits).toBe(true);
+  });
+  it('VA only for veterans', () => {
+    expect(loanPrograms({ score: 700, downPct: 0, veteran: false, firstTimeBuyer: false })[2].reason).toBe('not-veteran');
+  });
+});

@@ -208,3 +208,26 @@ export function creditGap(score: number) {
     pointsNeeded: Math.max(0, t.minScore - score),
   }));
 }
+
+/**
+ * Herramienta 5: comparador de programas por perfil.
+ * Fuentes: HUD Handbook 4000.1 (FHA 580/3.5%, 500/10%); Fannie Mae Selling Guide B3-5.1-01 (620 mínimo)
+ * y B5-6 / 97% LTV (3% de pago inicial con HomeReady o primer comprador); VA no fija puntaje mínimo (cada prestamista sí).
+ */
+export type ProgramKey = 'fha' | 'conventional' | 'va';
+export interface ProgramFit { program: ProgramKey; fits: boolean; minDownPct: number | null; reason: 'ok' | 'score' | 'down' | 'not-veteran' | 'lender-overlay' }
+
+export function loanPrograms(i: { score: number; downPct: number; veteran: boolean; firstTimeBuyer: boolean }): ProgramFit[] {
+  const fhaDown = i.score >= 580 ? 3.5 : i.score >= 500 ? 10 : null;
+  const fha: ProgramFit = fhaDown === null
+    ? { program: 'fha', fits: false, minDownPct: null, reason: 'score' }
+    : { program: 'fha', fits: i.downPct >= fhaDown, minDownPct: fhaDown, reason: i.downPct >= fhaDown ? 'ok' : 'down' };
+  const convDown = i.firstTimeBuyer ? 3 : 5;
+  const conventional: ProgramFit = i.score < 620
+    ? { program: 'conventional', fits: false, minDownPct: convDown, reason: 'score' }
+    : { program: 'conventional', fits: i.downPct >= convDown, minDownPct: convDown, reason: i.downPct >= convDown ? 'ok' : 'down' };
+  const va: ProgramFit = !i.veteran
+    ? { program: 'va', fits: false, minDownPct: 0, reason: 'not-veteran' }
+    : { program: 'va', fits: true, minDownPct: 0, reason: i.score < 580 ? 'lender-overlay' : 'ok' };
+  return [fha, conventional, va];
+}

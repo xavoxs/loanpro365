@@ -1,107 +1,133 @@
 ---
 import Base from '../layouts/Base.astro';
-import { COMPANY, TOOL_SLUGS, t, toolPath, type Locale, type ToolKey } from '../i18n';
+import { COMPANY, ROUTES, t, toolPath, type Locale, type ToolKey } from '../i18n';
+import { FIELDS, TOOL_TEXT } from '../i18n/tools';
 interface Props { locale: Locale; tool: ToolKey }
 const { locale, tool } = Astro.props;
 const d = t(locale);
-const f = d.form;
+const x = TOOL_TEXT[locale];
 const alternates = { en: toolPath(tool, 'en'), es: toolPath(tool, 'es') };
-
-type Field = { name: string; label: string; value: number; step?: string };
-const fields: Record<ToolKey, Field[]> = {
-  payment: [
-    { name: 'price', label: f.price, value: 400000 },
-    { name: 'downPayment', label: f.down, value: 40000 },
-    { name: 'annualRatePct', label: f.rate, value: 6.5, step: '0.01' },
-    { name: 'years', label: f.years, value: 30 },
-    { name: 'propertyTaxYearly', label: f.tax, value: 7200 },
-    { name: 'insuranceYearly', label: f.insurance, value: 4800 },
-    { name: 'floodInsuranceYearly', label: f.flood, value: 0 },
-    { name: 'hoaMonthly', label: f.hoa, value: 0 },
-    { name: 'pmiRatePct', label: f.pmi, value: 0.6, step: '0.01' },
-  ],
-  affordability: [
-    { name: 'grossMonthlyIncome', label: f.income, value: 8000 },
-    { name: 'monthlyDebts', label: f.debts, value: 500 },
-    { name: 'downPayment', label: f.down, value: 40000 },
-    { name: 'annualRatePct', label: f.rate, value: 6.5, step: '0.01' },
-    { name: 'years', label: f.years, value: 30 },
-    { name: 'housingCostsPctOfPrice', label: f.costsPct, value: 3, step: '0.1' },
-    { name: 'hoaMonthly', label: f.hoa, value: 0 },
-  ],
-  closing: [
-    { name: 'price', label: f.price, value: 400000 },
-    { name: 'loanAmount', label: f.loan, value: 360000 },
-    { name: 'lenderFees', label: f.lenderFees, value: 2500 },
-    { name: 'titleAndSettlement', label: f.title, value: 3000 },
-    { name: 'prepaidsAndEscrow', label: f.prepaids, value: 4000 },
-  ],
-};
+const fields = FIELDS[tool];
+const interactive = tool !== 'glossary';
 ---
 <Base locale={locale} title={`${d.tools[tool].name} · LoanPro365`} description={d.tools[tool].desc} alternates={alternates}>
   <h1>{d.tools[tool].name}</h1>
   <p class="lead">{d.tools[tool].desc}</p>
 
-  <form class="tool" data-tool={tool} data-locale={locale} data-labels={JSON.stringify(d.result)} novalidate>
-    {fields[tool].map((x) => (
-      <label>{x.label}<input type="number" inputmode="decimal" min="0" name={x.name} value={x.value} step={x.step ?? '1'} /></label>
-    ))}
-    {tool === 'closing' && (
-      <>
-        <label>{f.county}
-          <select name="county">
-            <option value="broward">Broward</option>
-            <option value="miami-dade">Miami-Dade</option>
-            <option value="palm-beach">Palm Beach</option>
-            <option value="other">Other / Otro</option>
-          </select>
-        </label>
-        <label class="check"><input type="checkbox" name="singleFamily" checked /> {f.sfr}</label>
-        <label class="check"><input type="checkbox" name="sellerPaysDeedStamps" checked /> {f.sellerDeed}</label>
-      </>
-    )}
-  </form>
+  {fields.length > 0 && (
+    <form class="tool" data-tool={tool} data-locale={locale} novalidate>
+      {fields.map((f) =>
+        f.kind === 'number' ? (
+          <label>{x.fields[f.name]}<input type="number" inputmode="decimal" min="0" name={f.name} value={f.value} step={f.step ?? '1'} /></label>
+        ) : f.kind === 'check' ? (
+          <label class="check"><input type="checkbox" name={f.name} checked={f.value} /> {x.fields[f.name]}</label>
+        ) : (
+          <label>{x.fields[f.name]}
+            <select name={f.name}>{f.options.map((o) => <option value={o}>{x.options[o]}</option>)}</select>
+          </label>
+        ),
+      )}
+    </form>
+  )}
 
-  <div class="result" aria-live="polite" id="result"></div>
-  <p><a class="btn ghost" href={COMPANY.whatsappHref} rel="noopener">{d.cta.talk}</a></p>
+  {interactive && <div class="result" aria-live="polite" id="result"></div>}
+
+  {tool === 'glossary' && (
+    <dl class="glossary">
+      {x.glossary.map((g) => (<><dt>{g.term}</dt><dd>{g.def}</dd></>))}
+    </dl>
+  )}
+
+  <p class="actions">
+    <a class="btn ghost" href={COMPANY.whatsappHref} rel="noopener">{d.cta.talk}</a>
+    <a class="btn ghost" href={ROUTES.tools[locale]}>{d.nav.tools}</a>
+  </p>
   <p class="small">{d.disclaimer}</p>
+
+  <script type="application/json" id="tool-text" set:html={JSON.stringify(x)} />
 </Base>
 
 <script>
-  import { affordability, closingCosts, monthlyPayment, type County } from '@loanpro365/calculators';
+  import {
+    affordability, closingCosts, creditGap, dscr, loanPrograms, monthlyPayment, refinanceBreakEven, rentVsBuy, type County,
+  } from '@loanpro365/calculators';
 
-  const form = document.querySelector<HTMLFormElement>('form.tool')!;
-  const out = document.getElementById('result')!;
-  const L = JSON.parse(form.dataset.labels!);
-  const money = (n: number) => n.toLocaleString(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-  const num = (k: string) => Number((form.elements.namedItem(k) as HTMLInputElement | null)?.value) || 0;
-  const checked = (k: string) => (form.elements.namedItem(k) as HTMLInputElement).checked;
-  const row = (k: string, v: number) => `<dt>${k}</dt><dd>${money(v)}</dd>`;
+  const form = document.querySelector<HTMLFormElement>('form.tool');
+  const out = document.getElementById('result');
+  if (form && out) {
+    const X = JSON.parse(document.getElementById('tool-text')!.textContent!);
+    const R = X.results;
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+    const money = (n: number) => n.toLocaleString(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    const el = (k: string) => form.elements.namedItem(k) as HTMLInputElement & HTMLSelectElement;
+    const num = (k: string) => Number(el(k).value) || 0;
+    const on = (k: string) => el(k).checked;
+    const val = (k: string) => el(k).value;
+    const row = (k: string, v: string) => `<dt>${esc(k)}</dt><dd>${v}</dd>`;
+    const head = (label: string, big: string) => `<p>${esc(label)}</p><p class="big">${big}</p>`;
+    const list = (items: string[]) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
 
-  function render() {
-    const tool = form.dataset.tool;
-    if (tool === 'payment') {
-      const r = monthlyPayment({
-        price: num('price'), downPayment: num('downPayment'), annualRatePct: num('annualRatePct'), years: num('years') || 30,
-        propertyTaxYearly: num('propertyTaxYearly'), insuranceYearly: num('insuranceYearly'),
-        floodInsuranceYearly: num('floodInsuranceYearly'), hoaMonthly: num('hoaMonthly'), pmiRatePct: num('pmiRatePct'),
-      });
-      out.innerHTML = `<p>${L.total}</p><p class="big">${money(r.total)}</p><dl>${row(L.pi, r.principalInterest)}${row('Tax', r.tax)}${row('Insurance', r.insurance + r.flood)}${row('HOA', r.hoa)}${row('PMI', r.pmi)}</dl>`;
-    } else if (tool === 'affordability') {
-      const r = affordability({
-        grossMonthlyIncome: num('grossMonthlyIncome'), monthlyDebts: num('monthlyDebts'), downPayment: num('downPayment'),
-        annualRatePct: num('annualRatePct'), years: num('years') || 30, housingCostsPctOfPrice: num('housingCostsPctOfPrice'), hoaMonthly: num('hoaMonthly'),
-      });
-      out.innerHTML = `<p>${L.maxPrice}</p><p class="big">${money(r.maxPrice)}</p><dl>${row(L.maxPayment, r.maxHousingPayment)}</dl>`;
-    } else {
-      const r = closingCosts({
-        price: num('price'), loanAmount: num('loanAmount'), county: (form.elements.namedItem('county') as HTMLSelectElement).value as County,
-        singleFamily: checked('singleFamily'), sellerPaysDeedStamps: checked('sellerPaysDeedStamps'),
-        lenderFees: num('lenderFees'), titleAndSettlement: num('titleAndSettlement'), prepaidsAndEscrow: num('prepaidsAndEscrow'),
-      });
-      out.innerHTML = `<p>${L.closingTotal}</p><p class="big">${money(r.total)}</p><dl>${row(L.deed, r.items.deedStamps)}${row(L.note, r.items.noteStamps)}${row(L.intangible, r.items.intangibleTax)}</dl>`;
-    }
+    const renderers: Record<string, () => string> = {
+      payment: () => {
+        const r = monthlyPayment({
+          price: num('price'), downPayment: num('downPayment'), annualRatePct: num('annualRatePct'), years: num('years') || 30,
+          propertyTaxYearly: num('propertyTaxYearly'), insuranceYearly: num('insuranceYearly'),
+          floodInsuranceYearly: num('floodInsuranceYearly'), hoaMonthly: num('hoaMonthly'), pmiRatePct: num('pmiRatePct'),
+        });
+        return head(R.total, money(r.total)) + `<dl>${row(R.pi, money(r.principalInterest))}${row(R.tax, money(r.tax))}${row(R.insurance, money(r.insurance + r.flood))}${row(R.hoa, money(r.hoa))}${row(R.pmi, money(r.pmi))}</dl>`;
+      },
+      affordability: () => {
+        const r = affordability({
+          grossMonthlyIncome: num('grossMonthlyIncome'), monthlyDebts: num('monthlyDebts'), downPayment: num('downPayment'),
+          annualRatePct: num('annualRatePct'), years: num('years') || 30, housingCostsPctOfPrice: num('housingCostsPctOfPrice'), hoaMonthly: num('hoaMonthly'),
+        });
+        return head(R.maxPrice, money(r.maxPrice)) + `<dl>${row(R.maxPayment, money(r.maxHousingPayment))}</dl>`;
+      },
+      closing: () => {
+        const r = closingCosts({
+          price: num('price'), loanAmount: num('loanAmount'), county: val('county') as County, singleFamily: on('singleFamily'),
+          sellerPaysDeedStamps: on('sellerPaysDeedStamps'), lenderFees: num('lenderFees'), titleAndSettlement: num('titleAndSettlement'), prepaidsAndEscrow: num('prepaidsAndEscrow'),
+        });
+        return head(R.closingTotal, money(r.total)) + `<dl>${row(R.deed, money(r.items.deedStamps))}${row(R.note, money(r.items.noteStamps))}${row(R.intangible, money(r.items.intangibleTax))}</dl>`;
+      },
+      rentVsBuy: () => {
+        const r = rentVsBuy({
+          monthlyRent: num('monthlyRent'), rentGrowthPct: num('rentGrowthPct'), price: num('price'), downPayment: num('downPayment'),
+          annualRatePct: num('annualRatePct'), years: 30, ownershipCostsYearly: num('ownershipCostsYearly'), appreciationPct: num('appreciationPct'),
+          closingCosts: num('closingCosts'), sellingCostPct: num('sellingCostPct'), horizonYears: Math.min(30, Math.max(1, num('horizonYears'))),
+        });
+        const top = r.breakEvenYear ? head(R.breakEven, String(r.breakEvenYear)) : `<p class="big">${esc(R.noBreakEven)}</p>`;
+        const rows = r.rows.map((y) => `<tr><td>${y.year}</td><td>${money(y.rentCost)}</td><td>${money(y.buyNetCost)}</td></tr>`).join('');
+        return top + `<div class="table-wrap"><table><thead><tr><th>${esc(R.year)}</th><th>${esc(R.rentCost)}</th><th>${esc(R.buyCost)}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+      },
+      refinance: () => {
+        const r = refinanceBreakEven({ currentPayment: num('currentPayment'), newBalance: num('newBalance'), newRatePct: num('newRatePct'), newYears: num('newYears') || 30, closingCosts: num('closingCosts') });
+        if (r.breakEvenMonths === null) return head(R.newPayment, money(r.newPayment)) + `<p>${esc(R.noSavings)}</p>`;
+        return head(R.months, String(r.breakEvenMonths)) + `<dl>${row(R.newPayment, money(r.newPayment))}${row(R.savings, money(r.monthlySavings))}</dl>`;
+      },
+      dscr: () => {
+        const r = dscr({ monthlyRent: num('monthlyRent'), monthlyPITIA: num('monthlyPITIA') });
+        return head(R.ratio, r.ratio.toFixed(2)) + `<p>${esc(r.ratio >= 1 ? R.dscrGood : R.dscrLow)}</p>`;
+      },
+      credit: () => {
+        const g = creditGap(num('score'));
+        return `<dl>${g.map((p) => row(X.programs[p.program], p.qualifies ? `✓ ${esc(R.qualifies)}` : `${p.pointsNeeded} ${esc(R.pointsNeeded)}`)).join('')}</dl>`;
+      },
+      compare: () => {
+        const ps = loanPrograms({ score: num('score'), downPct: num('downPct'), veteran: on('veteran'), firstTimeBuyer: on('firstTimeBuyer') });
+        return `<dl>${ps.map((p) => row(X.programs[p.program], `${p.fits ? '✓' : '—'} ${esc(X.reasons[p.reason])}${p.minDownPct !== null ? ` · ${esc(R.minDown)} ${p.minDownPct}%` : ''}`)).join('')}</dl>`;
+      },
+      assistance: () => {
+        const ok = on('firstTimeBuyer') && on('primaryResidence');
+        const links = X.assistance.links.map((l: any) => `<li><a href="${l.url}" rel="noopener">${esc(l.name)}</a> · ${esc(l.note)}</li>`).join('');
+        return `<p>${esc(ok ? X.assistance.yes : X.assistance.no)}</p><ul>${links}</ul>`;
+      },
+      documents: () => list([...X.documents.common, ...X.documents[val('profile')]]),
+    };
+
+    const render = () => { out.innerHTML = renderers[form.dataset.tool!](); };
+    form.addEventListener('input', render);
+    form.addEventListener('change', render);
+    render();
   }
-  form.addEventListener('input', render);
-  render();
 </script>

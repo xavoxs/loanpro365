@@ -36,7 +36,7 @@ const en: Record<ContentKey, PageContent> = {
       ] },
       { h: 'Florida costs to plan for', p: 'Homeowners and wind insurance, flood insurance in some zones, HOA or condo fees, and Florida documentary stamp and intangible taxes at closing. The tools below include them.' },
     ],
-    tools: ['affordability', 'payment', 'closing'],
+    tools: ['affordability', 'payment', 'rentVsBuy', 'closing'],
     cta: 'prequal',
   },
   refinance: {
@@ -46,8 +46,8 @@ const en: Record<ContentKey, PageContent> = {
       { h: 'Common reasons to refinance', list: ['Lower interest rate or monthly payment.', 'Switch from an adjustable to a fixed rate.', 'Cash-out to consolidate higher-interest debt or renovate.', 'Remove mortgage insurance when you have enough equity.'] },
       { h: 'Is it worth it?', p: 'Compare your monthly savings with the closing costs. The break-even point is the number of months it takes for the savings to cover those costs.' },
     ],
-    tools: ['closing'],
     cta: 'talk',
+    tools: ['refinance', 'closing'],
   },
   credit: {
     title: 'Mortgage options if your credit isn’t perfect',
@@ -61,6 +61,7 @@ const en: Record<ContentKey, PageContent> = {
       { h: 'What usually helps', list: ['Pay every account on time from now on.', 'Lower credit card balances below 30% of the limit.', 'Check your reports for errors at AnnualCreditReport.com (free).', 'Avoid opening new credit while you prepare.'] },
     ],
     cta: 'talk',
+    tools: ['credit', 'compare'],
   },
   investors: {
     title: 'Loans for real estate investors',
@@ -70,6 +71,7 @@ const en: Record<ContentKey, PageContent> = {
       { h: 'What lenders look at', p: 'Rent vs. payment (DSCR), down payment, reserves, credit and property type. Requirements vary by lender; I compare them for you.' },
     ],
     cta: 'talk',
+    tools: ['dscr'],
   },
   assistance: {
     title: 'Down payment assistance in Florida',
@@ -83,6 +85,7 @@ const en: Record<ContentKey, PageContent> = {
       { h: 'Important', p: 'Income limits, purchase price limits and funding change during the year. I check what is open today for your county before we count on it.' },
     ],
     cta: 'talk',
+    tools: ['assistance', 'affordability'],
   },
   learn: {
     title: 'Learn',
@@ -90,6 +93,7 @@ const en: Record<ContentKey, PageContent> = {
     sections: [
       { h: 'Trusted official resources', list: ['Consumer Financial Protection Bureau — Buying a House (consumerfinance.gov).', 'HUD — Buying a home (hud.gov).', 'NMLS Consumer Access — verify any loan officer (nmlsconsumeraccess.org).'] },
     ],
+    tools: ['glossary', 'documents'],
   },
   about: {
     title: 'About Pablo Samsing',
@@ -107,6 +111,7 @@ const en: Record<ContentKey, PageContent> = {
       { h: 'Your privacy', p: 'This website never asks for your Social Security number, date of birth or bank account numbers.' },
     ],
     cta: 'talk',
+    tools: ['documents', 'compare'],
   },
   contact: {
     title: 'Contact',
@@ -146,7 +151,7 @@ const es: Record<ContentKey, PageContent> = {
       ] },
       { h: 'Costos de Florida que debes prever', p: 'Seguro de hogar y de viento, seguro contra inundación en algunas zonas, cuotas de HOA o condominio, y los impuestos documentales e intangible de Florida al cierre. Las herramientas de abajo los incluyen.' },
     ],
-    tools: ['affordability', 'payment', 'closing'],
+    tools: ['affordability', 'payment', 'rentVsBuy', 'closing'],
     cta: 'prequal',
   },
   refinance: {
@@ -156,8 +161,8 @@ const es: Record<ContentKey, PageContent> = {
       { h: 'Razones comunes para refinanciar', list: ['Tasa o pago mensual más bajo.', 'Pasar de tasa ajustable a fija.', 'Sacar efectivo para consolidar deudas caras o remodelar.', 'Quitar el seguro hipotecario cuando ya tienes suficiente capital.'] },
       { h: '¿Vale la pena?', p: 'Compara tu ahorro mensual con los costos de cierre. El punto de equilibrio es la cantidad de meses que tarda el ahorro en cubrir esos costos.' },
     ],
-    tools: ['closing'],
     cta: 'talk',
+    tools: ['refinance', 'closing'],
   },
   credit: {
     title: 'Opciones de hipoteca aunque tu crédito no sea perfecto',
@@ -171,6 +176,7 @@ const es: Record<ContentKey, PageContent> = {
       { h: 'Lo que suele ayudar', list: ['Paga todas tus cuentas a tiempo desde hoy.', 'Baja el saldo de tus tarjetas a menos del 30% del límite.', 'Revisa tus reportes gratis en AnnualCreditReport.com y corrige errores.', 'No abras crédito nuevo mientras te preparas.'] },
     ],
     cta: 'talk',
+    tools: ['credit', 'compare'],
   },
   investors: {
     title: 'Préstamos para inversionistas',
@@ -180,6 +186,7 @@ const es: Record<ContentKey, PageContent> = {
       { h: 'Qué miran los prestamistas', p: 'Renta frente a pago (DSCR), pago inicial, reservas, crédito y tipo de propiedad. Los requisitos cambian según el prestamista; yo los comparo por ti.' },
     ],
     cta: 'talk',
+    tools: ['dscr'],
   },
   assistance: {
     title: 'Ayudas para el pago inicial en Florida',
@@ -193,6 +200,7 @@ const es: Record<ContentKey, PageContent> = {
       { h: 'Importante', p: 'Los límites de ingreso, de precio y los fondos cambian durante el año. Reviso qué está abierto hoy en tu condado antes de contar con ello.' },
     ],
     cta: 'talk',
+    tools: ['assistance', 'affordability'],
   },
   learn: {
     title: 'Aprende',
@@ -200,6 +208,7 @@ const es: Record<ContentKey, PageContent> = {
     sections: [
       { h: 'Recursos oficiales confiables', list: ['Oficina de Protección Financiera del Consumidor (CFPB): comprar una casa, en español (consumerfinance.gov/es).', 'HUD: comprar una vivienda (hud.gov).', 'NMLS Consumer Access: verifica a cualquier asesor (nmlsconsumeraccess.org).'] },
     ],
+    tools: ['glossary', 'documents'],
   },
   about: {
     title: 'Sobre Pablo Samsing',
@@ -217,6 +226,7 @@ const es: Record<ContentKey, PageContent> = {
       { h: 'Tu privacidad', p: 'Este sitio nunca te pide número de Seguro Social, fecha de nacimiento ni números de cuenta bancaria.' },
     ],
     cta: 'talk',
+    tools: ['documents', 'compare'],
   },
   contact: {
     title: 'Contacto',
