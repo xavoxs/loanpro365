@@ -3,7 +3,18 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "scripts": { "dev": "wrangler dev", "deploy": "wrangler deploy" },
-  "dependencies": { "hono": "^4.9.0", "@loanpro365/calculators": "*" },
-  "devDependencies": { "wrangler": "^4.40.0" }
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "hono": "^4.9.0",
+    "@loanpro365/calculators": "*"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0",
+    "vitest": "^3.2.4",
+    "@cloudflare/workers-types": "^4.20251001.0"
+  }
 }

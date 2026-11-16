@@ -5,7 +5,7 @@ import { CONTENT_KEYS, type ContentKey } from '../../i18n/pages';
 
 export function getStaticPaths() {
   return LOCALES.flatMap((lang) =>
-    CONTENT_KEYS.map((page) => ({
+    CONTENT_KEYS.filter((p) => p !== 'prequal').map((page) => ({
       params: { lang, page: ROUTES[page][lang].split('/')[2] },
       props: { locale: lang, key: page },
     })),

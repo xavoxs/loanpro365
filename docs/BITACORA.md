@@ -5,19 +5,27 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Estado actual (actualizar en cada posta)
 
-- **Fase:** 1 — Base (ver `docs/ARQUITECTURA.md` §6)
-- **Funciona:** calculadoras (16 pruebas); web EN/ES con 47 páginas: home, las 11 herramientas, índice de herramientas y 10 páginas de contenido (comprar, refinanciar, crédito difícil, inversionistas, ayudas FL, aprende, sobre Pablo, precalificación provisional, contacto, legal); API con `/v1/health` y `/v1/leads`; CI en GitHub Actions (pruebas, build, paridad EN/ES y hreflang).
-- **Roto o pendiente conocido:** sin enlaces internos rotos. La precalificación es provisional (lleva a WhatsApp). Políticas de privacidad, quejas y accesibilidad pendientes de redacción legal. D1 sin crear. En móvil el menú ocupa 3 líneas: conviene un menú plegable.
-- **Bloqueado por el cliente:** NMLS del asesor, correo oficial, dirección física, licencia OFR, tipo de consulta de crédito en precalificación, foto y biografía de Pablo, textos legales.
+- **Fase:** 2 — Precalificación y API (ver `docs/ARQUITECTURA.md` §6)
+- **Funciona:** calculadoras (16 pruebas); web EN/ES con 47 páginas: home, 11 herramientas, índice, 9 páginas de contenido, legal y precalificación de 4 pasos; menú plegable en móvil; API `/v1/leads` validada (4 pruebas); CI con pruebas, `astro check`, build, paridad EN/ES y hreflang.
+- **Roto o pendiente conocido:** la API no está desplegada y `PUBLIC_API_URL` está vacío, así que la precalificación termina con el respaldo de WhatsApp. D1 sin crear. Sin Turnstile ni límite de envíos. Políticas de privacidad, quejas y accesibilidad pendientes de redacción legal.
+- **Bloqueado por el cliente:** NMLS del asesor, correo oficial, dirección física, licencia OFR, tipo de consulta de crédito, foto y biografía de Pablo, textos legales, revisión legal del texto de consentimiento TCPA, cuenta de Cloudflare para desplegar.
 
 ## Siguiente posta (tareas en orden)
 
-1. Menú plegable en móvil y, en herramientas largas, mostrar el resultado arriba o fijo (en móvil queda bajo 6–10 campos).
-2. Precalificación de 4 pasos + conexión a `/v1/leads` con consentimiento TCPA bilingüe.
-3. Añadir `astro check` al CI.
-4. Verificador de ayudas: añadir programas de condado solo con URL oficial verificada.
+1. Desplegar: Cloudflare Pages (web) y Workers + D1 (API); definir `PUBLIC_API_URL`; aviso por correo al broker con cada lead.
+2. Turnstile y límite de envíos por IP en `/v1/leads`.
+3. Reseñas de Google (`/v1/reviews`) y bloque de confianza en la home.
+4. Páginas de condado (Broward, Miami-Dade, Palm Beach) y sección Aprende con guías.
+5. Verificador de ayudas: añadir programas de condado solo con URL oficial verificada.
 
 ## Entradas
+
+### 2026-11-15 — Sesión 4 (Claude Code)
+- **Hecho:** menú plegable en móvil (`<details>`, sin JS); en herramientas el resultado va arriba en móvil y fijo a la derecha en escritorio; tabla de rentar o comprar plegable. Precalificación en 4 pasos (`components/Prequal.astro`, `/en/prequalify/` y `/es/precalificacion/`) con resultado (rango de precio + programas) antes de pedir datos, consentimiento TCPA bilingüe versionado (`tcpa-2026-11-v1`) y envío a `/v1/leads`, con respaldo a WhatsApp. API: validación de teléfono, correo y tamaño, pruebas con Vitest. `astro check` en CI.
+- **Decisiones:** el texto de consentimiento lleva versión y se guarda con cada lead. Si la API falla, nunca se pierde el contacto: se ofrece WhatsApp con un resumen sin datos sensibles.
+- **Verificado:** `npm test` (16 + 4 pruebas), `npm run check` (0 errores), build (47 páginas); en el navegador a 375 px: validación de campos, pasos 1 a 4, respaldo de WhatsApp, menú plegable, resultado arriba del formulario, sin scroll horizontal.
+- **No verificado:** envío real a la API (no está desplegada); vista de escritorio en detalle.
+- **Notas:** se corrigió un error por el que los pasos ocultos se mostraban (`[hidden]` ahora gana sobre el CSS). El texto TCPA es un borrador: requiere revisión legal.
 
 ### 2026-11-15 — Sesión 3 (Claude Code)
 - **Hecho:** las 11 herramientas están en la web en EN/ES (47 páginas). Nuevas: rentar vs comprar, refinanciación, DSCR, plan de crédito, comparador FHA/convencional/VA (`loanPrograms` en calculators), verificador de ayudas FL, lista de documentos (W-2, independiente, ITIN) y glosario bilingüe. Textos y campos en `apps/web/src/i18n/tools.ts`; un solo componente `Tool.astro`. Herramientas enlazadas desde las páginas de contenido.

@@ -18,6 +18,10 @@ app.post('/v1/leads', async (c) => {
   const { name, phone, email, locale, sourceTool, consentTcpa, consentTextVersion, payload } = body as any;
   if (typeof name !== 'string' || !name.trim()) return c.json({ error: 'name_required' }, 400);
   if (!phone && !email) return c.json({ error: 'contact_required' }, 400);
+  if (name.length > 120) return c.json({ error: 'name_length' }, 400);
+  if (phone && !/^[+()\d\s.-]{7,20}$/.test(String(phone))) return c.json({ error: 'phone' }, 400);
+  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email))) return c.json({ error: 'email' }, 400);
+  if (payload && JSON.stringify(payload).length > 4000) return c.json({ error: 'payload_size' }, 400);
   if (locale !== 'en' && locale !== 'es') return c.json({ error: 'locale' }, 400);
   if (consentTcpa !== true || typeof consentTextVersion !== 'string') return c.json({ error: 'consent_required' }, 400);
 

@@ -14,6 +14,7 @@ const interactive = tool !== 'glossary';
   <h1>{d.tools[tool].name}</h1>
   <p class="lead">{d.tools[tool].desc}</p>
 
+  <div class={interactive ? "tool-layout" : ""}>
   {fields.length > 0 && (
     <form class="tool" data-tool={tool} data-locale={locale} novalidate>
       {fields.map((f) =>
@@ -31,6 +32,7 @@ const interactive = tool !== 'glossary';
   )}
 
   {interactive && <div class="result" aria-live="polite" id="result"></div>}
+  </div>
 
   {tool === 'glossary' && (
     <dl class="glossary">
@@ -98,7 +100,7 @@ const interactive = tool !== 'glossary';
         });
         const top = r.breakEvenYear ? head(R.breakEven, String(r.breakEvenYear)) : `<p class="big">${esc(R.noBreakEven)}</p>`;
         const rows = r.rows.map((y) => `<tr><td>${y.year}</td><td>${money(y.rentCost)}</td><td>${money(y.buyNetCost)}</td></tr>`).join('');
-        return top + `<div class="table-wrap"><table><thead><tr><th>${esc(R.year)}</th><th>${esc(R.rentCost)}</th><th>${esc(R.buyCost)}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+        return top + `<details><summary>${esc(R.byYear)}</summary><div class="table-wrap"><table><thead><tr><th>${esc(R.year)}</th><th>${esc(R.rentCost)}</th><th>${esc(R.buyCost)}</th></tr></thead><tbody>${rows}</tbody></table></div></details>`;
       },
       refinance: () => {
         const r = refinanceBreakEven({ currentPayment: num('currentPayment'), newBalance: num('newBalance'), newRatePct: num('newRatePct'), newYears: num('newYears') || 30, closingCosts: num('closingCosts') });

@@ -1,0 +1,174 @@
+---
+import Base from '../layouts/Base.astro';
+import { COMPANY, ROUTES, t, type Locale } from '../i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? '';
+
+/** Versión del texto de consentimiento: si cambia el texto, cambia la versión (queda guardada con cada lead). */
+export const CONSENT_VERSION = 'tcpa-2026-11-v1';
+
+const T = {
+  en: {
+    title: 'Pre-qualify in 4 steps',
+    lead: 'About 2 minutes. No Social Security number, no credit check on this website.',
+    step: 'Step', of: 'of', next: 'Continue', back: 'Back', send: 'Send to Pablo',
+    s1: 'What do you want to do?', goal: { buy: 'Buy a home', refinance: 'Refinance', invest: 'Buy an investment property' },
+    county: 'County',
+    s2: 'The home', price: 'Approximate price (or current value)', down: 'Down payment or equity available',
+    s3: 'You', income: 'Gross monthly household income', debts: 'Monthly debt payments (cards, car, loans)',
+    score: 'Estimated credit score', scores: { '760': '740 or more', '700': '680–739', '640': '620–679', '590': '580–619', '540': '500–579', '480': 'Below 500 / not sure' },
+    veteran: 'Veteran or active military', first: 'First-time buyer',
+    s4: 'Your results and contact', estimate: 'Estimated price range you could afford', programs: 'Programs that may fit',
+    name: 'Full name', phone: 'Mobile phone', email: 'Email (optional)', prefer: 'Preferred language',
+    consent: 'I agree that LoanPro365 Mortgages may contact me by phone, text or WhatsApp at the number provided, including by automated means, about my mortgage inquiry. Consent is not a condition of any purchase or loan. Message and data rates may apply. I can opt out at any time by replying STOP.',
+    ok: 'Thank you! Pablo will contact you soon.', fail: 'We could not send your information. Please send it on WhatsApp:', whatsapp: 'Send on WhatsApp',
+    required: 'Please complete this field.',
+  },
+  es: {
+    title: 'Precalifícate en 4 pasos',
+    lead: 'Unos 2 minutos. Sin número de Seguro Social y sin consulta de crédito en este sitio.',
+    step: 'Paso', of: 'de', next: 'Continuar', back: 'Atrás', send: 'Enviar a Pablo',
+    s1: '¿Qué quieres hacer?', goal: { buy: 'Comprar casa', refinance: 'Refinanciar', invest: 'Comprar una propiedad de inversión' },
+    county: 'Condado',
+    s2: 'La propiedad', price: 'Precio aproximado (o valor actual)', down: 'Pago inicial o capital disponible',
+    s3: 'Tú', income: 'Ingreso mensual bruto del hogar', debts: 'Pagos mensuales de deudas (tarjetas, auto, préstamos)',
+    score: 'Puntaje de crédito estimado', scores: { '760': '740 o más', '700': '680–739', '640': '620–679', '590': '580–619', '540': '500–579', '480': 'Menos de 500 / no sé' },
+    veteran: 'Veterano o militar activo', first: 'Primer comprador',
+    s4: 'Tus resultados y contacto', estimate: 'Rango de precio estimado que podrías pagar', programs: 'Programas que podrían servirte',
+    name: 'Nombre completo', phone: 'Celular', email: 'Correo (opcional)', prefer: 'Idioma preferido',
+    consent: 'Acepto que LoanPro365 Mortgages me contacte por teléfono, mensaje de texto o WhatsApp al número indicado, incluso por medios automatizados, sobre mi consulta hipotecaria. El consentimiento no es condición para ninguna compra ni préstamo. Pueden aplicar tarifas de mensajes y datos. Puedo darme de baja en cualquier momento respondiendo STOP.',
+    ok: '¡Gracias! Pablo te contactará pronto.', fail: 'No pudimos enviar tu información. Envíala por WhatsApp:', whatsapp: 'Enviar por WhatsApp',
+    required: 'Completa este campo.',
+  },
+}[locale];
+const x = t(locale);
+const counties = [['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-beach', 'Palm Beach'], ['other', locale === 'es' ? 'Otro' : 'Other']];
+---
+<Base locale={locale} title={`${T.title} · LoanPro365`} description={T.lead} alternates={ROUTES.prequal}>
+  <h1>{T.title}</h1>
+  <p class="lead">{T.lead}</p>
+
+  <form id="prequal" class="prequal" novalidate data-api={apiUrl} data-locale={locale} data-consent-version={CONSENT_VERSION} data-whatsapp={COMPANY.whatsappHref}>
+    <p class="progress" aria-live="polite"><span data-step-label>{T.step} 1 {T.of} 4</span></p>
+
+    <fieldset data-step="1">
+      <legend>{T.s1}</legend>
+      {Object.entries(T.goal).map(([v, l], i) => <label class="check"><input type="radio" name="goal" value={v} checked={i === 0} /> {l}</label>)}
+      <label>{T.county}<select name="county">{counties.map(([v, l]) => <option value={v}>{l}</option>)}</select></label>
+    </fieldset>
+
+    <fieldset data-step="2" hidden>
+      <legend>{T.s2}</legend>
+      <label>{T.price}<input type="number" inputmode="numeric" min="0" name="price" required /></label>
+      <label>{T.down}<input type="number" inputmode="numeric" min="0" name="down" required /></label>
+    </fieldset>
+
+    <fieldset data-step="3" hidden>
+      <legend>{T.s3}</legend>
+      <label>{T.income}<input type="number" inputmode="numeric" min="0" name="income" required /></label>
+      <label>{T.debts}<input type="number" inputmode="numeric" min="0" name="debts" value="0" /></label>
+      <label>{T.score}<select name="score">{Object.entries(T.scores).reverse().map(([v, l]) => <option value={v} selected={v === '640'}>{l}</option>)}</select></label>
+      <label class="check"><input type="checkbox" name="veteran" /> {T.veteran}</label>
+      <label class="check"><input type="checkbox" name="first" checked /> {T.first}</label>
+    </fieldset>
+
+    <fieldset data-step="4" hidden>
+      <legend>{T.s4}</legend>
+      <div class="result" data-summary></div>
+      <label>{T.name}<input name="name" autocomplete="name" required /></label>
+      <label>{T.phone}<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required /></label>
+      <label>{T.email}<input type="email" name="email" autocomplete="email" /></label>
+      <label class="check consent"><input type="checkbox" name="consent" required /> <span>{T.consent}</span></label>
+    </fieldset>
+
+    <p class="error" role="alert" hidden data-error>{T.required}</p>
+    <p class="actions">
+      <button type="button" class="btn ghost" data-back hidden>{T.back}</button>
+      <button type="button" class="btn" data-next>{T.next}</button>
+      <button type="submit" class="btn" data-send hidden>{T.send}</button>
+    </p>
+    <div data-done hidden class="result"></div>
+  </form>
+
+  <p class="small">{x.disclaimer}</p>
+  <script type="application/json" id="prequal-text" set:html={JSON.stringify({ ...T, programNames: { fha: 'FHA', conventional: locale === 'es' ? 'Convencional' : 'Conventional', va: 'VA' } })} />
+</Base>
+
+<script>
+  import { affordability, loanPrograms } from '@loanpro365/calculators';
+
+  const form = document.getElementById('prequal') as HTMLFormElement;
+  const T = JSON.parse(document.getElementById('prequal-text')!.textContent!);
+  const steps = [...form.querySelectorAll<HTMLFieldSetElement>('fieldset[data-step]')];
+  const $ = <E extends Element>(s: string) => form.querySelector<E>(s)!;
+  const err = $<HTMLElement>('[data-error]');
+  const fd = () => new FormData(form);
+  const n = (k: string) => Number(fd().get(k)) || 0;
+  const money = (v: number) => v.toLocaleString(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  let current = 0;
+
+  function show(i: number) {
+    current = i;
+    steps.forEach((s, j) => (s.hidden = j !== i));
+    $<HTMLElement>('[data-step-label]').textContent = `${T.step} ${i + 1} ${T.of} ${steps.length}`;
+    $<HTMLElement>('[data-back]').hidden = i === 0;
+    $<HTMLElement>('[data-next]').hidden = i === steps.length - 1;
+    $<HTMLElement>('[data-send]').hidden = i !== steps.length - 1;
+    err.hidden = true;
+    if (i === 3) summarize();
+    steps[i].querySelector<HTMLElement>('input, select')?.focus();
+  }
+
+  function valid(i: number) {
+    const bad = [...steps[i].querySelectorAll<HTMLInputElement>('[required]')].find((el) => (el.type === 'checkbox' ? !el.checked : !el.value.trim()));
+    err.hidden = !bad;
+    if (bad) { bad.setAttribute('aria-invalid', 'true'); bad.focus(); }
+    return !bad;
+  }
+
+  function results() {
+    const price = n('price'), down = n('down');
+    const a = affordability({ grossMonthlyIncome: n('income'), monthlyDebts: n('debts'), downPayment: down, annualRatePct: 6.5, years: 30, housingCostsPctOfPrice: 3 });
+    const programs = loanPrograms({ score: n('score'), downPct: price > 0 ? (down / price) * 100 : 0, veteran: fd().get('veteran') === 'on', firstTimeBuyer: fd().get('first') === 'on' });
+    return { maxPrice: a.maxPrice, programs: programs.filter((p) => p.fits).map((p) => p.program) };
+  }
+
+  function summarize() {
+    const r = results();
+    const low = Math.floor((r.maxPrice * 0.85) / 1000) * 1000;
+    $<HTMLElement>('[data-summary]').innerHTML =
+      `<p>${esc(T.estimate)}</p><p class="big">${money(low)} – ${money(r.maxPrice)}</p>` +
+      (r.programs.length ? `<p>${esc(T.programs)}: <strong>${r.programs.map((p) => T.programNames[p]).join(', ')}</strong></p>` : '');
+  }
+
+  $('[data-next]').addEventListener('click', () => valid(current) && show(current + 1));
+  $('[data-back]').addEventListener('click', () => show(current - 1));
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!valid(current)) return;
+    const data = fd();
+    const r = results();
+    const body = {
+      name: String(data.get('name')), phone: String(data.get('phone')), email: String(data.get('email') || '') || undefined,
+      locale: form.dataset.locale, sourceTool: 'prequal', consentTcpa: data.get('consent') === 'on', consentTextVersion: form.dataset.consentVersion,
+      payload: { goal: data.get('goal'), county: data.get('county'), price: n('price'), down: n('down'), income: n('income'), debts: n('debts'), score: n('score'), veteran: data.get('veteran') === 'on', firstTimeBuyer: data.get('first') === 'on', estimate: r },
+    };
+    const done = $<HTMLElement>('[data-done]');
+    const wa = `${form.dataset.whatsapp}?text=${encodeURIComponent(`${body.name} · ${body.payload.goal} · ${body.payload.county} · ${money(body.payload.price)}`)}`;
+    let ok = false;
+    if (form.dataset.api) {
+      try {
+        const res = await fetch(`${form.dataset.api}/v1/leads`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+        ok = res.ok;
+      } catch { ok = false; }
+    }
+    steps.forEach((s) => (s.hidden = true));
+    form.querySelector<HTMLElement>('.actions')!.hidden = true;
+    done.hidden = false;
+    done.innerHTML = ok ? `<p class="big">${esc(T.ok)}</p>` : `<p>${esc(T.fail)}</p><p><a class="btn" href="${wa}" rel="noopener">${esc(T.whatsapp)}</a></p>`;
+    done.focus();
+  });
+</script>

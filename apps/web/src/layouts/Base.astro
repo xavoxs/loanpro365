@@ -38,10 +38,16 @@ const nav = [
     <a class="skip" href="#main">{d.skip}</a>
     <header class="site-header">
       <a class="brand" href={ROUTES.home[locale]}>LoanPro365</a>
-      <nav aria-label="Main">
+      <a class="lang" href={alternates[other(locale)]} hreflang={other(locale)} data-lang={other(locale)}>{d.langSwitch}</a>
+      <nav aria-label="Main" class="nav-desktop">
         <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
       </nav>
-      <a class="lang" href={alternates[other(locale)]} hreflang={other(locale)} data-lang={other(locale)}>{d.langSwitch}</a>
+      <details class="nav-mobile">
+        <summary>{locale === 'es' ? 'Menú' : 'Menu'}</summary>
+        <nav aria-label="Main">
+          <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
+        </nav>
+      </details>
     </header>
     <main id="main"><slot /></main>
     <footer class="site-footer">
