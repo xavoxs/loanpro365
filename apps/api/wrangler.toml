@@ -3,9 +3,10 @@ main = "src/index.ts"
 compatibility_date = "2026-10-01"
 
 [vars]
-ALLOWED_ORIGIN = "https://loanpro365.com"
+# Orígenes permitidos separados por coma (producción y vista previa)
+ALLOWED_ORIGIN = "https://loanpro365.com,https://loanpro365-web.francisco-buenano.workers.dev"
 
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "loanpro365"
-# database_id = "<crear con: wrangler d1 create loanpro365>"
+[[d1_databases]]
+binding = "DB"
+database_name = "loanpro365"
+database_id = "42086125-38b0-445d-8bfe-1bcd685b6b22"

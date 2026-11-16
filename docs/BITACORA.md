@@ -5,20 +5,35 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Estado actual (actualizar en cada posta)
 
-- **Fase:** 2 — Precalificación y API (ver `docs/ARQUITECTURA.md` §6)
-- **Funciona:** calculadoras (16 pruebas); web EN/ES con 47 páginas: home, 11 herramientas, índice, 9 páginas de contenido, legal y precalificación de 4 pasos; menú plegable en móvil; API `/v1/leads` validada (4 pruebas); CI con pruebas, `astro check`, build, paridad EN/ES y hreflang.
-- **Roto o pendiente conocido:** la API no está desplegada y `PUBLIC_API_URL` está vacío, así que la precalificación termina con el respaldo de WhatsApp. D1 sin crear. Sin Turnstile ni límite de envíos. Políticas de privacidad, quejas y accesibilidad pendientes de redacción legal.
-- **Bloqueado por el cliente:** NMLS del asesor, correo oficial, dirección física, licencia OFR, tipo de consulta de crédito, foto y biografía de Pablo, textos legales, revisión legal del texto de consentimiento TCPA, cuenta de Cloudflare para desplegar.
+- **Fase:** 2 — Precalificación y API, desplegadas como vista previa (ver `docs/ARQUITECTURA.md` §6)
+- **En línea (vista previa, `noindex`):** web https://loanpro365-web.francisco-buenano.workers.dev · API https://loanpro365-api.francisco-buenano.workers.dev
+- **Funciona:** calculadoras (16 pruebas); web EN/ES con 47 páginas: home, 11 herramientas, índice, 9 páginas de contenido, legal y precalificación de 4 pasos; menú plegable en móvil; API `/v1/leads` validada (4 pruebas) que guarda en D1; CI con pruebas, `astro check`, build, paridad EN/ES y hreflang.
+- **Roto o pendiente conocido:** el broker no recibe aviso de los leads nuevos (hoy solo quedan en D1). Sin Turnstile ni límite de envíos. Políticas de privacidad, quejas y accesibilidad pendientes de redacción legal. El dominio loanpro365.com no apunta al sitio nuevo.
+- **Bloqueado por el cliente:** NMLS del asesor, correo oficial, dirección física, licencia OFR, tipo de consulta de crédito, foto y biografía de Pablo, textos legales, revisión legal del texto de consentimiento TCPA, acceso al DNS de loanpro365.com.
+
+## Infraestructura (Cloudflare)
+
+- Cuenta compartida con SomosVitally por decisión del dueño (2026-11-15). Recursos **separados**, sin nada compartido: Worker `loanpro365-api`, Worker de archivos estáticos `loanpro365-web`, base D1 `loanpro365` (id `42086125-…`). **Nunca** usar ni tocar `somosvitally` ni la D1 `vitally`.
+- Desplegar web: `npm run deploy -w @loanpro365/web` (build + `wrangler deploy`, solo archivos estáticos; no aceptar la autoconfiguración de wrangler que agrega `@astrojs/cloudflare`).
+- Desplegar API: `cd apps/api && npx wrangler deploy`. Esquema: `npx wrangler d1 execute loanpro365 --remote --file=schema.sql`.
+- Al pasar a producción: quitar `apps/web/public/_headers` (`noindex`), conectar el dominio y actualizar `ALLOWED_ORIGIN` y la URL de API en `Prequal.astro`.
 
 ## Siguiente posta (tareas en orden)
 
-1. Desplegar: Cloudflare Pages (web) y Workers + D1 (API); definir `PUBLIC_API_URL`; aviso por correo al broker con cada lead.
+1. Aviso al broker por cada lead (correo o WhatsApp) con datos mínimos.
 2. Turnstile y límite de envíos por IP en `/v1/leads`.
 3. Reseñas de Google (`/v1/reviews`) y bloque de confianza en la home.
 4. Páginas de condado (Broward, Miami-Dade, Palm Beach) y sección Aprende con guías.
 5. Verificador de ayudas: añadir programas de condado solo con URL oficial verificada.
 
 ## Entradas
+
+### 2026-11-15 — Sesión 5 (Claude Code)
+- **Hecho:** despliegue de vista previa en Cloudflare: D1 `loanpro365` con el esquema, API `loanpro365-api` (CORS con varios orígenes), web estática `loanpro365-web` (Workers Static Assets, `wrangler.jsonc` solo con `assets`). URL pública de la API en `Prequal.astro` (no es secreta). `_headers` con `X-Robots-Tag: noindex`.
+- **Decisiones:** el dueño eligió mantener la misma cuenta de Cloudflare que SomosVitally con recursos separados. Se usan Workers Static Assets porque wrangler ya no publica Pages directamente.
+- **Verificado:** `/v1/health` responde; la web devuelve 200 con `noindex`; precalificación real enviada desde la web publicada → registro en D1 con versión de consentimiento; el registro de prueba se borró (0 leads).
+- **No verificado:** el CI tras este push.
+- **Notas:** la autoconfiguración de wrangler intentó convertir la web en SSR (`@astrojs/cloudflare`); se revirtió.
 
 ### 2026-11-15 — Sesión 4 (Claude Code)
 - **Hecho:** menú plegable en móvil (`<details>`, sin JS); en herramientas el resultado va arriba en móvil y fijo a la derecha en escritorio; tabla de rentar o comprar plegable. Precalificación en 4 pasos (`components/Prequal.astro`, `/en/prequalify/` y `/es/precalificacion/`) con resultado (rango de precio + programas) antes de pedir datos, consentimiento TCPA bilingüe versionado (`tcpa-2026-11-v1`) y envío a `/v1/leads`, con respaldo a WhatsApp. API: validación de teléfono, correo y tamaño, pruebas con Vitest. `astro check` en CI.

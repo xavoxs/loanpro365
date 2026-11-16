@@ -1,0 +1,10 @@
+// Sitio estático servido con Workers Static Assets (sin código de servidor).
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "loanpro365-web",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

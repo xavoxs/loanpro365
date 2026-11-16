@@ -3,7 +3,8 @@ import Base from '../layouts/Base.astro';
 import { COMPANY, ROUTES, t, type Locale } from '../i18n';
 interface Props { locale: Locale }
 const { locale } = Astro.props;
-const apiUrl = import.meta.env.PUBLIC_API_URL ?? '';
+// URL pública de la API (no es secreta). Se puede sobrescribir con PUBLIC_API_URL.
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://loanpro365-api.francisco-buenano.workers.dev';
 
 /** Versión del texto de consentimiento: si cambia el texto, cambia la versión (queda guardada con cada lead). */
 export const CONSENT_VERSION = 'tcpa-2026-11-v1';

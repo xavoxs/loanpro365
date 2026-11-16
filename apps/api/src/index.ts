@@ -4,7 +4,9 @@ import { cors } from 'hono/cors';
 type Env = { DB?: D1Database; ALLOWED_ORIGIN: string };
 const app = new Hono<{ Bindings: Env }>();
 
-app.use('/v1/*', (c, next) => cors({ origin: c.env.ALLOWED_ORIGIN, allowMethods: ['GET', 'POST'] })(c, next));
+app.use('/v1/*', (c, next) =>
+  cors({ origin: c.env.ALLOWED_ORIGIN.split(',').map((o) => o.trim()), allowMethods: ['GET', 'POST'] })(c, next),
+);
 
 app.get('/v1/health', (c) => c.json({ ok: true }));
 
