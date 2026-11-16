@@ -133,7 +133,7 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
         : <div class="about-photo" role="img" aria-label={COMPANY.broker}>PS</div>}
       <div>
         <h2 id="about">{h.about.h}</h2>
-        <p class="lead" style="margin-top:12px">{h.about.d}</p>
+        <p class="lead about-lead">{h.about.d}</p>
         <ul class="checks">{h.about.points.map((x) => <li><Icon name="check" size={18} />{x}</li>)}</ul>
         <a class="link-arrow" href={ROUTES.about[locale]}>{h.about.cta}<Icon name="arrow-right" size={18} /></a>
       </div>
