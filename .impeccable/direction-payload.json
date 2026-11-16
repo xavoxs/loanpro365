@@ -1,0 +1,64 @@
+{
+  "title": "Elige el mundo visual de LoanPro365",
+  "question": "La tirada asignó «La Ventanita». Quédate con ella, toma una alternativa o vuelve a tirar.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "La Ventanita",
+      "kicker": "THE ROLL",
+      "lineage": "La ventanita de café de Miami: el mostrador donde se pregunta y te contestan claro",
+      "thesis": "Una hipoteca se pregunta en la ventanita: tablero de precios con números reales, respuesta directa, sin entrar a una oficina. Rechaza el banco azul con familia sonriendo.",
+      "palette": ["#0e3b34", "#e8492f", "#141414", "#ffffff", "#bfe3d0"],
+      "materials": ["tablero de letras intercambiables", "toldo a rayas", "rótulo pintado a mano", "mostrador de fórmica"],
+      "viewport": "Toldo a rayas arriba; debajo, un tablero negro de letras blancas con TU número (pago mensual estimado) que cambia en vivo al mover el precio; a la derecha la ventanita con la foto de Pablo y el botón Precalifícate en rojo tomate.",
+      "risk": "Si se ejecuta tímida parece un café, no un corredor; el tablero debe mostrar finanzas reales y el NMLS a la vista.",
+      "raised": [
+        { "from": "Película 16 mm (declinada)", "raise": "Solo el paso activo de la precalificación lleva el color cálido; todo lo demás queda en el verde del toldo." },
+        { "from": "Panel de conexiones (declinado)", "raise": "Los estados (completo, pendiente, error) se dibujan con forma de línea y marca, nunca solo con color." },
+        { "from": "Risografía (declinada)", "raise": "Compromiso total de dos tintas: verde toldo y rojo tomate cubren regiones enteras, no acentos sueltos." }
+      ],
+      "board": "https://impeccable.style/worlds/cards/operate-b-normalled-jackfield.webp"
+    },
+    {
+      "id": "model-pick",
+      "label": "MiMo Terrazzo",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Miami Modern de Biscayne: terrazo, bloques calados, letreros de motel",
+      "thesis": "La casa que vas a comprar en el sur de Florida como sistema: terrazo, celosías de bloque y letrero de neón de Biscayne Blvd.",
+      "palette": ["#f0ebe3", "#1f6f78", "#f2a65a", "#2b2b2b"],
+      "materials": ["terrazo", "bloque calado", "letrero de motel"],
+      "viewport": "Fachada de bloque calado a pantalla completa con el titular en letrero MiMo y la calculadora como placa de terrazo.",
+      "risk": "Es la dirección a la que llegan muchas webs de Miami; familiar y efectiva, menos memorable."
+    },
+    {
+      "id": "challenger-azulejo",
+      "label": "Estación de azulejos",
+      "verdict": "competitive",
+      "lineage": "salas de azulejos pintados en cobalto",
+      "thesis": "El camino a tu casa contado en paneles de azulejo: cada paso de la hipoteca, un panel enmarcado.",
+      "palette": ["#1f3f99", "#ffffff", "#d9a520"],
+      "materials": ["azulejo esmaltado", "cobalto", "cartela"],
+      "viewport": "Panel de azulejo cobalto con el titular en cartela y los 4 pasos como paneles en fila.",
+      "case": "Herencia hispana fuerte y azul de confianza; pierde en claridad: la decoración compite con los números.",
+      "risk": "Puede leerse como restaurante o turismo si el panel no muestra cifras.",
+      "hero": "https://impeccable.style/worlds/cards/architecture-places-azulejo-station-hall-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/architecture-places-azulejo-station-hall.webp"
+    },
+    { "id": "challenger-film", "label": "Película 16 mm", "verdict": "declined", "lineage": "película revelada a mano", "palette": ["#1a1a1a", "#c8c8c8", "#f07a2a"], "materials": ["grano", "fuga de luz"], "case": "El público no se identifica con el cine; resta claridad.", "kept": "El color cálido solo en el cuadro activo." },
+    { "id": "challenger-jackfield", "label": "Panel de conexiones", "verdict": "declined", "lineage": "jackfield de sala de máquinas", "palette": ["#0b0b0b", "#ffb000"], "materials": ["vidrio negro", "líneas ámbar"], "case": "Lenguaje de operador técnico, ajeno a compradores de casa.", "kept": "Estado dibujado por forma de línea, no por color." },
+    { "id": "challenger-phosphor", "label": "Terminal de fósforo", "verdict": "declined", "lineage": "terminal verde", "palette": ["#050805", "#33ff66"], "materials": ["escaneo", "brillo"], "case": "Frío y técnico; contradice la cercanía." , "kept": "El diálogo escrito como interfaz principal." },
+    { "id": "challenger-riso", "label": "Risografía", "verdict": "declined", "lineage": "fanzine a dos tintas", "palette": ["#ff48b0", "#0078bf"], "materials": ["semitono", "desregistro"], "case": "Lúdico en exceso para una decisión financiera.", "kept": "Compromiso total de dos tintas." },
+    { "id": "challenger-kaiju", "label": "Alerta de emisión", "verdict": "declined", "lineage": "boletín de emergencia", "palette": ["#7a7a7a", "#d7261e", "#ffffff"], "materials": ["franjas", "flechas"], "case": "Transmite alarma, lo opuesto a la confianza.", "kept": "Una sola flecha decide el camino." }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "canon": true,
+  "canonCard": {
+    "label": "El estándar de la categoría",
+    "thesis": "Lo que publica cualquier corredor hipotecario, ejecutado impecablemente.",
+    "palette": ["#ffffff", "#0f172a", "#1d4ed8"],
+    "materials": ["retícula limpia", "foto de familia"],
+    "viewport": "Hero con foto, titular, formulario corto y franja de confianza.",
+    "risk": "Indistinguible de la competencia por diseño."
+  },
+  "steer": true
+}

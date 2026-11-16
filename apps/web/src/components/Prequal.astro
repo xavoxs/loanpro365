@@ -46,12 +46,12 @@ const T = {
 const x = t(locale);
 const counties = [['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-beach', 'Palm Beach'], ['other', locale === 'es' ? 'Otro' : 'Other']];
 ---
-<Base locale={locale} title={`${T.title} · LoanPro365`} description={T.lead} alternates={ROUTES.prequal}>
+<Base locale={locale} title={`${T.title} · LoanPro365`} description={T.lead} alternates={ROUTES.prequal} hideStickyCta>
   <h1>{T.title}</h1>
   <p class="lead">{T.lead}</p>
 
   <form id="prequal" class="prequal" novalidate data-api={apiUrl} data-locale={locale} data-consent-version={CONSENT_VERSION} data-whatsapp={COMPANY.whatsappHref}>
-    <p class="progress" aria-live="polite"><span data-step-label>{T.step} 1 {T.of} 4</span></p>
+    <div class="progress"><span aria-live="polite" data-step-label>{T.step} 1 {T.of} 4</span><span class="progress-bar" aria-hidden="true"><span data-step-bar></span></span></div>
 
     <fieldset data-step="1">
       <legend>{T.s1}</legend>
@@ -61,14 +61,14 @@ const counties = [['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-b
 
     <fieldset data-step="2" hidden>
       <legend>{T.s2}</legend>
-      <label>{T.price}<input type="number" inputmode="numeric" min="0" name="price" required /></label>
-      <label>{T.down}<input type="number" inputmode="numeric" min="0" name="down" required /></label>
+      <label>{T.price}<span class="money"><input type="number" inputmode="numeric" min="0" name="price" required /></span></label>
+      <label>{T.down}<span class="money"><input type="number" inputmode="numeric" min="0" name="down" required /></span></label>
     </fieldset>
 
     <fieldset data-step="3" hidden>
       <legend>{T.s3}</legend>
-      <label>{T.income}<input type="number" inputmode="numeric" min="0" name="income" required /></label>
-      <label>{T.debts}<input type="number" inputmode="numeric" min="0" name="debts" value="0" /></label>
+      <label>{T.income}<span class="money"><input type="number" inputmode="numeric" min="0" name="income" required /></span></label>
+      <label>{T.debts}<span class="money"><input type="number" inputmode="numeric" min="0" name="debts" value="0" /></span></label>
       <label>{T.score}<select name="score">{Object.entries(T.scores).reverse().map(([v, l]) => <option value={v} selected={v === '640'}>{l}</option>)}</select></label>
       <label class="check"><input type="checkbox" name="veteran" /> {T.veteran}</label>
       <label class="check"><input type="checkbox" name="first" checked /> {T.first}</label>
@@ -110,6 +110,14 @@ const counties = [['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-b
   const money = (v: number) => v.toLocaleString(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
   let current = 0;
+  // Datos que la persona ya escribió en la portada (misma pestaña).
+  try {
+    const pre = JSON.parse(sessionStorage.getItem('lp365-est') || 'null');
+    if (pre) {
+      (form.elements.namedItem('income') as HTMLInputElement).value = String(pre.income || '');
+      (form.elements.namedItem('down') as HTMLInputElement).value = String(pre.down || '');
+    }
+  } catch {}
 
   function show(i: number) {
     current = i;
@@ -119,6 +127,7 @@ const counties = [['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-b
     $<HTMLElement>('[data-next]').hidden = i === steps.length - 1;
     $<HTMLElement>('[data-send]').hidden = i !== steps.length - 1;
     err.hidden = true;
+    $<HTMLElement>('[data-step-bar]').style.setProperty('--p', String((i + 1) / steps.length));
     if (i === 3) summarize();
     steps[i].querySelector<HTMLElement>('input, select')?.focus();
   }

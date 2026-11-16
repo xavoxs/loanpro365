@@ -20,6 +20,7 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Siguiente posta (tareas en orden)
 
+0. Poner la foto real de Pablo en `apps/web/public/img/pablo.jpg` (la portada la usa sola; hoy muestra sus iniciales).
 1. Activar el aviso al broker cuando el dueño cree la cuenta de Resend (ver "Roto o pendiente").
 2. Turnstile en la precalificación (crear el widget en Cloudflare; clave secreta con `wrangler secret put`).
 3. Reseñas de Google (`/v1/reviews`) y bloque de confianza en la home.
@@ -27,6 +28,13 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 5. Verificador de ayudas: añadir programas de condado solo con URL oficial verificada.
 
 ## Entradas
+
+### 2026-11-15 — Sesión 7 (Claude Code, rediseño con /impeccable)
+- **Hecho:** rediseño completo del sistema visual. `PRODUCT.md` creado con el dueño (acción principal: precalificación; prueba disponible: foto real de Pablo; identidad libre). Dirección elegida por el dueño: el estándar de la categoría al nivel de Better.com y Rocket Mortgage (contrato en `apps/web/.impeccable/surfaces/`). Nueva portada: titular, estimador en vivo (ingreso + ahorros → rango de precio, con conteo animado), tarjeta de Pablo con NMLS, franja de confianza, 3 pasos, caminos de préstamo, herramientas, costos de Florida con fuente, sobre Pablo, preguntas frecuentes y cierre con CTA. Cabecera fija con CTA «Precalifícate», selector EN/ES y menú móvil con panel; pie de 4 columnas con NMLS e igualdad de vivienda; barra fija móvil (Precalifícate + WhatsApp) que en la portada aparece al pasar el botón del hero. Manrope autoalojada, íconos Lucide. La precalificación hereda el sistema, con barra de progreso y datos precargados desde el estimador (sessionStorage, nunca en la URL).
+- **Decisiones:** sin testimonios ni cifras (no existen). La foto de Pablo se usa sola si existe `public/img/pablo.jpg`.
+- **Verificado:** 16 + 8 pruebas, `astro check` 0 errores, build 47 páginas, detector de diseño sin hallazgos; revisión en navegador a 1280, 1440 y 375 px (sin scroll horizontal; barra fija oculta arriba y visible al bajar). Desplegado en la vista previa.
+- **No verificado:** revisión final por un agente revisor independiente (no se pudieron guardar capturas en archivo); páginas de contenido revisadas solo en la herramienta de pago.
+- **Notas:** falta la foto real de Pablo (requiere permiso para descargarla del sitio actual o que el cliente la envíe).
 
 ### 2026-11-15 — Sesión 6 (Claude Code)
 - **Hecho:** aviso al broker por correo con Resend (`apps/api/src/notify.ts`), opcional: se activa solo con `RESEND_API_KEY`, `NOTIFY_TO` y `NOTIFY_FROM`; el correo lleva datos mínimos escapados y se envía en segundo plano (`waitUntil`), así que un fallo del correo no pierde el lead. Límite de envíos con el binding `LEADS_LIMITER` (5/min por IP). Campo trampa `website` en la precalificación.

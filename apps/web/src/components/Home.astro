@@ -1,33 +1,216 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import Base from '../layouts/Base.astro';
-import { ROUTES, TOOL_SLUGS, t, toolPath, type Locale, type ToolKey } from '../i18n';
+import Icon from './Icon.astro';
+import { COMPANY, ROUTES, t, toolPath, type Locale, type ToolKey } from '../i18n';
+import { HOME } from '../i18n/home';
+
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const d = t(locale);
-const tools = Object.keys(TOOL_SLUGS) as ToolKey[];
----
-<Base locale={locale} title={`LoanPro365 · ${d.hero.title}`} description={d.hero.sub} alternates={ROUTES.home}>
-  <section>
-    <h1>{d.hero.title}</h1>
-    <p class="lead">{d.hero.sub}</p>
-    <p><a class="btn" href={toolPath('affordability', locale)}>{d.cta.primary}</a></p>
-  </section>
+const h = HOME[locale];
+const es = locale === 'es';
 
-  <section aria-labelledby="why">
-    <h2 id="why" class="visually-hidden">LoanPro365</h2>
-    <div class="grid">
-      {d.messages.map((m) => <div class="card"><h3>{m.t}</h3><p>{m.d}</p></div>)}
+/** La foto real de Pablo se coloca en public/img/pablo.jpg; mientras no exista se muestran sus iniciales. */
+const hasPhoto = fs.existsSync(path.resolve(process.cwd(), 'public/img/pablo.jpg'));
+const featuredTools: { key: ToolKey; icon: string }[] = [
+  { key: 'affordability', icon: 'calculator' },
+  { key: 'payment', icon: 'circle-dollar-sign' },
+  { key: 'closing', icon: 'file-text' },
+  { key: 'rentVsBuy', icon: 'key-round' },
+  { key: 'compare', icon: 'scale' },
+  { key: 'documents', icon: 'clipboard-list' },
+];
+const stepIcons = ['calculator', 'scale', 'key-round'];
+---
+<Base locale={locale} title={es ? 'LoanPro365 · Hipotecas en el sur de Florida, en español' : 'LoanPro365 · South Florida mortgages, in your language'} description={h.sub} alternates={ROUTES.home} full>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1 id="hero-title">{h.h1}</h1>
+        <p class="lead">{h.sub}</p>
+
+        <form class="estimator" id="estimator" data-locale={locale} novalidate onsubmit="return false">
+          <h2>{h.est.title}</h2>
+          <div class="est-fields">
+            <label>{h.est.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" value="7000" /></span></label>
+            <label>{h.est.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" value="25000" /></span></label>
+          </div>
+          <div class="est-out" aria-live="polite">
+            <span class="label">{h.est.result}</span>
+            <span class="value" data-range>—</span>
+          </div>
+          <a class="btn block" href={ROUTES.prequal[locale]} data-prequal>{h.est.cta}<Icon name="arrow-right" size={20} /></a>
+          <p class="est-alt"><a href={COMPANY.whatsappHref} rel="noopener"><Icon name="message-circle" size={18} />{h.est.or}</a></p>
+          <p class="est-note">{h.est.note}</p>
+        </form>
+      </div>
+
+      <aside class="hero-side" aria-label={es ? 'Tu corredor' : 'Your broker'}>
+        <div class="pablo-card">
+          {hasPhoto
+            ? <img class="pablo-photo" src="/img/pablo.jpg" alt={`${COMPANY.broker}, ${h.pablo.role}`} width="600" height="600" loading="eager" />
+            : <div class="pablo-photo" role="img" aria-label={COMPANY.broker}>PS</div>}
+          <div class="body">
+            <p class="name">{COMPANY.broker}</p>
+            <p class="role">{h.pablo.role} · NMLS #{COMPANY.nmlsBroker}</p>
+            <div class="meta">
+              <span><Icon name="globe" size={16} />{h.pablo.lang}</span>
+              <span><Icon name="badge-check" size={16} /><a href={COMPANY.nmlsUrl} rel="noopener">{h.pablo.verify}</a></span>
+            </div>
+          </div>
+        </div>
+        <ul class="trust">
+          {h.trust.map((x, i) => <li><Icon name={['lock', 'shield-check', 'badge-check', 'house'][i]} size={18} />{x}</li>)}
+        </ul>
+      </aside>
     </div>
   </section>
 
-  <section aria-labelledby="tools">
-    <h2 id="tools">{d.toolsTitle}</h2>
-    <div class="grid">
-      {tools.map((k) => (
-        <a class="card" href={toolPath(k, locale)}>
-          <h3>{d.tools[k].name}</h3><p>{d.tools[k].desc}</p>
-        </a>
-      ))}
+  <section class="band" aria-labelledby="how">
+    <div class="wrap">
+      <div class="band-head"><h2 id="how">{h.how.h}</h2></div>
+      <ol class="steps">
+        {h.how.steps.map((s, i) => (
+          <li>
+            <span class="dot"><Icon name={stepIcons[i]} size={20} /></span>
+            <div><h3>{s.t}</h3><p>{s.d}</p></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="band alt" aria-labelledby="paths">
+    <div class="wrap">
+      <div class="band-head"><h2 id="paths">{h.paths.h}</h2></div>
+      <div class="paths">
+        {h.paths.items.map((p) => (
+          <a class="path" href={ROUTES[p.key as 'buy'][locale]}>
+            <span class="ico"><Icon name={p.icon} size={24} /></span>
+            <span><h3>{p.t}</h3><p>{p.d}</p></span>
+            <Icon name="arrow-right" size={20} />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="tools">
+    <div class="wrap">
+      <div class="band-head"><h2 id="tools">{h.tools.h}</h2><p>{h.tools.d}</p></div>
+      <div class="tool-list">
+        {featuredTools.map(({ key, icon }) => (
+          <a class="tool-row" href={toolPath(key, locale)}>
+            <Icon name={icon} size={22} />
+            <span><strong>{d.tools[key].name}</strong><span>{d.tools[key].desc}</span></span>
+            <Icon name="arrow-right" size={18} />
+          </a>
+        ))}
+      </div>
+      <a class="link-arrow" href={ROUTES.tools[locale]}>{h.tools.all}<Icon name="arrow-right" size={18} /></a>
+    </div>
+  </section>
+
+  <section class="band alt" aria-labelledby="florida">
+    <div class="wrap split">
+      <div class="band-head">
+        <h2 id="florida">{h.florida.h}</h2>
+        <p>{h.florida.d}</p>
+        <p><a class="btn ghost" href={toolPath('closing', locale)}>{h.florida.cta}</a></p>
+      </div>
+      <div class="fl-table">
+        {h.florida.items.map((x) => <div><strong>{x.t}</strong><span>{x.d}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="about">
+    <div class="wrap split">
+      {hasPhoto
+        ? <img class="about-photo" src="/img/pablo.jpg" alt={COMPANY.broker} width="800" height="600" loading="lazy" />
+        : <div class="about-photo" role="img" aria-label={COMPANY.broker}>PS</div>}
+      <div>
+        <h2 id="about">{h.about.h}</h2>
+        <p class="lead" style="margin-top:12px">{h.about.d}</p>
+        <ul class="checks">{h.about.points.map((x) => <li><Icon name="check" size={18} />{x}</li>)}</ul>
+        <a class="link-arrow" href={ROUTES.about[locale]}>{h.about.cta}<Icon name="arrow-right" size={18} /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" aria-labelledby="faq">
+    <div class="wrap">
+      <div class="band-head"><h2 id="faq">{h.faq.h}</h2></div>
+      <div class="faq">
+        {h.faq.items.map((f) => (
+          <details>
+            <summary>{f.q}<Icon name="chevron-down" size={20} /></summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="final" aria-labelledby="final">
+    <div class="wrap">
+      <h2 id="final">{h.final.h}</h2>
+      <p>{h.final.d}</p>
+      <a class="btn" href={ROUTES.prequal[locale]}>{h.final.cta}<Icon name="arrow-right" size={20} /></a>
     </div>
   </section>
 </Base>
+
+<script>
+  import { affordability } from '@loanpro365/calculators';
+
+  const form = document.getElementById('estimator') as HTMLFormElement | null;
+  if (form) {
+    const out = form.querySelector<HTMLElement>('[data-range]')!;
+    const cta = form.querySelector<HTMLAnchorElement>('[data-prequal]')!;
+    const fmt = new Intl.NumberFormat(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let shown = [0, 0];
+    let raf = 0;
+
+    const compute = () => {
+      const income = Number((form.elements.namedItem('income') as HTMLInputElement).value) || 0;
+      const down = Number((form.elements.namedItem('down') as HTMLInputElement).value) || 0;
+      const max = affordability({ grossMonthlyIncome: income, monthlyDebts: 0, downPayment: down, annualRatePct: 6.5, years: 30, housingCostsPctOfPrice: 3 }).maxPrice;
+      const low = Math.floor((max * 0.85) / 1000) * 1000;
+      return { low, max, income, down };
+    };
+
+    // Interacción distintiva: el rango cuenta de un valor al otro.
+    const animateTo = (target: [number, number]) => {
+      cancelAnimationFrame(raf);
+      const from = [...shown];
+      const start = performance.now();
+      const dur = reduce ? 0 : 450;
+      out.classList.add('tick');
+      const step = (now: number) => {
+        const k = dur === 0 ? 1 : Math.min(1, (now - start) / dur);
+        const e = 1 - Math.pow(1 - k, 4);
+        shown = [from[0] + (target[0] - from[0]) * e, from[1] + (target[1] - from[1]) * e];
+        out.textContent = target[1] > 0 ? `${fmt.format(shown[0])} – ${fmt.format(shown[1])}` : '—';
+        if (k < 1) raf = requestAnimationFrame(step);
+        else out.classList.remove('tick');
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    const render = () => {
+      const r = compute();
+      animateTo([r.low, r.max]);
+    };
+    // Lleva los datos a la precalificación para no volver a pedirlos (solo en esta pestaña, nunca en la URL).
+    cta.addEventListener('click', () => {
+      const r = compute();
+      try { sessionStorage.setItem('lp365-est', JSON.stringify({ income: r.income, down: r.down })); } catch {}
+    });
+    form.addEventListener('input', render);
+    render();
+  }
+</script>

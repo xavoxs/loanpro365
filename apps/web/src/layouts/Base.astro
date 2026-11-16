@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { COMPANY, ROUTES, t, other, type Locale } from '../i18n';
+import Icon from '../components/Icon.astro';
+import { COMPANY, ROUTES, TOOL_SLUGS, t, other, toolPath, type Locale, type ToolKey } from '../i18n';
 
 interface Props {
   locale: Locale;
@@ -8,26 +9,37 @@ interface Props {
   description: string;
   /** Ruta equivalente en cada idioma (para hreflang y el selector). */
   alternates: Record<Locale, string>;
+  /** Portada: secciones a todo el ancho en lugar de la columna de lectura. */
+  full?: boolean;
+  /** Oculta la barra fija móvil (p. ej. dentro de la precalificación). */
+  hideStickyCta?: boolean;
 }
-const { locale, title, description, alternates } = Astro.props;
+const { locale, title, description, alternates, full = false, hideStickyCta = false } = Astro.props;
 const d = t(locale);
+const es = locale === 'es';
 const site = Astro.site!.origin;
 const nav = [
   ['buy', d.nav.buy], ['refinance', d.nav.refinance], ['credit', d.nav.credit],
-  ['tools', d.nav.tools], ['about', d.nav.about], ['contact', d.nav.contact],
+  ['investors', d.nav.investors], ['tools', d.nav.tools], ['about', d.nav.about],
 ] as const;
+const footerTools: ToolKey[] = ['affordability', 'payment', 'closing', 'rentVsBuy', 'compare'];
+const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
 ---
 <!doctype html>
-<html lang={locale === 'es' ? 'es-US' : 'en-US'}>
+<html lang={es ? 'es-US' : 'en-US'}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={site + alternates[locale]} />
     <link rel="alternate" hreflang="en-US" href={site + alternates.en} />
     <link rel="alternate" hreflang="es-US" href={site + alternates.es} />
     <link rel="alternate" hreflang="x-default" href={site + alternates.en} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={es ? 'es_US' : 'en_US'} />
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org', '@type': 'MortgageBroker', name: COMPANY.name,
       telephone: COMPANY.phone, email: COMPANY.email, areaServed: 'Florida', knowsLanguage: ['en', 'es'],
@@ -37,34 +49,96 @@ const nav = [
   <body>
     <a class="skip" href="#main">{d.skip}</a>
     <header class="site-header">
-      <a class="brand" href={ROUTES.home[locale]}>LoanPro365</a>
-      <a class="lang" href={alternates[other(locale)]} hreflang={other(locale)} data-lang={other(locale)}>{d.langSwitch}</a>
-      <nav aria-label="Main" class="nav-desktop">
-        <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
-      </nav>
-      <details class="nav-mobile">
-        <summary>{locale === 'es' ? 'Menú' : 'Menu'}</summary>
-        <nav aria-label="Main">
+      <div class="wrap">
+        <a class="brand" href={ROUTES.home[locale]} aria-label="LoanPro365 Mortgages">
+          <span class="brand-mark"><Icon name="house" size={18} /></span>
+          <span>LoanPro365<small>Mortgages · South Florida</small></span>
+        </a>
+        <nav aria-label={es ? 'Principal' : 'Main'} class="nav-desktop">
           <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
         </nav>
-      </details>
+        <a class="header-phone" href={COMPANY.phoneHref}><Icon name="phone" size={18} />{COMPANY.phone}</a>
+        <a class="lang" href={alternates[other(locale)]} hreflang={other(locale)} lang={other(locale)} data-lang={other(locale)}>
+          <Icon name="globe" size={16} />{es ? 'EN' : 'ES'}<span class="visually-hidden"> — {d.langSwitch}</span>
+        </a>
+        <a class="btn sm header-cta" href={ROUTES.prequal[locale]}>{prequalLabel}</a>
+        <details class="nav-mobile">
+          <summary aria-label={es ? 'Abrir menú' : 'Open menu'}>
+            <span class="when-closed"><Icon name="menu" size={24} /></span>
+            <span class="when-open"><Icon name="x" size={24} /></span>
+          </summary>
+          <div class="panel">
+            <nav aria-label={es ? 'Principal' : 'Main'}>
+              <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}<Icon name="arrow-right" size={18} /></a></li>)}</ul>
+            </nav>
+            <a class="btn block" href={ROUTES.prequal[locale]}>{prequalLabel}</a>
+          </div>
+        </details>
+      </div>
     </header>
-    <main id="main"><slot /></main>
+
+    {full ? <main id="main"><slot /></main> : <main id="main" class="page"><slot /></main>}
+
     <footer class="site-footer">
-      <p>{COMPANY.name} · {d.trust.licensed}</p>
-      <p>
-        <a href={COMPANY.nmlsUrl} rel="noopener">{d.trust.nmls} #{COMPANY.nmlsCompany}</a>
-        · {COMPANY.broker}, {d.trust.nmls} #{COMPANY.nmlsBroker} · {d.trust.ehl}
-      </p>
-      <p><a href={COMPANY.phoneHref}>{COMPANY.phone}</a> · <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></p>
-      <p><a href={ROUTES.legal[locale]}>{d.footer.legal}</a> · <a href={ROUTES.learn[locale]}>{locale === "es" ? "Aprende" : "Learn"}</a> · <a href={ROUTES.assistance[locale]}>{locale === "es" ? "Ayudas en Florida" : "Florida assistance"}</a></p>
-      <p class="small">{d.disclaimer}</p>
+      <div class="wrap">
+        <div class="footer-grid">
+          <div>
+            <h2>LoanPro365 Mortgages</h2>
+            <p>{es ? 'Corredor hipotecario independiente en el sur de Florida. Atención en español e inglés.' : 'Independent mortgage broker in South Florida. Service in English and Spanish.'}</p>
+          </div>
+          <div>
+            <h2>{es ? 'Préstamos' : 'Loans'}</h2>
+            <ul>
+              <li><a href={ROUTES.buy[locale]}>{d.nav.buy}</a></li>
+              <li><a href={ROUTES.refinance[locale]}>{d.nav.refinance}</a></li>
+              <li><a href={ROUTES.credit[locale]}>{d.nav.credit}</a></li>
+              <li><a href={ROUTES.investors[locale]}>{d.nav.investors}</a></li>
+              <li><a href={ROUTES.assistance[locale]}>{es ? 'Ayudas en Florida' : 'Florida assistance'}</a></li>
+            </ul>
+          </div>
+          <div>
+            <h2>{d.nav.tools}</h2>
+            <ul>
+              {footerTools.map((k) => <li><a href={toolPath(k, locale)}>{d.tools[k].name}</a></li>)}
+              <li><a href={ROUTES.tools[locale]}>{es ? 'Todas las herramientas' : 'All tools'}</a></li>
+            </ul>
+          </div>
+          <div>
+            <h2>{d.nav.contact}</h2>
+            <ul>
+              <li><a href={COMPANY.phoneHref}>{COMPANY.phone}</a></li>
+              <li><a href={COMPANY.whatsappHref} rel="noopener">WhatsApp</a></li>
+              <li><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></li>
+              <li><a href={ROUTES.learn[locale]}>{es ? 'Aprende' : 'Learn'}</a></li>
+              <li><a href={ROUTES.legal[locale]}>{d.footer.legal}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-legal">
+          <p>
+            {COMPANY.name} · <a href={COMPANY.nmlsUrl} rel="noopener">NMLS #{COMPANY.nmlsCompany}</a> · {COMPANY.broker}, NMLS #{COMPANY.nmlsBroker}
+          </p>
+          <p class="ehl"><Icon name="house" size={16} />{d.trust.ehl}</p>
+          <p>{d.disclaimer}</p>
+        </div>
+      </div>
     </footer>
-    <nav class="sticky-cta" aria-label="Contact">
-      <a href={COMPANY.phoneHref}>{d.cta.call}</a>
-      <a href={COMPANY.whatsappHref} rel="noopener">{d.cta.whatsapp}</a>
-    </nav>
+
+    {!hideStickyCta && (
+      <nav class="sticky-cta" aria-label={es ? 'Acciones rápidas' : 'Quick actions'}>
+        <a class="btn" href={ROUTES.prequal[locale]}>{d.cta.prequal}</a>
+        <a class="btn ghost wa" href={COMPANY.whatsappHref} rel="noopener" aria-label="WhatsApp"><Icon name="message-circle" size={22} /></a>
+      </nav>
+    )}
+
     <script>
+      // En la portada la barra fija aparece cuando el botón principal del hero sale de la pantalla.
+      const bar = document.querySelector<HTMLElement>('.sticky-cta');
+      const heroCta = document.querySelector<HTMLElement>('[data-prequal]');
+      if (bar && heroCta && 'IntersectionObserver' in window) {
+        bar.classList.add('away');
+        new IntersectionObserver(([e]) => bar.classList.toggle('away', e.isIntersecting || e.boundingClientRect.top > 0)).observe(heroCta);
+      }
       document.querySelectorAll<HTMLAnchorElement>('a[data-lang]').forEach((a) =>
         a.addEventListener('click', () => { try { localStorage.setItem('lang', a.dataset.lang!); } catch {} }),
       );
