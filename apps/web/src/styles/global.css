@@ -90,3 +90,4 @@ legend { font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; }
 .consent { align-items: flex-start; }
 .error { color: #b42318; }
 [aria-invalid="true"] { border-color: #b42318; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

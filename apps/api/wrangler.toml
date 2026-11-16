@@ -10,3 +10,15 @@ ALLOWED_ORIGIN = "https://loanpro365.com,https://loanpro365-web.francisco-buenan
 binding = "DB"
 database_name = "loanpro365"
 database_id = "42086125-38b0-445d-8bfe-1bcd685b6b22"
+
+# Máximo 5 envíos por minuto por IP en /v1/leads
+[[ratelimits]]
+name = "LEADS_LIMITER"
+namespace_id = "3650"
+
+  [ratelimits.simple]
+  limit = 5
+  period = 60
+
+# Aviso al broker (Resend). La clave NO va aquí: `npx wrangler secret put RESEND_API_KEY`.
+# NOTIFY_TO y NOTIFY_FROM se agregan en [vars] cuando el cliente confirme el correo oficial.

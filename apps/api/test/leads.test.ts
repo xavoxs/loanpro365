@@ -23,3 +23,33 @@ describe('POST /v1/leads', () => {
     expect((await post({ ...valid, locale: 'fr' })).status).toBe(400);
   });
 });
+
+import { vi } from 'vitest';
+import { buildLeadEmail } from '../src/notify';
+
+describe('protecciones y aviso', () => {
+  it('ignores honeypot submissions without storing', async () => {
+    const r = await post({ ...valid, website: 'spam.example' });
+    expect(r.status).toBe(201);
+    expect((await r.json()).id).toBe('ignored');
+  });
+  it('returns 429 when the limiter refuses', async () => {
+    const r = await app.request('/v1/leads', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(valid) },
+      { ...env, LEADS_LIMITER: { limit: async () => ({ success: false }) } });
+    expect(r.status).toBe(429);
+  });
+  it('sends the broker email when Resend is configured', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}', { status: 200 }));
+    const r = await app.request('/v1/leads', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(valid) },
+      { ...env, RESEND_API_KEY: 'test', NOTIFY_TO: 'broker@example.com', NOTIFY_FROM: 'Leads <leads@example.com>' });
+    expect(r.status).toBe(201);
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(String(fetchMock.mock.calls[0][0])).toBe('https://api.resend.com/emails');
+    fetchMock.mockRestore();
+  });
+  it('escapes HTML in the email', () => {
+    const m = buildLeadEmail({ id: '1', createdAt: 'now', name: '<b>x</b>', locale: 'es', payload: { county: 'broward' } });
+    expect(m.html).not.toContain('<b>x</b>');
+    expect(m.subject).toContain('broward');
+  });
+});

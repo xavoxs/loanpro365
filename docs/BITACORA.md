@@ -7,8 +7,8 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 - **Fase:** 2 — Precalificación y API, desplegadas como vista previa (ver `docs/ARQUITECTURA.md` §6)
 - **En línea (vista previa, `noindex`):** web https://loanpro365-web.francisco-buenano.workers.dev · API https://loanpro365-api.francisco-buenano.workers.dev
-- **Funciona:** calculadoras (16 pruebas); web EN/ES con 47 páginas: home, 11 herramientas, índice, 9 páginas de contenido, legal y precalificación de 4 pasos; menú plegable en móvil; API `/v1/leads` validada (4 pruebas) que guarda en D1; CI con pruebas, `astro check`, build, paridad EN/ES y hreflang.
-- **Roto o pendiente conocido:** el broker no recibe aviso de los leads nuevos (hoy solo quedan en D1). Sin Turnstile ni límite de envíos. Políticas de privacidad, quejas y accesibilidad pendientes de redacción legal. El dominio loanpro365.com no apunta al sitio nuevo.
+- **Funciona:** calculadoras (16 pruebas); web EN/ES con 47 páginas: home, 11 herramientas, índice, 9 páginas de contenido, legal y precalificación de 4 pasos; menú plegable en móvil; API `/v1/leads` validada (8 pruebas) que guarda en D1, con límite de 5 envíos/min por IP y campo trampa anti-bots; aviso al broker por correo (Resend) listo pero **inactivo** hasta configurar la clave; CI con pruebas, `astro check`, build, paridad EN/ES y hreflang.
+- **Roto o pendiente conocido:** el broker aún no recibe avisos: falta crear la cuenta de Resend, guardar `RESEND_API_KEY` con `wrangler secret put` y definir `NOTIFY_TO`/`NOTIFY_FROM` en `[vars]` (requiere el correo oficial). Sin Turnstile. Políticas de privacidad, quejas y accesibilidad pendientes de redacción legal. El dominio loanpro365.com no apunta al sitio nuevo.
 - **Bloqueado por el cliente:** NMLS del asesor, correo oficial, dirección física, licencia OFR, tipo de consulta de crédito, foto y biografía de Pablo, textos legales, revisión legal del texto de consentimiento TCPA, acceso al DNS de loanpro365.com.
 
 ## Infraestructura (Cloudflare)
@@ -20,13 +20,20 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Siguiente posta (tareas en orden)
 
-1. Aviso al broker por cada lead (correo o WhatsApp) con datos mínimos.
-2. Turnstile y límite de envíos por IP en `/v1/leads`.
+1. Activar el aviso al broker cuando el dueño cree la cuenta de Resend (ver "Roto o pendiente").
+2. Turnstile en la precalificación (crear el widget en Cloudflare; clave secreta con `wrangler secret put`).
 3. Reseñas de Google (`/v1/reviews`) y bloque de confianza en la home.
 4. Páginas de condado (Broward, Miami-Dade, Palm Beach) y sección Aprende con guías.
 5. Verificador de ayudas: añadir programas de condado solo con URL oficial verificada.
 
 ## Entradas
+
+### 2026-11-15 — Sesión 6 (Claude Code)
+- **Hecho:** aviso al broker por correo con Resend (`apps/api/src/notify.ts`), opcional: se activa solo con `RESEND_API_KEY`, `NOTIFY_TO` y `NOTIFY_FROM`; el correo lleva datos mínimos escapados y se envía en segundo plano (`waitUntil`), así que un fallo del correo no pierde el lead. Límite de envíos con el binding `LEADS_LIMITER` (5/min por IP). Campo trampa `website` en la precalificación.
+- **Decisiones:** Resend por ser simple y sin SDK; el lead siempre se guarda en D1 primero. Las claves nunca van en el repo.
+- **Verificado:** 16 + 8 pruebas; `astro check` 0 errores; API y web desplegadas; en vivo, 7 envíos seguidos con campo trampa → el 7.º devolvió 429 y la base quedó con 0 leads.
+- **No verificado:** envío real de correo (no hay clave de Resend).
+- **Notas:** el límite de Cloudflare es aproximado (dejó pasar 6, no 5).
 
 ### 2026-11-15 — Sesión 5 (Claude Code)
 - **Hecho:** despliegue de vista previa en Cloudflare: D1 `loanpro365` con el esquema, API `loanpro365-api` (CORS con varios orígenes), web estática `loanpro365-web` (Workers Static Assets, `wrangler.jsonc` solo con `assets`). URL pública de la API en `Prequal.astro` (no es secreta). `_headers` con `X-Robots-Tag: noindex`.
