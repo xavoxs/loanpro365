@@ -1,0 +1,11 @@
+{
+  "name": "loanpro365",
+  "private": true,
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "test": "npm test -w @loanpro365/calculators",
+    "dev": "npm run dev -w @loanpro365/web",
+    "build": "npm run build -w @loanpro365/web",
+    "dev:api": "npm run dev -w @loanpro365/api"
+  }
+}

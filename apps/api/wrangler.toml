@@ -1,0 +1,11 @@
+name = "loanpro365-api"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://loanpro365.com"
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "loanpro365"
+# database_id = "<crear con: wrangler d1 create loanpro365>"

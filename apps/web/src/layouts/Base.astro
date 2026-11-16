@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+import { COMPANY, ROUTES, t, other, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** Ruta equivalente en cada idioma (para hreflang y el selector). */
+  alternates: Record<Locale, string>;
+}
+const { locale, title, description, alternates } = Astro.props;
+const d = t(locale);
+const site = Astro.site!.origin;
+const nav = [
+  ['buy', d.nav.buy], ['refinance', d.nav.refinance], ['credit', d.nav.credit],
+  ['tools', d.nav.tools], ['about', d.nav.about], ['contact', d.nav.contact],
+] as const;
+---
+<!doctype html>
+<html lang={locale === 'es' ? 'es-US' : 'en-US'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={site + alternates[locale]} />
+    <link rel="alternate" hreflang="en-US" href={site + alternates.en} />
+    <link rel="alternate" hreflang="es-US" href={site + alternates.es} />
+    <link rel="alternate" hreflang="x-default" href={site + alternates.en} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'MortgageBroker', name: COMPANY.name,
+      telephone: COMPANY.phone, email: COMPANY.email, areaServed: 'Florida', knowsLanguage: ['en', 'es'],
+      url: site + alternates[locale],
+    })} />
+  </head>
+  <body>
+    <a class="skip" href="#main">{d.skip}</a>
+    <header class="site-header">
+      <a class="brand" href={ROUTES.home[locale]}>LoanPro365</a>
+      <nav aria-label="Main">
+        <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
+      </nav>
+      <a class="lang" href={alternates[other(locale)]} hreflang={other(locale)} data-lang={other(locale)}>{d.langSwitch}</a>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <p>{COMPANY.name} · {d.trust.licensed}</p>
+      <p>
+        <a href={COMPANY.nmlsUrl} rel="noopener">{d.trust.nmls} #{COMPANY.nmlsCompany}</a>
+        · {COMPANY.broker}, {d.trust.nmls} #{COMPANY.nmlsBroker} · {d.trust.ehl}
+      </p>
+      <p><a href={COMPANY.phoneHref}>{COMPANY.phone}</a> · <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></p>
+      <p class="small">{d.disclaimer}</p>
+    </footer>
+    <nav class="sticky-cta" aria-label="Contact">
+      <a href={COMPANY.phoneHref}>{d.cta.call}</a>
+      <a href={COMPANY.whatsappHref} rel="noopener">{d.cta.whatsapp}</a>
+    </nav>
+    <script>
+      document.querySelectorAll<HTMLAnchorElement>('a[data-lang]').forEach((a) =>
+        a.addEventListener('click', () => { try { localStorage.setItem('lang', a.dataset.lang!); } catch {} }),
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+---
+// Raíz: sirve inglés por defecto y SUGIERE español si el navegador lo prefiere (sin redirigir a la fuerza).
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LoanPro365 Mortgages</title>
+    <link rel="canonical" href="https://loanpro365.com/en/" />
+    <meta http-equiv="refresh" content="0; url=/en/" />
+    <script is:inline>
+      try {
+        var saved = localStorage.getItem('lang');
+        var pref = saved || ((navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en');
+        location.replace('/' + pref + '/');
+      } catch (e) { location.replace('/en/'); }
+    </script>
+  </head>
+  <body><a href="/en/">English</a> · <a href="/es/">Español</a></body>
+</html>

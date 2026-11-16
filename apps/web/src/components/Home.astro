@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import { ROUTES, TOOL_SLUGS, t, toolPath, type Locale, type ToolKey } from '../i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const d = t(locale);
+const tools = Object.keys(TOOL_SLUGS) as ToolKey[];
+---
+<Base locale={locale} title={`LoanPro365 · ${d.hero.title}`} description={d.hero.sub} alternates={ROUTES.home}>
+  <section>
+    <h1>{d.hero.title}</h1>
+    <p class="lead">{d.hero.sub}</p>
+    <p><a class="btn" href={toolPath('affordability', locale)}>{d.cta.primary}</a></p>
+  </section>
+
+  <section aria-labelledby="why">
+    <h2 id="why" class="visually-hidden">LoanPro365</h2>
+    <div class="grid">
+      {d.messages.map((m) => <div class="card"><h3>{m.t}</h3><p>{m.d}</p></div>)}
+    </div>
+  </section>
+
+  <section aria-labelledby="tools">
+    <h2 id="tools">{d.toolsTitle}</h2>
+    <div class="grid">
+      {tools.map((k) => (
+        <a class="card" href={toolPath(k, locale)} style="text-decoration:none">
+          <h3>{d.tools[k].name}</h3><p>{d.tools[k].desc}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>

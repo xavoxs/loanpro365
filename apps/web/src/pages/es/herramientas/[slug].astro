@@ -1,0 +1,9 @@
+---
+import Tool from '../../../components/Tool.astro';
+import { TOOL_SLUGS, type ToolKey } from '../../../i18n';
+export function getStaticPaths() {
+  return (Object.keys(TOOL_SLUGS) as ToolKey[]).map((tool) => ({ params: { slug: TOOL_SLUGS[tool].es }, props: { tool } }));
+}
+const { tool } = Astro.props;
+---
+<Tool locale="es" tool={tool} />

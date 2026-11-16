@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import { COMPANY, TOOL_SLUGS, t, toolPath, type Locale, type ToolKey } from '../i18n';
+interface Props { locale: Locale; tool: ToolKey }
+const { locale, tool } = Astro.props;
+const d = t(locale);
+const f = d.form;
+const alternates = { en: toolPath(tool, 'en'), es: toolPath(tool, 'es') };
+
+type Field = { name: string; label: string; value: number; step?: string };
+const fields: Record<ToolKey, Field[]> = {
+  payment: [
+    { name: 'price', label: f.price, value: 400000 },
+    { name: 'downPayment', label: f.down, value: 40000 },
+    { name: 'annualRatePct', label: f.rate, value: 6.5, step: '0.01' },
+    { name: 'years', label: f.years, value: 30 },
+    { name: 'propertyTaxYearly', label: f.tax, value: 7200 },
+    { name: 'insuranceYearly', label: f.insurance, value: 4800 },
+    { name: 'floodInsuranceYearly', label: f.flood, value: 0 },
+    { name: 'hoaMonthly', label: f.hoa, value: 0 },
+    { name: 'pmiRatePct', label: f.pmi, value: 0.6, step: '0.01' },
+  ],
+  affordability: [
+    { name: 'grossMonthlyIncome', label: f.income, value: 8000 },
+    { name: 'monthlyDebts', label: f.debts, value: 500 },
+    { name: 'downPayment', label: f.down, value: 40000 },
+    { name: 'annualRatePct', label: f.rate, value: 6.5, step: '0.01' },
+    { name: 'years', label: f.years, value: 30 },
+    { name: 'housingCostsPctOfPrice', label: f.costsPct, value: 3, step: '0.1' },
+    { name: 'hoaMonthly', label: f.hoa, value: 0 },
+  ],
+  closing: [
+    { name: 'price', label: f.price, value: 400000 },
+    { name: 'loanAmount', label: f.loan, value: 360000 },
+    { name: 'lenderFees', label: f.lenderFees, value: 2500 },
+    { name: 'titleAndSettlement', label: f.title, value: 3000 },
+    { name: 'prepaidsAndEscrow', label: f.prepaids, value: 4000 },
+  ],
+};
+---
+<Base locale={locale} title={`${d.tools[tool].name} · LoanPro365`} description={d.tools[tool].desc} alternates={alternates}>
+  <h1>{d.tools[tool].name}</h1>
+  <p class="lead">{d.tools[tool].desc}</p>
+
+  <form class="tool" data-tool={tool} data-locale={locale} data-labels={JSON.stringify(d.result)} novalidate>
+    {fields[tool].map((x) => (
+      <label>{x.label}<input type="number" inputmode="decimal" min="0" name={x.name} value={x.value} step={x.step ?? '1'} /></label>
+    ))}
+    {tool === 'closing' && (
+      <>
+        <label>{f.county}
+          <select name="county">
+            <option value="broward">Broward</option>
+            <option value="miami-dade">Miami-Dade</option>
+            <option value="palm-beach">Palm Beach</option>
+            <option value="other">Other / Otro</option>
+          </select>
+        </label>
+        <label class="check"><input type="checkbox" name="singleFamily" checked /> {f.sfr}</label>
+        <label class="check"><input type="checkbox" name="sellerPaysDeedStamps" checked /> {f.sellerDeed}</label>
+      </>
+    )}
+  </form>
+
+  <div class="result" aria-live="polite" id="result"></div>
+  <p><a class="btn ghost" href={COMPANY.whatsappHref} rel="noopener">{d.cta.talk}</a></p>
+  <p class="small">{d.disclaimer}</p>
+</Base>
+
+<script>
+  import { affordability, closingCosts, monthlyPayment, type County } from '@loanpro365/calculators';
+
+  const form = document.querySelector<HTMLFormElement>('form.tool')!;
+  const out = document.getElementById('result')!;
+  const L = JSON.parse(form.dataset.labels!);
+  const money = (n: number) => n.toLocaleString(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  const num = (k: string) => Number((form.elements.namedItem(k) as HTMLInputElement | null)?.value) || 0;
+  const checked = (k: string) => (form.elements.namedItem(k) as HTMLInputElement).checked;
+  const row = (k: string, v: number) => `<dt>${k}</dt><dd>${money(v)}</dd>`;
+
+  function render() {
+    const tool = form.dataset.tool;
+    if (tool === 'payment') {
+      const r = monthlyPayment({
+        price: num('price'), downPayment: num('downPayment'), annualRatePct: num('annualRatePct'), years: num('years') || 30,
+        propertyTaxYearly: num('propertyTaxYearly'), insuranceYearly: num('insuranceYearly'),
+        floodInsuranceYearly: num('floodInsuranceYearly'), hoaMonthly: num('hoaMonthly'), pmiRatePct: num('pmiRatePct'),
+      });
+      out.innerHTML = `<p>${L.total}</p><p class="big">${money(r.total)}</p><dl>${row(L.pi, r.principalInterest)}${row('Tax', r.tax)}${row('Insurance', r.insurance + r.flood)}${row('HOA', r.hoa)}${row('PMI', r.pmi)}</dl>`;
+    } else if (tool === 'affordability') {
+      const r = affordability({
+        grossMonthlyIncome: num('grossMonthlyIncome'), monthlyDebts: num('monthlyDebts'), downPayment: num('downPayment'),
+        annualRatePct: num('annualRatePct'), years: num('years') || 30, housingCostsPctOfPrice: num('housingCostsPctOfPrice'), hoaMonthly: num('hoaMonthly'),
+      });
+      out.innerHTML = `<p>${L.maxPrice}</p><p class="big">${money(r.maxPrice)}</p><dl>${row(L.maxPayment, r.maxHousingPayment)}</dl>`;
+    } else {
+      const r = closingCosts({
+        price: num('price'), loanAmount: num('loanAmount'), county: (form.elements.namedItem('county') as HTMLSelectElement).value as County,
+        singleFamily: checked('singleFamily'), sellerPaysDeedStamps: checked('sellerPaysDeedStamps'),
+        lenderFees: num('lenderFees'), titleAndSettlement: num('titleAndSettlement'), prepaidsAndEscrow: num('prepaidsAndEscrow'),
+      });
+      out.innerHTML = `<p>${L.closingTotal}</p><p class="big">${money(r.total)}</p><dl>${row(L.deed, r.items.deedStamps)}${row(L.note, r.items.noteStamps)}${row(L.intangible, r.items.intangibleTax)}</dl>`;
+    }
+  }
+  form.addEventListener('input', render);
+  render();
+</script>
