@@ -15,7 +15,12 @@ if (!dir) throw new Error('lucide-static not installed');
 const svg = fs
   .readFileSync(path.join(dir, `${name}.svg`), 'utf8')
   .replace(/<!--[\s\S]*?-->/g, '')
-  .replace(/\s(width|height)="\d+"/g, '')
-  .replace('<svg', `<svg width="${size}" height="${size}" class="icon ${cls ?? ''}" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true" focusable="false"'}`);
+  // Solo se cambian las medidas de la etiqueta <svg>, nunca las de sus figuras internas.
+  .replace(/<svg[^>]*>/, (tag) =>
+    tag
+      .replace(/\s(width|height)="\d+"/g, '')
+      .replace(/\sclass="[^"]*"/, '')
+      .replace('<svg', `<svg width="${size}" height="${size}" class="icon ${cls ?? ''}" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true" focusable="false"'}`),
+  );
 ---
 <Fragment set:html={svg} />

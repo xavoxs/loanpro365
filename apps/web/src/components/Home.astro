@@ -50,7 +50,7 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
       <aside class="hero-side" aria-label={es ? 'Tu corredor' : 'Your broker'}>
         <div class="pablo-card">
           {hasPhoto
-            ? <img class="pablo-photo" src="/img/pablo.jpg" alt={`${COMPANY.broker}, ${h.pablo.role}`} width="600" height="600" loading="eager" />
+            ? <img class="pablo-photo" src="/img/pablo.jpg" alt={`${COMPANY.broker}, ${h.pablo.role}`} width="735" height="814" loading="eager" fetchpriority="high" />
             : <div class="pablo-photo" role="img" aria-label={COMPANY.broker}>PS</div>}
           <div class="body">
             <p class="name">{COMPANY.broker}</p>
@@ -129,7 +129,7 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
   <section class="band" aria-labelledby="about">
     <div class="wrap split">
       {hasPhoto
-        ? <img class="about-photo" src="/img/pablo.jpg" alt={COMPANY.broker} width="800" height="600" loading="lazy" />
+        ? <img class="about-photo" src="/img/pablo.jpg" alt={COMPANY.broker} width="735" height="814" loading="lazy" decoding="async" />
         : <div class="about-photo" role="img" aria-label={COMPANY.broker}>PS</div>}
       <div>
         <h2 id="about">{h.about.h}</h2>

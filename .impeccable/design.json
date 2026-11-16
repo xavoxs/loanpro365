@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-15T00:00:00Z",
+  "title": "Design System: LoanPro365",
+  "extensions": {
+    "colorMeta": {
+      "navy-ink": { "role": "neutral", "displayName": "Navy Ink", "canonical": "#0c1f3f", "cssVar": "--ink", "tonalRamp": ["#060f20", "#0c1f3f", "#1d3460", "#334c7d", "#53699a", "#7f91b8", "#b3c0d8", "#e3e9f3"] },
+      "slate-ink": { "role": "neutral", "displayName": "Slate Ink", "canonical": "#3c4b66", "cssVar": "--ink-2", "tonalRamp": ["#151b26", "#26303f", "#3c4b66", "#55647f", "#717f98", "#959fb3", "#bcc4d2", "#e6e9ef"] },
+      "muted-slate": { "role": "neutral", "displayName": "Muted Slate", "canonical": "#5d6b84", "cssVar": "--ink-3", "tonalRamp": ["#1a1f28", "#2d3545", "#434e63", "#5d6b84", "#7a879d", "#9ba5b7", "#c0c7d3", "#e7eaef"] },
+      "white-ground": { "role": "neutral", "displayName": "White Ground", "canonical": "#ffffff", "cssVar": "--bg", "tonalRamp": ["#262626", "#474747", "#6b6b6b", "#919191", "#b5b5b5", "#d6d6d6", "#efefef", "#ffffff"] },
+      "pale-field": { "role": "neutral", "displayName": "Pale Field", "canonical": "#eef3fb", "cssVar": "--field", "tonalRamp": ["#1e2633", "#38455a", "#566683", "#7a8ba8", "#a1b0c8", "#c7d3e5", "#dfe7f4", "#eef3fb"] },
+      "mist-field": { "role": "neutral", "displayName": "Mist Field", "canonical": "#f6f8fc", "cssVar": "--field-2", "tonalRamp": ["#21252c", "#3d444f", "#5d6676", "#828b9b", "#a8b0be", "#ced4de", "#e7ebf2", "#f6f8fc"] },
+      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "#dbe3ef", "cssVar": "--line", "tonalRamp": ["#1c222b", "#36404f", "#536177", "#75839a", "#9ba7ba", "#b8c5db", "#dbe3ef", "#f1f4f9"] },
+      "action-blue": { "role": "primary", "displayName": "Action Blue", "canonical": "#1f4fd8", "cssVar": "--brand", "tonalRamp": ["#0a1a4a", "#112c7f", "#173fb4", "#1f4fd8", "#4d74e4", "#8aa4ee", "#c3d1f7", "#e6edff"] },
+      "action-blue-deep": { "role": "primary", "displayName": "Deep Action Blue", "canonical": "#173fb4", "cssVar": "--brand-hover", "tonalRamp": ["#081540", "#0f266f", "#173fb4", "#2a54cc", "#5878dc", "#90a6ea", "#c6d2f5", "#e8eefc"] },
+      "action-blue-soft": { "role": "primary", "displayName": "Blue Wash", "canonical": "#e6edff", "cssVar": "--brand-soft", "tonalRamp": ["#141f3d", "#26386b", "#3d559e", "#5f77c4", "#8ea0dc", "#bccaf0", "#d6e0fb", "#e6edff"] },
+      "confirm-green": { "role": "tertiary", "displayName": "Confirmation Green", "canonical": "#0f7a4a", "cssVar": "--ok", "tonalRamp": ["#06301d", "#0a4d2f", "#0f7a4a", "#2b9466", "#5bb08a", "#93cdb2", "#c8e7d8", "#eaf6f0"] },
+      "error-red": { "role": "tertiary", "displayName": "Error Red", "canonical": "#b42318", "cssVar": "--error", "tonalRamp": ["#430d09", "#701610", "#b42318", "#cf4237", "#e0736a", "#eda59f", "#f7d3d0", "#fdeeed"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The H1 only; balanced wrap." },
+      "headline": { "displayName": "Headline", "purpose": "Section H2s; interior pages step down to clamp(1.35rem, 1.2rem + 0.6vw, 1.7rem)." },
+      "figure": { "displayName": "Figure", "purpose": "Estimator range and tool result totals; always tabular." },
+      "title": { "displayName": "Title", "purpose": "H3s, card titles, panel headings." },
+      "body": { "displayName": "Body", "purpose": "Running text; paragraphs capped near 68ch." },
+      "lead": { "displayName": "Lead", "purpose": "Sublines under H1 and about copy, Slate Ink, max 58ch." },
+      "label": { "displayName": "Label", "purpose": "Form labels, meta, progress text; 13px for notes and consent." }
+    },
+    "shadows": [
+      { "name": "rest-lift", "cssVar": "--shadow-1", "value": "0 1px 2px rgba(12, 31, 63, 0.06), 0 2px 8px rgba(12, 31, 63, 0.06)", "purpose": "Broker card, cost table, hover state of link cards." },
+      { "name": "panel-lift", "cssVar": "--shadow-2", "value": "0 2px 4px rgba(12, 31, 63, 0.06), 0 12px 32px rgba(12, 31, 63, 0.10)", "purpose": "Estimator, pre-qualification form, mobile nav panel." },
+      { "name": "button-glow", "value": "0 1px 2px rgba(12, 31, 63, 0.12), 0 6px 16px rgba(31, 79, 216, 0.22)", "purpose": "Primary buttons." },
+      { "name": "focus-halo", "value": "0 0 0 4px #e6edff", "purpose": "Input and select focus, paired with an Action Blue border." }
+    ],
+    "motion": [
+      { "name": "ease", "cssVar": "--ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "All state transitions." },
+      { "name": "duration-field", "value": "0.15s", "purpose": "Input border and halo." },
+      { "name": "duration-state", "value": "0.2s", "purpose": "Buttons, cards, rows, arrow nudges." },
+      { "name": "duration-reveal", "value": "0.25s-0.4s", "purpose": "FAQ chevron, progress bar, sticky bar slide (0.35s)." },
+      { "name": "estimator-count", "value": "450ms, ease-out quartic (1 - (1 - k)^4)", "purpose": "Signature: the price range counts between values; 0ms under reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "trust-two-col", "value": "640px" },
+      { "name": "paths-two-col", "value": "760px" },
+      { "name": "footer-grid", "value": "768px" },
+      { "name": "tablet", "value": "900px" },
+      { "name": "hero-split", "value": "1040px" },
+      { "name": "desktop-nav", "value": "1100px" },
+      { "name": "header-phone", "value": "1320px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Every primary action; Action Blue with a blue glow.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Pre-qualify in 2 minutes<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 24px; border-radius: 12px; border: 0; background: var(--brand, #1f4fd8); color: #fff; font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 1.02rem; text-decoration: none; cursor: pointer; box-shadow: 0 1px 2px rgba(12,31,63,.12), 0 6px 16px rgba(31,79,216,.22); transition: background-color .2s cubic-bezier(0.16,1,0.3,1), transform .2s cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover { background: var(--brand-hover, #173fb4); transform: translateY(-1px); } .ds-btn:active { transform: translateY(0); } .ds-btn:focus-visible { outline: 3px solid #1f4fd8; outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action; white with a hairline inset stroke.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Estimate closing costs</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 24px; border-radius: 12px; background: #fff; color: #0c1f3f; font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 1.02rem; text-decoration: none; box-shadow: inset 0 0 0 1.5px #dbe3ef; transition: box-shadow .2s cubic-bezier(0.16,1,0.3,1), transform .2s cubic-bezier(0.16,1,0.3,1); } .ds-btn-ghost:hover { box-shadow: inset 0 0 0 1.5px #5d6b84; transform: translateY(-1px); } .ds-btn-ghost:focus-visible { outline: 3px solid #1f4fd8; outline-offset: 3px; }"
+    },
+    {
+      "name": "Money Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Labeled numeric field with a muted dollar prefix and a blue focus halo.",
+      "html": "<label class=\"ds-label\">Monthly income<span class=\"ds-money\"><input class=\"ds-input\" type=\"number\" value=\"7000\" /></span></label>",
+      "css": ".ds-label { display: grid; gap: 6px; font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 600; color: #3c4b66; max-width: 260px; } .ds-money { position: relative; display: block; } .ds-money::before { content: '$'; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #5d6b84; font-weight: 700; pointer-events: none; } .ds-input { box-sizing: border-box; width: 100%; min-height: 50px; padding: 0 14px 0 28px; border: 1.5px solid #dbe3ef; border-radius: 10px; background: #fff; color: #0c1f3f; font: inherit; font-size: 1.02rem; font-weight: 600; font-variant-numeric: tabular-nums; transition: border-color .15s cubic-bezier(0.16,1,0.3,1), box-shadow .15s cubic-bezier(0.16,1,0.3,1); } .ds-input:hover { border-color: #b8c5db; } .ds-input:focus { outline: none; border-color: #1f4fd8; box-shadow: 0 0 0 4px #e6edff; }"
+    },
+    {
+      "name": "Hero Estimator",
+      "kind": "custom",
+      "refersTo": "estimator-card",
+      "description": "Signature panel: two inputs, a counting price-range readout, and the primary action.",
+      "html": "<div class=\"ds-est\"><p class=\"ds-est-h\">What could you afford?</p><div class=\"ds-est-out\"><span class=\"ds-est-label\">Estimated price range</span><span class=\"ds-est-value\">$312,000 – $367,000</span></div><a class=\"ds-est-btn\" href=\"#\">Pre-qualify in 2 minutes</a><p class=\"ds-est-note\">An estimate, not an offer.</p></div>",
+      "css": ".ds-est { font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; color: #0c1f3f; background: #fff; border: 1px solid #dbe3ef; border-radius: 20px; box-shadow: 0 2px 4px rgba(12,31,63,.06), 0 12px 32px rgba(12,31,63,.10); padding: 24px; display: grid; gap: 16px; max-width: 460px; } .ds-est-h { margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; } .ds-est-out { background: #eef3fb; border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; } .ds-est-label { font-size: 14px; font-weight: 600; color: #3c4b66; } .ds-est-value { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; font-variant-numeric: tabular-nums; transition: color .3s cubic-bezier(0.16,1,0.3,1); } .ds-est:hover .ds-est-value { color: #1f4fd8; } .ds-est-btn { display: flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 12px; background: #1f4fd8; color: #fff; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(12,31,63,.12), 0 6px 16px rgba(31,79,216,.22); } .ds-est-btn:hover { background: #173fb4; } .ds-est-btn:focus-visible { outline: 3px solid #1f4fd8; outline-offset: 3px; } .ds-est-note { margin: 0; font-size: 13px; color: #5d6b84; }"
+    },
+    {
+      "name": "Path Card",
+      "kind": "card",
+      "refersTo": "path-card",
+      "description": "Linked loan path with a Blue Wash icon tile; lifts and turns its border blue on hover.",
+      "html": "<a class=\"ds-path\" href=\"#\"><span class=\"ds-path-ico\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\"/><path d=\"M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg></span><span><strong class=\"ds-path-t\">Buy a home</strong><span class=\"ds-path-d\">First home or next home, FHA to conventional.</span></span><svg class=\"ds-path-arrow\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a>",
+      "css": ".ds-path { display: grid; grid-template-columns: 48px 1fr 20px; gap: 16px; align-items: center; padding: 20px; border-radius: 12px; background: #fff; border: 1px solid #dbe3ef; text-decoration: none; color: #0c1f3f; font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; max-width: 520px; transition: border-color .2s cubic-bezier(0.16,1,0.3,1), box-shadow .2s cubic-bezier(0.16,1,0.3,1), transform .2s cubic-bezier(0.16,1,0.3,1); } .ds-path:hover { border-color: #1f4fd8; box-shadow: 0 1px 2px rgba(12,31,63,.06), 0 2px 8px rgba(12,31,63,.06); transform: translateY(-2px); } .ds-path:focus-visible { outline: 3px solid #1f4fd8; outline-offset: 3px; } .ds-path-ico { width: 48px; height: 48px; border-radius: 12px; background: #e6edff; color: #1f4fd8; display: grid; place-items: center; } .ds-path-t { display: block; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; } .ds-path-d { display: block; color: #3c4b66; font-size: 15px; margin-top: 2px; } .ds-path-arrow { color: #5d6b84; }"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Desktop header: brand tile, slate links with mist hover, language pill, small primary CTA.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-brand-mark\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\"/><path d=\"M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg></span>LoanPro365</a><a class=\"ds-nav-link\" href=\"#\">Buy</a><a class=\"ds-nav-link\" href=\"#\">Refinance</a><a class=\"ds-nav-link\" href=\"#\">Tools</a><a class=\"ds-lang\" href=\"#\">ES</a><a class=\"ds-nav-cta\" href=\"#\">Pre-qualify</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 4px; min-height: 68px; padding: 0 16px; background: #fff; border-bottom: 1px solid #dbe3ef; font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; } .ds-brand { display: inline-flex; align-items: center; gap: 10px; margin-right: auto; color: #0c1f3f; text-decoration: none; font-weight: 800; letter-spacing: -0.02em; font-size: 1.12rem; } .ds-brand-mark { width: 34px; height: 34px; border-radius: 9px; background: #1f4fd8; color: #fff; display: grid; place-items: center; } .ds-nav-link { padding: 8px 12px; border-radius: 8px; color: #3c4b66; text-decoration: none; font-weight: 600; font-size: 0.95rem; } .ds-nav-link:hover { color: #0c1f3f; background: #f6f8fc; } .ds-nav-link:focus-visible, .ds-lang:focus-visible, .ds-nav-cta:focus-visible { outline: 3px solid #1f4fd8; outline-offset: 3px; } .ds-lang { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; margin: 0 8px; border-radius: 999px; color: #0c1f3f; text-decoration: none; font-weight: 700; font-size: 0.9rem; box-shadow: inset 0 0 0 1.5px #dbe3ef; } .ds-lang:hover { box-shadow: inset 0 0 0 1.5px #5d6b84; } .ds-nav-cta { display: inline-flex; align-items: center; min-height: 42px; padding: 0 16px; border-radius: 12px; background: #1f4fd8; color: #fff; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 1px 2px rgba(12,31,63,.12), 0 6px 16px rgba(31,79,216,.22); } .ds-nav-cta:hover { background: #173fb4; }"
+    },
+    {
+      "name": "Radio Option Tile",
+      "kind": "chip",
+      "refersTo": "input",
+      "description": "Pre-qualification choice; bordered 12px tile that fills Blue Wash when selected.",
+      "html": "<div class=\"ds-opts\"><label class=\"ds-opt\"><input type=\"radio\" name=\"g\" checked /> Buy a home</label><label class=\"ds-opt\"><input type=\"radio\" name=\"g\" /> Refinance</label></div>",
+      "css": ".ds-opts { display: grid; gap: 14px; max-width: 360px; font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; } .ds-opt { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 12px 16px; border: 1.5px solid #dbe3ef; border-radius: 12px; font-size: 15px; font-weight: 600; color: #0c1f3f; cursor: pointer; } .ds-opt input { width: 20px; height: 20px; margin: 0; accent-color: #1f4fd8; } .ds-opt:has(input:checked) { border-color: #1f4fd8; background: #e6edff; } .ds-opt:has(input:focus-visible) { outline: 3px solid #1f4fd8; outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Clear Number",
+    "overview": "The category standard for consumer mortgage sites, played straight: a white ground, deep navy ink, and one confident blue that marks every action. The visitor's own figure is the hero. Each screen resolves to one number (a price range, a payment, a closing cost) and one next step, with trust facts placed beside the action rather than below it.\n\nDensity is calm and generous: wide 72px bands alternate white and a barely-blue mist, separated by hairlines. Type is a single family, Manrope, set heavy and tight for headings and numbers, plain for reading. Depth is soft and navy-tinted; surfaces that hold the user's numbers (estimator, pre-qualification, tool results) lift, everything else sits flat on hairlines. Icons are Lucide line icons at a 2px stroke, inlined as SVG.\n\nMotion is short and decelerating. The signature is the hero estimator: as income or down payment changes, the range counts from its old values to the new ones over 450ms and flashes action blue while it moves, dropping to an instant swap under reduced motion.",
+    "keyCharacteristics": [
+      "White ground, navy ink, one action blue; green only for affirmative ticks.",
+      "Manrope Variable throughout, 800 weight with negative tracking for display and figures, tabular numerals for every amount.",
+      "12px controls, 20px panels, pill for the language switch.",
+      "Soft, navy-tinted two-layer shadows on number-holding panels only.",
+      "Lucide line icons in tinted tiles or bare, never filled glyphs."
+    ],
+    "rules": [
+      { "name": "The One Blue Rule", "body": "Every primary action on every screen is Action Blue. No second accent hue exists; inverted contexts (the blue final band) flip the button to white with blue text rather than introducing a new color.", "section": "colors" },
+      { "name": "The Green Means Yes Rule", "body": "Green appears only as an icon beside an affirmative fact (verified, private, included). It never carries a surface or a call to action.", "section": "colors" },
+      { "name": "The Tabular Money Rule", "body": "Every amount, input, and table uses tabular numerals so counting values never jitter.", "section": "typography" },
+      { "name": "The Heavy Number Rule", "body": "The user's figure gets the heaviest type on its panel; the panel's own heading stays at title size.", "section": "typography" },
+      { "name": "The Lift Means Input Rule", "body": "Panel lift is reserved for surfaces that hold the user's own numbers. Informational cards stay on hairlines and earn rest lift at most.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Action Blue for every primary action and nothing decorative.",
+      "Do set every amount in tabular numerals at 800 weight with negative tracking.",
+      "Do inline Lucide line icons at 2px stroke, 16 to 24px, tinted blue in tiles or muted as trailing arrows.",
+      "Do reserve panel lift for surfaces holding the user's numbers; use hairlines elsewhere.",
+      "Do use the `cubic-bezier(0.16, 1, 0.3, 1)` ease at 0.15 to 0.45s, and drop all motion under reduced motion.",
+      "Do tint shadows navy, not black."
+    ],
+    "donts": [
+      "Don't introduce a second accent hue; the blue final band is the only large color field.",
+      "Don't use green for buttons, fills, or text; it marks affirmative icons only.",
+      "Don't use filled glyph icons, emoji, or icon fonts.",
+      "Don't add a second typeface or a system display face; Manrope carries every role."
+    ]
+  }
+}
