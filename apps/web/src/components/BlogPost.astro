@@ -1,29 +1,78 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { ROUTES, t, type Locale } from '../i18n';
+import Icon from './Icon.astro';
+import { ROUTES, t, toolPath, TOOL_SLUGS, type Locale, type ToolKey } from '../i18n';
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
 const locale = post.data.lang as Locale;
 const d = t(locale);
 const es = locale === 'es';
+const href = (p: CollectionEntry<'blog'>) => `${ROUTES.blog[p.data.lang as Locale]}${p.data.slug}/`;
+
 const twin = (await getCollection('blog', (p) => p.data.translationKey === post.data.translationKey && p.data.lang !== locale))[0];
-const alternates = {
-  [locale]: `${ROUTES.blog[locale]}${post.data.slug}/`,
-  [locale === 'es' ? 'en' : 'es']: twin ? `${ROUTES.blog[twin.data.lang]}${twin.data.slug}/` : ROUTES.blog[locale === 'es' ? 'en' : 'es'],
-} as Record<Locale, string>;
+const otherLang: Locale = es ? 'en' : 'es';
+const alternates = { [locale]: href(post), [otherLang]: twin ? href(twin) : ROUTES.blog[otherLang] } as Record<Locale, string>;
+
+// Ruta de aprendizaje: lista ordenada de la serie, paso actual y siguiente.
+const series = post.data.series
+  ? (await getCollection('blog', (p) => p.data.lang === locale && p.data.series === post.data.series)).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
+  : [];
+const idx = series.findIndex((p) => p.id === post.id);
+const next = idx >= 0 ? series[idx + 1] : undefined;
+const tool = post.data.tool && post.data.tool in TOOL_SLUGS ? (post.data.tool as ToolKey) : undefined;
+const pathName = es ? 'Ruta del comprador' : 'Homebuyer path';
+const stepLabel = (n: number) => (es ? `Paso ${n} de ${series.length}` : `Step ${n} of ${series.length}`);
 const { Content } = await render(post);
 ---
 <Base locale={locale} title={`${post.data.title} · LoanPro365`} description={post.data.description} alternates={alternates}>
-  <p class="small"><a href={ROUTES.blog[locale]}>Blog</a></p>
+  <p class="small crumb">
+    <a href={ROUTES.blog[locale]}>Blog</a>
+    {series.length > 0 && <span> · {pathName} · {stepLabel(idx + 1)}</span>}
+  </p>
   <article class="prose">
     <h1>{post.data.title}</h1>
     <p class="lead">{post.data.description}</p>
     <Content />
   </article>
-  <div class="actions">
-    <a class="btn" href={ROUTES.prequal[locale]}>{d.cta.prequal}</a>
-    <a class="btn ghost" href={ROUTES.tools[locale]}>{d.nav.tools}</a>
-  </div>
-  <p class="small post-note">{es ? 'Información general; no es asesoría legal ni fiscal. Requisitos y programas cambian.' : 'General information, not legal or tax advice. Requirements and programs change.'}</p>
+
+  {tool && (
+    <aside class="post-cta" aria-label={es ? 'Ponlo en práctica' : 'Put it into practice'}>
+      <div>
+        <h2>{es ? 'Ponlo en práctica' : 'Put it into practice'}</h2>
+        <p>{d.tools[tool].desc}</p>
+      </div>
+      <div class="post-cta-actions">
+        <a class="btn ghost" href={toolPath(tool, locale)}>{d.tools[tool].name}</a>
+        <a class="btn" href={ROUTES.prequal[locale]}>{d.cta.prequal}</a>
+      </div>
+    </aside>
+  )}
+
+  {series.length > 0 && (
+    <nav class="learn-path" aria-label={pathName}>
+      {next ? (
+        <a class="path-next" href={href(next)}>
+          <span class="small">{es ? 'Siguiente' : 'Next'} · {stepLabel(idx + 2)}</span>
+          <strong>{next.data.title}</strong>
+          <Icon name="arrow-right" size={22} />
+        </a>
+      ) : (
+        <div class="path-done">
+          <strong>{es ? 'Completaste la ruta del comprador.' : 'You finished the homebuyer path.'}</strong>
+          <p>{es ? 'Ya sabes lo que necesitas. El siguiente paso es conocer tu número real con nuestro equipo.' : 'You know what you need. The next step is getting your real number with our team.'}</p>
+          <a class="btn" href={ROUTES.prequal[locale]}>{d.cta.prequal}<Icon name="arrow-right" size={20} /></a>
+        </div>
+      )}
+      <ol class="path-steps">
+        {series.map((p, i) => (
+          <li class={i === idx ? 'current' : i < idx ? 'done' : ''}>
+            <a href={href(p)} aria-current={i === idx ? 'page' : undefined}><span class="n">{i + 1}</span>{p.data.title}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )}
+
+  <p class="small post-note">{es ? 'Información general con fines educativos; no es asesoría legal ni fiscal ni una oferta de crédito. Requisitos, tasas y programas cambian y dependen de cada prestamista.' : 'General information for educational purposes, not legal or tax advice or an offer of credit. Requirements, rates and programs change and vary by lender.'}</p>
 </Base>

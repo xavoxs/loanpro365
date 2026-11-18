@@ -4,6 +4,9 @@ description: "Why buy in Florida, how the regional markets differ, which mortgag
 lang: en
 slug: buying-a-home-in-florida
 translationKey: buying-in-florida
+series: buyer
+order: 4
+tool: assistance
 publishedAt: 2025-01-10
 source: "Adapted from loanpro365.com/buying-a-home-in-florida"
 ---

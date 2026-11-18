@@ -1,6 +1,8 @@
 import {
   DEED_DOC_STAMP_PER_100,
   DEED_DOC_STAMP_PER_100_MIAMI_DADE_SFR,
+  DEED_DOC_STAMP_PER_100_MIAMI_DADE_OTHER,
+  CONVENTIONAL_COMMON_LENDER_MIN,
   INTANGIBLE_TAX_RATE,
   NOTE_DOC_STAMP_PER_100,
   type County,
@@ -153,8 +155,10 @@ export interface ClosingCostInput {
 /** Herramienta 6: costos de cierre con impuestos de Florida. */
 export function closingCosts(i: ClosingCostInput) {
   const deedRate =
-    i.county === 'miami-dade' && i.singleFamily
-      ? DEED_DOC_STAMP_PER_100_MIAMI_DADE_SFR.value
+    i.county === 'miami-dade'
+      ? i.singleFamily
+        ? DEED_DOC_STAMP_PER_100_MIAMI_DADE_SFR.value
+        : DEED_DOC_STAMP_PER_100_MIAMI_DADE_OTHER.value
       : DEED_DOC_STAMP_PER_100.value;
   // Fla. Stat. se calcula por cada $100 o fracción
   const per100 = (amount: number, rate: number) => round2(Math.ceil(amount / 100) * rate);
@@ -197,7 +201,7 @@ export function dscr(i: { monthlyRent: number; monthlyPITIA: number }) {
 export const CREDIT_THRESHOLDS = [
   { program: 'fha-3.5', minScore: 580 },
   { program: 'fha-10', minScore: 500 },
-  { program: 'conventional', minScore: 620 },
+  { program: 'conventional', minScore: CONVENTIONAL_COMMON_LENDER_MIN.value },
 ] as const;
 
 export function creditGap(score: number) {
@@ -211,7 +215,8 @@ export function creditGap(score: number) {
 
 /**
  * Herramienta 5: comparador de programas por perfil.
- * Fuentes: HUD Handbook 4000.1 (FHA 580/3.5%, 500/10%); Fannie Mae Selling Guide B3-5.1-01 (620 mínimo)
+ * Fuentes: HUD Handbook 4000.1 (FHA 580/3.5%, 500/10%); convencional: sin mínimo de la agencia en DU desde
+ * nov-2025 (Fannie Mae SEL-2025-09), 620 como mínimo habitual de los prestamistas
  * y B5-6 / 97% LTV (3% de pago inicial con HomeReady o primer comprador); VA no fija puntaje mínimo (cada prestamista sí).
  */
 export type ProgramKey = 'fha' | 'conventional' | 'va';
@@ -223,8 +228,9 @@ export function loanPrograms(i: { score: number; downPct: number; veteran: boole
     ? { program: 'fha', fits: false, minDownPct: null, reason: 'score' }
     : { program: 'fha', fits: i.downPct >= fhaDown, minDownPct: fhaDown, reason: i.downPct >= fhaDown ? 'ok' : 'down' };
   const convDown = i.firstTimeBuyer ? 3 : 5;
-  const conventional: ProgramFit = i.score < 620
-    ? { program: 'conventional', fits: false, minDownPct: convDown, reason: 'score' }
+  // Bajo 620 no se descarta: depende del análisis automático (DU/LPA) y del prestamista.
+  const conventional: ProgramFit = i.score < CONVENTIONAL_COMMON_LENDER_MIN.value
+    ? { program: 'conventional', fits: false, minDownPct: convDown, reason: 'lender-overlay' }
     : { program: 'conventional', fits: i.downPct >= convDown, minDownPct: convDown, reason: i.downPct >= convDown ? 'ok' : 'down' };
   const va: ProgramFit = !i.veteran
     ? { program: 'va', fits: false, minDownPct: 0, reason: 'not-veteran' }

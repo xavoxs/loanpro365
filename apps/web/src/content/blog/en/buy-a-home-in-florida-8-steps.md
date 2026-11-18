@@ -4,6 +4,9 @@ description: "From budget to keys: the 8 steps to buying a home in Florida, the 
 lang: en
 slug: buy-a-home-in-florida-8-steps
 translationKey: florida-8-steps
+series: buyer
+order: 6
+tool: affordability
 publishedAt: 2025-01-15
 source: "Adapted from loanpro365.com/comprar-una-casa-en-florida"
 ---

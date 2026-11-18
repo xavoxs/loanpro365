@@ -56,6 +56,10 @@ describe('closingCosts (Florida)', () => {
     const r = closingCosts({ price: 400_000, loanAmount: 0, county: 'miami-dade', singleFamily: true, sellerPaysDeedStamps: false, lenderFees: 0, titleAndSettlement: 0, prepaidsAndEscrow: 0 });
     expect(r.items.deedStamps).toBe(2400);
   });
+  it('adds the Miami-Dade surtax on non single-family property', () => {
+    const r = closingCosts({ price: 400_000, loanAmount: 0, county: 'miami-dade', singleFamily: false, sellerPaysDeedStamps: false, lenderFees: 0, titleAndSettlement: 0, prepaidsAndEscrow: 0 });
+    expect(r.items.deedStamps).toBe(4200);
+  });
   it('rounds up to the next $100', () => {
     const r = closingCosts({ price: 0, loanAmount: 100_050, county: 'other', singleFamily: true, sellerPaysDeedStamps: true, lenderFees: 0, titleAndSettlement: 0, prepaidsAndEscrow: 0 });
     expect(r.items.noteStamps).toBe(350.35);

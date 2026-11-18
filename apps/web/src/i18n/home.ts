@@ -19,7 +19,7 @@ const en = {
     or: 'or talk to an advisor on WhatsApp',
   },
   proof: [
-    { n: '15+', t: 'years financing homes and businesses' },
+    { n: '15+', t: 'years financing homes and businesses*' },
     { n: '98%', t: 'of pre-approved loans closed*' },
     { n: '24/7', t: 'assistance during your process' },
     { n: 'EN · ES', t: 'service in your language' },
@@ -63,7 +63,7 @@ const en = {
     items: [
       { t: 'Doc stamps on the note', d: '$0.35 per $100 of the loan (Fla. Stat. §201.08).' },
       { t: 'Intangible tax', d: '0.2% of the mortgage amount (Fla. Stat. §199.133).' },
-      { t: 'Doc stamps on the deed', d: '$0.70 per $100; $0.60 for single-family homes in Miami-Dade (Fla. Stat. §201.02).' },
+      { t: 'Doc stamps on the deed', d: '$0.70 per $100. In Miami-Dade: $0.60 for single-family homes and $1.05 for other property (Fla. Stat. §201.02, §201.031). Usually paid by the seller.' },
     ],
     cta: 'Estimate my closing costs',
   },
@@ -105,7 +105,7 @@ const es: Home = {
     or: 'o habla con un asesor por WhatsApp',
   },
   proof: [
-    { n: '15+', t: 'años financiando viviendas y negocios' },
+    { n: '15+', t: 'años financiando viviendas y negocios*' },
     { n: '98%', t: 'de los préstamos preaprobados cerrados*' },
     { n: '24/7', t: 'asistencia durante tu proceso' },
     { n: 'ES · EN', t: 'atención en tu idioma' },
@@ -149,7 +149,7 @@ const es: Home = {
     items: [
       { t: 'Doc stamps del pagaré', d: '$0.35 por cada $100 del préstamo (Fla. Stat. §201.08).' },
       { t: 'Impuesto intangible', d: '0.2% del monto de la hipoteca (Fla. Stat. §199.133).' },
-      { t: 'Doc stamps de la escritura', d: '$0.70 por cada $100; $0.60 en viviendas unifamiliares de Miami-Dade (Fla. Stat. §201.02).' },
+      { t: 'Doc stamps de la escritura', d: '$0.70 por cada $100. En Miami-Dade: $0.60 en viviendas unifamiliares y $1.05 en otras propiedades (Fla. Stat. §201.02, §201.031). Suele pagarlo el vendedor.' },
     ],
     cta: 'Calcular mis costos de cierre',
   },

@@ -4,6 +4,9 @@ description: "Del presupuesto a las llaves: los 8 pasos para comprar casa en Flo
 lang: es
 slug: comprar-casa-en-florida-8-pasos
 translationKey: florida-8-steps
+series: buyer
+order: 6
+tool: affordability
 publishedAt: 2025-01-15
 source: "Adaptado de loanpro365.com/comprar-una-casa-en-florida"
 ---

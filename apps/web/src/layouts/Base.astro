@@ -123,7 +123,16 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
             <svg viewBox="0 0 64 56" width="28" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M32 2 2 24v6h6v24h48V30h6v-6zM16 28h32v20H16z" /><path fill="currentColor" d="M22 32h20v5H22zM22 40h20v5H22z" /></svg>
             {d.trust.ehl}
           </p>
-          <p>{d.disclaimer}</p>
+          {(es ? [
+            'LoanPro365 Mortgages es un corredor hipotecario, no un prestamista: los préstamos los otorgan prestamistas terceros. No todos los solicitantes califican; todo préstamo está sujeto a aprobación de crédito, normas de suscripción y elegibilidad de la propiedad. Tasas, condiciones y programas pueden cambiar sin aviso. Nada en este sitio es una oferta o compromiso de préstamo.',
+            'No estamos afiliados ni respaldados por HUD, FHA, VA, USDA, Fannie Mae, Freddie Mac ni ninguna agencia del gobierno.',
+            'Las calculadoras y estimaciones son solo educativas. Las cifras marcadas con * son declaraciones de la empresa.',
+          ] : [
+            'LoanPro365 Mortgages is a mortgage broker, not a lender: loans are funded by third-party lenders. Not all applicants will qualify; all loans are subject to credit approval, underwriting guidelines and property eligibility. Rates, terms and programs are subject to change without notice. Nothing on this site is an offer or commitment to lend.',
+            'Not affiliated with or endorsed by HUD, FHA, VA, USDA, Fannie Mae, Freddie Mac or any government agency.',
+            'Calculators and estimates are for educational purposes only. Figures marked * are company statements.',
+          ]).map((x) => <p>{x}</p>)}
+          <p><a href={ROUTES.legal[locale]}>{d.footer.legal}</a> · <a href="https://www.nmlsconsumeraccess.org/" rel="noopener">NMLS Consumer Access</a></p>
         </div>
       </div>
     </footer>

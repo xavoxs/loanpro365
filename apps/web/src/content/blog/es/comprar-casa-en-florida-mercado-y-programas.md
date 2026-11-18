@@ -4,6 +4,9 @@ description: "Por qué comprar en Florida, cómo cambian los mercados por regió
 lang: es
 slug: comprar-casa-en-florida-mercado-y-programas
 translationKey: buying-in-florida
+series: buyer
+order: 4
+tool: assistance
 publishedAt: 2025-01-10
 source: "Adaptado de loanpro365.com/buying-a-home-in-florida"
 ---

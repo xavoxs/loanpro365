@@ -109,10 +109,10 @@ const en: Labels = {
     noSavings: 'This refinance does not lower your payment', ratio: 'DSCR', dscrGood: 'Many lenders look for 1.0 or higher; some ask for 1.2+.',
     dscrLow: 'Below 1.0 the rent does not cover the payment.', qualifies: 'Meets the minimum', pointsNeeded: 'points needed', minDown: 'Minimum down',
   },
-  programs: { fha: 'FHA', conventional: 'Conventional', va: 'VA', 'fha-3.5': 'FHA with 3.5% down', 'fha-10': 'FHA with 10% down' },
+  programs: { fha: 'FHA', conventional: 'Conventional (usual lender minimum)', va: 'VA', 'fha-3.5': 'FHA with 3.5% down', 'fha-10': 'FHA with 10% down' },
   reasons: {
     ok: 'Fits your profile', score: 'Score below the program minimum', down: 'Down payment below the minimum',
-    'not-veteran': 'Only for eligible veterans and service members', 'lender-overlay': 'VA sets no minimum score, but most lenders do',
+    'not-veteran': 'Only for eligible veterans and service members', 'lender-overlay': 'No minimum score set by the program; most lenders set their own (often 580–620)',
   },
   assistance: {
     yes: 'You may be a good candidate. Funding and limits change, so confirm what is open today:',
@@ -165,10 +165,10 @@ const es: Labels = {
     noSavings: 'Esta refinanciación no baja tu pago', ratio: 'DSCR', dscrGood: 'Muchos prestamistas buscan 1.0 o más; algunos piden 1.2 o más.',
     dscrLow: 'Por debajo de 1.0 la renta no cubre el pago.', qualifies: 'Cumple el mínimo', pointsNeeded: 'puntos que faltan', minDown: 'Pago inicial mínimo',
   },
-  programs: { fha: 'FHA', conventional: 'Convencional', va: 'VA', 'fha-3.5': 'FHA con 3.5% de pago inicial', 'fha-10': 'FHA con 10% de pago inicial' },
+  programs: { fha: 'FHA', conventional: 'Convencional (mínimo habitual de prestamistas)', va: 'VA', 'fha-3.5': 'FHA con 3.5% de pago inicial', 'fha-10': 'FHA con 10% de pago inicial' },
   reasons: {
     ok: 'Encaja con tu perfil', score: 'Puntaje por debajo del mínimo del programa', down: 'Pago inicial por debajo del mínimo',
-    'not-veteran': 'Solo para veteranos y militares elegibles', 'lender-overlay': 'VA no fija puntaje mínimo, pero la mayoría de prestamistas sí',
+    'not-veteran': 'Solo para veteranos y militares elegibles', 'lender-overlay': 'El programa no fija puntaje mínimo; la mayoría de prestamistas sí (a menudo 580–620)',
   },
   assistance: {
     yes: 'Podrías ser buen candidato. Los fondos y límites cambian; confirma qué está abierto hoy:',
