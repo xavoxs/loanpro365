@@ -12,7 +12,7 @@ Hispanic and English-speaking households in South Florida (Broward, Miami-Dade, 
 
 ## Product Purpose
 
-LoanPro365 Mortgages is an independent mortgage broker (Pablo Samsing, broker/owner). The site turns an anonymous visitor into a pre-qualified conversation with Pablo. Success: the visitor completes the 4-step pre-qualification (primary action); WhatsApp and phone are secondary paths.
+LoanPro365 Mortgages is a Florida mortgage company (independent broker; Pablo Samsing, broker/owner) offering home, refinance, bad-credit, investment and commercial loans. The site presents the company first and turns an anonymous visitor into a pre-qualified conversation with its advisors. Success: the visitor completes the 4-step pre-qualification (primary action); WhatsApp and phone are secondary paths.
 
 ## Positioning
 
@@ -38,7 +38,10 @@ Name "LoanPro365 Mortgages" only. The visual identity is free to replace entirel
 
 - Real photo of Pablo Samsing on the current site (`pablo-samsing-mortgage.png` at loanpro365.com), to be obtained with permission.
 - NMLS #1486485 (company) and #328337 (Pablo), verifiable on NMLS Consumer Access.
-- No testimonials, review counts, years in business, or loans-closed figures are available: never invent them.
+- Company claims published on loanpro365.com/about-us (read 2026-11-17): over 15 years in business, closes over 98% of the loans it pre-approves, wholesale rates, 24/7 assistance, quick closings, problem resolution, free consultations. Shown as company figures; to be confirmed by the client.
+- Official logo: `loanprologo-new.jpg` ("LoanPro", no 365), used as-is in the header (owner instruction 2026-11-17).
+- Hero video: Pexels clip 32491588 (aerial Florida suburb), Pexels license.
+- No testimonials or review counts: never invent them.
 
 ## Product Principles
 

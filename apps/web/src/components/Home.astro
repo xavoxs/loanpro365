@@ -1,9 +1,10 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
-import { COMPANY, ROUTES, t, toolPath, type Locale, type ToolKey } from '../i18n';
+import { COMPANY, ROUTES, t, toolPath, type Locale, type RouteKey, type ToolKey } from '../i18n';
 import { HOME } from '../i18n/home';
 
 interface Props { locale: Locale }
@@ -12,59 +13,82 @@ const d = t(locale);
 const h = HOME[locale];
 const es = locale === 'es';
 
-/** La foto real de Pablo se coloca en public/img/pablo.jpg; mientras no exista se muestran sus iniciales. */
 const hasPhoto = fs.existsSync(path.resolve(process.cwd(), 'public/img/pablo.jpg'));
+const posts = (await getCollection('blog', (p) => p.data.lang === locale)).sort((a, b) => +b.data.publishedAt - +a.data.publishedAt).slice(0, 2);
 const featuredTools: { key: ToolKey; icon: string }[] = [
   { key: 'affordability', icon: 'calculator' },
   { key: 'payment', icon: 'circle-dollar-sign' },
   { key: 'closing', icon: 'file-text' },
   { key: 'rentVsBuy', icon: 'key-round' },
   { key: 'compare', icon: 'scale' },
-  { key: 'documents', icon: 'clipboard-list' },
+  { key: 'dscr', icon: 'building-2' },
 ];
 const stepIcons = ['calculator', 'scale', 'key-round'];
 ---
-<Base locale={locale} title={es ? 'LoanPro365 · Hipotecas en el sur de Florida, en español' : 'LoanPro365 · South Florida mortgages, in your language'} description={h.sub} alternates={ROUTES.home} full>
-  <section class="hero" aria-labelledby="hero-title">
+<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Hipotecas y préstamos comerciales en Florida' : 'LoanPro365 Mortgages · Florida home and commercial loans'} description={h.sub} alternates={ROUTES.home} full>
+  <section class="hero hero-video" aria-labelledby="hero-title">
+    <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="/video/hero-poster.jpg" aria-hidden="true" data-hero-video>
+      <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
+      <source src="/video/hero-1280.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <button class="video-toggle" type="button" data-video-toggle aria-pressed="false">
+      <span class="visually-hidden" data-label-pause>{es ? 'Pausar video de fondo' : 'Pause background video'}</span>
+      <span class="ico-pause"><Icon name="pause" size={16} /></span><span class="ico-play"><Icon name="play" size={16} /></span>
+    </button>
+
     <div class="wrap">
       <div class="hero-copy">
         <h1 id="hero-title">{h.h1}</h1>
         <p class="lead">{h.sub}</p>
-
-        <form class="estimator" id="estimator" data-locale={locale} novalidate onsubmit="return false">
-          <h2>{h.est.title}</h2>
-          <div class="est-fields">
-            <label>{h.est.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" value="7000" /></span></label>
-            <label>{h.est.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" value="25000" /></span></label>
-          </div>
-          <div class="est-out" aria-live="polite">
-            <span class="label">{h.est.result}</span>
-            <span class="value" data-range>—</span>
-          </div>
-          <a class="btn block" href={ROUTES.prequal[locale]} data-prequal>{h.est.cta}<Icon name="arrow-right" size={20} /></a>
-          <p class="est-alt"><a href={COMPANY.whatsappHref} rel="noopener"><Icon name="message-circle" size={18} />{h.est.or}</a></p>
-          <p class="est-note">{h.est.note}</p>
-        </form>
+      </div>
+      <div class="hero-proof-wrap">
+        <ul class="hero-proof">
+          {h.proof.map((p) => <li><strong>{p.n}</strong><span>{p.t}</span></li>)}
+        </ul>
+        <p class="hero-note">{h.proofNote}</p>
       </div>
 
-      <aside class="hero-side" aria-label={es ? 'Tu corredor' : 'Your broker'}>
-        <div class="pablo-card">
-          {hasPhoto
-            ? <img class="pablo-photo" src="/img/pablo.jpg" alt={`${COMPANY.broker}, ${h.pablo.role}`} width="735" height="814" loading="eager" fetchpriority="high" />
-            : <div class="pablo-photo" role="img" aria-label={COMPANY.broker}>PS</div>}
-          <div class="body">
-            <p class="name">{COMPANY.broker}</p>
-            <p class="role">{h.pablo.role} · NMLS #{COMPANY.nmlsBroker}</p>
-            <div class="meta">
-              <span><Icon name="globe" size={16} />{h.pablo.lang}</span>
-              <span><Icon name="badge-check" size={16} /><a href={COMPANY.nmlsUrl} rel="noopener">{h.pablo.verify}</a></span>
-            </div>
-          </div>
+      <form class="estimator" id="estimator" data-locale={locale} novalidate onsubmit="return false">
+        <h2>{h.est.title}</h2>
+        <div class="est-fields">
+          <label>{h.est.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" value="7000" /></span></label>
+          <label>{h.est.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" value="25000" /></span></label>
         </div>
-        <ul class="trust">
-          {h.trust.map((x, i) => <li><Icon name={['lock', 'shield-check', 'badge-check', 'house'][i]} size={18} />{x}</li>)}
-        </ul>
-      </aside>
+        <div class="est-out" aria-live="polite">
+          <span class="label">{h.est.result}</span>
+          <span class="value" data-range>—</span>
+        </div>
+        <a class="btn block" href={ROUTES.prequal[locale]} data-prequal>{h.est.cta}<Icon name="arrow-right" size={20} /></a>
+        <p class="est-alt"><a href={COMPANY.whatsappHref} rel="noopener"><Icon name="message-circle" size={18} />{h.est.or}</a></p>
+        <p class="est-note">{h.est.note}</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="why">
+    <div class="wrap">
+      <div class="band-head"><h2 id="why">{h.why.h}</h2><p>{h.why.d}</p></div>
+      <ul class="why-list">
+        {h.why.items.map((w) => (
+          <li><span class="ico"><Icon name={w.icon} size={22} /></span><div><h3>{w.t}</h3><p>{w.d}</p></div></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band alt" aria-labelledby="paths">
+    <div class="wrap">
+      <div class="band-head"><h2 id="paths">{h.paths.h}</h2></div>
+      <div class="paths">
+        {h.paths.items.map((p) => (
+          <a class="path" href={ROUTES[p.key as RouteKey][locale]}>
+            <span class="ico"><Icon name={p.icon} size={24} /></span>
+            <span><h3>{p.t}</h3><p>{p.d}</p></span>
+            <Icon name="arrow-right" size={20} />
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -82,22 +106,7 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
     </div>
   </section>
 
-  <section class="band alt" aria-labelledby="paths">
-    <div class="wrap">
-      <div class="band-head"><h2 id="paths">{h.paths.h}</h2></div>
-      <div class="paths">
-        {h.paths.items.map((p) => (
-          <a class="path" href={ROUTES[p.key as 'buy'][locale]}>
-            <span class="ico"><Icon name={p.icon} size={24} /></span>
-            <span><h3>{p.t}</h3><p>{p.d}</p></span>
-            <Icon name="arrow-right" size={20} />
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="tools">
+  <section class="band alt" aria-labelledby="tools">
     <div class="wrap">
       <div class="band-head"><h2 id="tools">{h.tools.h}</h2><p>{h.tools.d}</p></div>
       <div class="tool-list">
@@ -113,7 +122,7 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
     </div>
   </section>
 
-  <section class="band alt" aria-labelledby="florida">
+  <section class="band" aria-labelledby="florida">
     <div class="wrap split">
       <div class="band-head">
         <h2 id="florida">{h.florida.h}</h2>
@@ -126,19 +135,40 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
     </div>
   </section>
 
-  <section class="band" aria-labelledby="about">
+  <section class="band alt" aria-labelledby="leader">
     <div class="wrap split">
       {hasPhoto
-        ? <img class="about-photo" src="/img/pablo.jpg" alt={COMPANY.broker} width="735" height="814" loading="lazy" decoding="async" />
+        ? <img class="about-photo" src="/img/pablo.jpg" alt={`${COMPANY.broker}, LoanPro365`} width="735" height="814" loading="lazy" decoding="async" />
         : <div class="about-photo" role="img" aria-label={COMPANY.broker}>PS</div>}
       <div>
-        <h2 id="about">{h.about.h}</h2>
-        <p class="lead about-lead">{h.about.d}</p>
-        <ul class="checks">{h.about.points.map((x) => <li><Icon name="check" size={18} />{x}</li>)}</ul>
-        <a class="link-arrow" href={ROUTES.about[locale]}>{h.about.cta}<Icon name="arrow-right" size={18} /></a>
+        <h2 id="leader">{h.leader.h}</h2>
+        <p class="lead about-lead">{h.leader.d}</p>
+        <ul class="checks">{h.leader.points.map((x) => <li><Icon name="check" size={18} />{x}</li>)}</ul>
+        <div class="realtors">
+          <h3>{h.realtors.h}</h3>
+          <p>{h.realtors.d}</p>
+        </div>
+        <a class="link-arrow" href={ROUTES.about[locale]}>{h.leader.cta}<Icon name="arrow-right" size={18} /></a>
       </div>
     </div>
   </section>
+
+  {posts.length > 0 && (
+    <section class="band" aria-labelledby="blog">
+      <div class="wrap">
+        <div class="band-head"><h2 id="blog">{h.blog.h}</h2></div>
+        <div class="post-list">
+          {posts.map((p) => (
+            <a class="post-row" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
+              <span><strong>{p.data.title}</strong><span>{p.data.description}</span></span>
+              <Icon name="arrow-right" size={20} />
+            </a>
+          ))}
+        </div>
+        <p class="more"><a class="link-arrow" href={ROUTES.blog[locale]}>{h.blog.all}<Icon name="arrow-right" size={18} /></a></p>
+      </div>
+    </section>
+  )}
 
   <section class="band alt" aria-labelledby="faq">
     <div class="wrap">
@@ -165,6 +195,22 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
 
 <script>
   import { affordability } from '@loanpro365/calculators';
+
+  // Video de fondo: respeta "reducir movimiento" y el ahorro de datos, y se puede pausar.
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-video-toggle]');
+  if (video && toggle) {
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || conn?.saveData) {
+      video.removeAttribute('autoplay');
+      video.pause();
+      toggle.setAttribute('aria-pressed', 'true');
+    }
+    toggle.addEventListener('click', () => {
+      if (video.paused) { video.play().catch(() => {}); toggle.setAttribute('aria-pressed', 'false'); }
+      else { video.pause(); toggle.setAttribute('aria-pressed', 'true'); }
+    });
+  }
 
   const form = document.getElementById('estimator') as HTMLFormElement | null;
   if (form) {
@@ -201,10 +247,7 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
       raf = requestAnimationFrame(step);
     };
 
-    const render = () => {
-      const r = compute();
-      animateTo([r.low, r.max]);
-    };
+    const render = () => { const r = compute(); animateTo([r.low, r.max]); };
     // Lleva los datos a la precalificación para no volver a pedirlos (solo en esta pestaña, nunca en la URL).
     cta.addEventListener('click', () => {
       const r = compute();

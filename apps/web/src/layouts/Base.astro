@@ -20,7 +20,7 @@ const es = locale === 'es';
 const site = Astro.site!.origin;
 const nav = [
   ['buy', d.nav.buy], ['refinance', d.nav.refinance], ['credit', d.nav.credit],
-  ['investors', d.nav.investors], ['tools', d.nav.tools], ['about', d.nav.about],
+  ['commercial', d.nav.commercial], ['tools', d.nav.tools], ['blog', d.nav.blog], ['about', d.nav.about],
 ] as const;
 const footerTools: ToolKey[] = ['affordability', 'payment', 'closing', 'rentVsBuy', 'compare'];
 const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
@@ -52,8 +52,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={ROUTES.home[locale]} aria-label="LoanPro365 Mortgages">
-          <img class="brand-mark" src="/brand/mark.svg" alt="" width="36" height="36" />
-          <span class="wordmark"><span class="wm"><span class="wm-loan">Loan</span><span class="wm-pro">Pro</span><span class="wm-365">365</span></span><small>{es ? 'Financiamiento residencial y comercial' : 'Residential & commercial financing'}</small></span>
+          <img class="brand-logo" src="/brand/loanpro-logo.jpg" alt="LoanPro — residential and commercial financing" width="304" height="87" />
         </a>
         <nav aria-label={es ? 'Principal' : 'Main'} class="nav-desktop">
           <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
@@ -84,8 +83,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
       <div class="wrap">
         <div class="footer-grid">
           <div>
-            <p class="wm wm-footer" aria-hidden="true"><span class="wm-loan">Loan</span><span class="wm-pro">Pro</span><span class="wm-365">365</span></p>
-            <h2 class="visually-hidden">LoanPro365 Mortgages</h2>
+            <h2>LoanPro365 Mortgages</h2>
             <p>{es ? 'Corredor hipotecario independiente en el sur de Florida. Atención en español e inglés.' : 'Independent mortgage broker in South Florida. Service in English and Spanish.'}</p>
           </div>
           <div>
@@ -95,6 +93,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
               <li><a href={ROUTES.refinance[locale]}>{d.nav.refinance}</a></li>
               <li><a href={ROUTES.credit[locale]}>{d.nav.credit}</a></li>
               <li><a href={ROUTES.investors[locale]}>{d.nav.investors}</a></li>
+              <li><a href={ROUTES.commercial[locale]}>{d.nav.commercial}</a></li>
               <li><a href={ROUTES.assistance[locale]}>{es ? 'Ayudas en Florida' : 'Florida assistance'}</a></li>
             </ul>
           </div>

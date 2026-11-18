@@ -28,6 +28,12 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 9 (Claude Code)
+- **Hecho:** cambio de enfoque: la empresa primero, no Pablo como agente. Portada nueva con datos del sitio real (about-us): hero con video de fondo (Pexels 32491588, 1280 px 780 KB y 720 px 256 KB, póster, botón pausar; no se reproduce con «reducir movimiento» o ahorro de datos), titular «Una compañía hipotecaria diferente en Florida», cifras de la empresa (15+ años, 98% de preaprobados cerrados*, 24/7, ES·EN) con nota de origen, «Por qué nosotros» (tasas mayoristas, rapidez, resolución de problemas, cierre seguro, 24/7, proceso explicado), 6 tipos de préstamo, sección de liderazgo y realtors, blog. Nuevas páginas: Préstamos comerciales y Blog (2 guías del blog real adaptadas en EN y ES: 8 pasos y mercado/programas de Florida). «Sobre Pablo» pasa a «Nosotros» (`/es/nosotros/`). Logo oficial «LoanPro» (sin 365) tal cual, una sola vez en la cabecera; se quitó el monograma LP de la cabecera (sigue como favicon).
+- **Decisiones:** las cifras de la empresa se muestran como afirmaciones suyas con nota «*Cifras de la empresa publicadas en loanpro365.com». Los artículos se reescribieron sin cifras dudosas del original (seguro de $1,000–2,500, montos de Hometown Heroes); se remite a floridahousing.org.
+- **Verificado:** `astro check` 0 errores, build 55 páginas; navegador a 375, 1280 y 1440 px: logo visible, sin solapes ni scroll horizontal, video reproduciéndose (720 en móvil, 1280 en escritorio), CTA del estimador dentro de la primera pantalla en móvil.
+- **No verificado:** los artículos antiguos sindicados de remtgs.com no se migraron (solo enlazaban afuera). El cliente debe confirmar las cifras 15+ años y 98%.
+
 ### 2026-11-17 — Sesión 8 (Claude Code)
 - **Hecho:** logos originales adaptados al nuevo diseño: wordmark «LoanPro» en dos tonos (Loan azul de acción, Pro tinta) con «365» y el lema original «residential and commercial financing» traducido; monograma LP del favicon redibujado en vector (`public/brand/mark.svg`, `public/favicon.svg`); símbolo de Igualdad de Vivienda redibujado en el pie. Sin biselado ni sombra del logo antiguo.
 - **Verificado:** `astro check` 0 errores; en navegador a 375, 1280 y 1440 px sin desbordes ni solapes (el lema se oculta donde no cabe).

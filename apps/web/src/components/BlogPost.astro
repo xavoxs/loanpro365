@@ -1,0 +1,29 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { ROUTES, t, type Locale } from '../i18n';
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const locale = post.data.lang as Locale;
+const d = t(locale);
+const es = locale === 'es';
+const twin = (await getCollection('blog', (p) => p.data.translationKey === post.data.translationKey && p.data.lang !== locale))[0];
+const alternates = {
+  [locale]: `${ROUTES.blog[locale]}${post.data.slug}/`,
+  [locale === 'es' ? 'en' : 'es']: twin ? `${ROUTES.blog[twin.data.lang]}${twin.data.slug}/` : ROUTES.blog[locale === 'es' ? 'en' : 'es'],
+} as Record<Locale, string>;
+const { Content } = await render(post);
+---
+<Base locale={locale} title={`${post.data.title} · LoanPro365`} description={post.data.description} alternates={alternates}>
+  <p class="small"><a href={ROUTES.blog[locale]}>Blog</a></p>
+  <article class="prose">
+    <h1>{post.data.title}</h1>
+    <p class="lead">{post.data.description}</p>
+    <Content />
+  </article>
+  <div class="actions">
+    <a class="btn" href={ROUTES.prequal[locale]}>{d.cta.prequal}</a>
+    <a class="btn ghost" href={ROUTES.tools[locale]}>{d.nav.tools}</a>
+  </div>
+  <p class="small post-note">{es ? 'Información general; no es asesoría legal ni fiscal. Requisitos y programas cambian.' : 'General information, not legal or tax advice. Requirements and programs change.'}</p>
+</Base>

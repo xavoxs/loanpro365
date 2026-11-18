@@ -25,10 +25,12 @@ export const ROUTES = {
   assistance: { en: '/en/florida-assistance/', es: '/es/ayudas-florida/' },
   tools: { en: '/en/tools/', es: '/es/herramientas/' },
   learn: { en: '/en/learn/', es: '/es/aprende/' },
-  about: { en: '/en/about/', es: '/es/sobre-pablo/' },
+  about: { en: '/en/about/', es: '/es/nosotros/' },
   prequal: { en: '/en/prequalify/', es: '/es/precalificacion/' },
   contact: { en: '/en/contact/', es: '/es/contacto/' },
   legal: { en: '/en/legal/', es: '/es/legal/' },
+  commercial: { en: '/en/commercial-loans/', es: '/es/prestamos-comerciales/' },
+  blog: { en: '/en/blog/', es: '/es/blog/' },
 } as const satisfies Record<string, Record<Locale, string>>;
 export type RouteKey = keyof typeof ROUTES;
 
@@ -50,8 +52,8 @@ export const toolPath = (t: ToolKey, l: Locale) => `${ROUTES.tools[l]}${TOOL_SLU
 
 const en = {
   skip: 'Skip to content',
-  nav: { buy: 'Buy a home', refinance: 'Refinance', credit: 'Credit challenges', investors: 'Investors', tools: 'Tools', about: 'About Pablo', contact: 'Contact' },
-  cta: { primary: 'See how much I can buy', call: 'Call', whatsapp: 'WhatsApp', prequal: 'Start pre-qualification', talk: 'Talk to Pablo' },
+  nav: { buy: 'Buy a home', refinance: 'Refinance', credit: 'Credit challenges', investors: 'Investors', tools: 'Tools', about: 'About us', contact: 'Contact', commercial: 'Commercial', blog: 'Blog' },
+  cta: { primary: 'See how much I can buy', call: 'Call', whatsapp: 'WhatsApp', prequal: 'Start pre-qualification', talk: 'Talk to an advisor' },
   hero: {
     title: 'South Florida mortgages, explained in your language',
     sub: 'I compare several lenders for you — FHA, VA, conventional, refinance and options even if your credit isn’t perfect.',
@@ -96,8 +98,8 @@ const en = {
 type Dict = typeof en;
 const es: Dict = {
   skip: 'Ir al contenido',
-  nav: { buy: 'Comprar casa', refinance: 'Refinanciar', credit: 'Crédito difícil', investors: 'Inversionistas', tools: 'Herramientas', about: 'Sobre Pablo', contact: 'Contacto' },
-  cta: { primary: 'Ver cuánto puedo comprar', call: 'Llamar', whatsapp: 'WhatsApp', prequal: 'Empezar precalificación', talk: 'Hablar con Pablo' },
+  nav: { buy: 'Comprar casa', refinance: 'Refinanciar', credit: 'Crédito difícil', investors: 'Inversionistas', tools: 'Herramientas', about: 'Nosotros', contact: 'Contacto', commercial: 'Comerciales', blog: 'Blog' },
+  cta: { primary: 'Ver cuánto puedo comprar', call: 'Llamar', whatsapp: 'WhatsApp', prequal: 'Empezar precalificación', talk: 'Hablar con un asesor' },
   hero: {
     title: 'Hipotecas en el sur de Florida, explicadas en tu idioma',
     sub: 'Comparo varios prestamistas por ti: FHA, VA, convencional, refinanciación y opciones aunque tu crédito no sea perfecto.',

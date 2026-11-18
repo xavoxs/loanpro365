@@ -14,7 +14,7 @@ export interface PageContent {
   cta?: 'prequal' | 'talk';
 }
 
-type ContentKey = Exclude<RouteKey, 'home' | 'tools'>;
+type ContentKey = Exclude<RouteKey, 'home' | 'tools' | 'blog'>;
 
 const en: Record<ContentKey, PageContent> = {
   buy: {
@@ -96,11 +96,26 @@ const en: Record<ContentKey, PageContent> = {
     tools: ['glossary', 'documents'],
   },
   about: {
-    title: 'About Pablo Samsing',
-    lead: 'Independent mortgage broker in South Florida. I work for you, not for one bank.',
+    title: 'About LoanPro365 Mortgages',
+    lead: 'A Florida mortgage broker built for quick closings and problem resolution, serving first-time buyers through seasoned investors for over 15 years.',
     sections: [
-      { h: 'How I work', list: ['I explain every step in English or Spanish.', 'I compare several lenders and show you the differences.', 'You can verify my license at any time on NMLS Consumer Access.'] },
+      { h: 'What we do', p: 'We close loans with the best terms possible, as fast as possible. As an independent broker we compare wholesale lenders for home loans, refinancing, loans for buyers with credit challenges, investment and commercial properties.' },
+      { h: 'Why us', list: ['Wholesale rates across several lenders.', 'Built for speed: quick, secure closings.', 'Problem resolution when a file gets complicated.', '24/7 assistance and free consultations.', 'The full loan process explained from beginning to end, in English or Spanish.', 'According to the company, over 98% of the loans it pre-approves close.'] },
+      { h: 'Leadership', p: 'Pablo Samsing, Broker/Owner. NMLS #328337 (Florida loan originator license LO23103). Company NMLS #1486485.' },
+      { h: 'For realtors', p: 'Fast, reliable pre-approvals and proactive updates so your buyers close on schedule.' },
     ],
+    tools: ['affordability', 'compare'],
+    cta: 'talk',
+  },
+  commercial: {
+    title: 'Commercial loans',
+    lead: 'Financing for income-producing properties and for the operations of your business.',
+    sections: [
+      { h: 'Commercial real estate', list: ['Apartment buildings', 'Office buildings', 'Retail: shopping centers and strip centers', 'Industrial buildings', 'Hotels and motels', 'Self-storage and other specialized properties'] },
+      { h: 'Business financing', list: ['Accounts receivable loans', 'Equipment loans', 'Inventory financing', 'Flooring lines', 'Unsecured lines of credit'] },
+      { h: 'Good to know', p: 'One-to-four unit properties (homes, condos, duplexes, four-plexes), even when rented, are financed as residential loans. Terms depend on the property and the lender; contact us to see what fits.' },
+    ],
+    tools: ['dscr'],
     cta: 'talk',
   },
   prequal: {
@@ -211,11 +226,26 @@ const es: Record<ContentKey, PageContent> = {
     tools: ['glossary', 'documents'],
   },
   about: {
-    title: 'Sobre Pablo Samsing',
-    lead: 'Corredor hipotecario independiente en el sur de Florida. Trabajo para ti, no para un solo banco.',
+    title: 'Sobre LoanPro365 Mortgages',
+    lead: 'Corredor hipotecario en Florida enfocado en cierres rápidos y en resolver problemas, con más de 15 años atendiendo desde primeros compradores hasta inversionistas con experiencia.',
     sections: [
-      { h: 'Cómo trabajo', list: ['Te explico cada paso en español o en inglés.', 'Comparo varios prestamistas y te muestro las diferencias.', 'Puedes verificar mi licencia cuando quieras en NMLS Consumer Access.'] },
+      { h: 'Qué hacemos', p: 'Cerramos préstamos con las mejores condiciones posibles, lo más rápido posible. Como corredor independiente comparamos prestamistas mayoristas para vivienda, refinanciación, préstamos con crédito difícil, propiedades de inversión y comerciales.' },
+      { h: 'Por qué nosotros', list: ['Tasas mayoristas entre varios prestamistas.', 'Hechos para la rapidez: cierres rápidos y seguros.', 'Resolvemos problemas cuando un expediente se complica.', 'Asistencia 24/7 y consultas gratis.', 'Todo el proceso del préstamo explicado de principio a fin, en español o en inglés.', 'Según la empresa, cierra más del 98% de los préstamos que preaprueba.'] },
+      { h: 'Dirección', p: 'Pablo Samsing, corredor y propietario. NMLS #328337 (licencia de originador de préstamos de Florida LO23103). NMLS de la empresa #1486485.' },
+      { h: 'Para realtors', p: 'Preaprobaciones rápidas y confiables, y avisos a tiempo para que tus compradores cierren según lo previsto.' },
     ],
+    tools: ['affordability', 'compare'],
+    cta: 'talk',
+  },
+  commercial: {
+    title: 'Préstamos comerciales',
+    lead: 'Financiamiento para propiedades que generan ingresos y para la operación de tu negocio.',
+    sections: [
+      { h: 'Bienes raíces comerciales', list: ['Edificios de apartamentos', 'Edificios de oficinas', 'Locales comerciales: centros y plazas comerciales', 'Edificios industriales', 'Hoteles y moteles', 'Almacenamiento y otras propiedades especializadas'] },
+      { h: 'Financiamiento para negocios', list: ['Préstamos sobre cuentas por cobrar', 'Préstamos para equipos', 'Financiamiento de inventario', 'Líneas de inventario (flooring)', 'Líneas de crédito sin garantía'] },
+      { h: 'Bueno saber', p: 'Las propiedades de 1 a 4 unidades (casas, condominios, dúplex, cuádruplex), aunque se renten, se financian como préstamos residenciales. Las condiciones dependen de la propiedad y del prestamista; contáctanos para ver qué te conviene.' },
+    ],
+    tools: ['dscr'],
     cta: 'talk',
   },
   prequal: {

@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import { ROUTES, type Locale } from '../i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const es = locale === 'es';
+const posts = (await getCollection('blog', (p) => p.data.lang === locale)).sort((a, b) => +b.data.publishedAt - +a.data.publishedAt);
+const title = es ? 'Blog de LoanPro365' : 'LoanPro365 blog';
+const lead = es ? 'Guías claras para comprar, refinanciar y entender tu hipoteca en Florida.' : 'Clear guides to buying, refinancing and understanding your Florida mortgage.';
+---
+<Base locale={locale} title={title} description={lead} alternates={ROUTES.blog}>
+  <h1>{title}</h1>
+  <p class="lead">{lead}</p>
+  <div class="post-list">
+    {posts.map((p) => (
+      <a class="post-row" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
+        <span>
+          <strong>{p.data.title}</strong>
+          <span>{p.data.description}</span>
+        </span>
+        <Icon name="arrow-right" size={20} />
+      </a>
+    ))}
+  </div>
+</Base>
