@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
+import Reviews from './Reviews.astro';
 import { COMPANY, ROUTES, type Locale } from '../i18n';
 import { HOME } from '../i18n/home';
 import { V4COPY } from '../i18n/v4';
@@ -94,6 +95,9 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
       <p class="v4-note">{B.note}</p>
     </div>
   </section>
+
+  <!-- Reseñas reales (solo aparece cuando hay datos en src/data/reviews.ts) -->
+  <Reviews locale={locale} />
 
   <!-- Tres pasos -->
   <section class="v4-section v4-tint" aria-labelledby="steps">

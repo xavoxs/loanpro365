@@ -1,0 +1,37 @@
+---
+/** Reseñas reales. No renderiza nada si `REVIEWS` está vacío. */
+import Icon from './Icon.astro';
+import { REVIEWS, REVIEW_SUMMARY } from '../data/reviews';
+import type { Locale } from '../i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const es = locale === 'es';
+const items = REVIEWS.slice(0, 6);
+---
+{items.length > 0 && (
+  <section class="v4-section reviews" aria-labelledby="reviews">
+    <div class="wrap">
+      <div class="v4-row-head">
+        <h2 id="reviews" class="v4-h2">{es ? 'Lo que dicen nuestros clientes' : 'What our clients say'}</h2>
+        {REVIEW_SUMMARY && (
+          <a class="review-summary" href={REVIEW_SUMMARY.url} rel="noopener">
+            <strong>{REVIEW_SUMMARY.rating.toFixed(1)}</strong>
+            <span>{REVIEW_SUMMARY.count} {es ? 'reseñas en' : 'reviews on'} {REVIEW_SUMMARY.source}</span>
+          </a>
+        )}
+      </div>
+      <ul class="review-list">
+        {items.map((r) => (
+          <li class="review" lang={r.lang}>
+            {r.rating && <span class="stars" role="img" aria-label={`${r.rating} / 5`}>{Array.from({ length: r.rating }).map(() => <Icon name="star" size={16} />)}</span>}
+            <blockquote><p>{r.text}</p></blockquote>
+            <p class="who"><strong>{r.name}</strong>{r.city && <span> · {r.city}</span>}</p>
+            <p class="src">
+              {r.url ? <a href={r.url} rel="noopener">{r.source}</a> : r.source}{r.date && <span> · {r.date}</span>}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

@@ -28,6 +28,11 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 21 (Claude Code)
+- **Hecho:** preparado el sitio para recibir material real del cliente. Sección de reseñas (`components/Reviews.astro`) alimentada por `apps/web/src/data/reviews.ts`: solo aparece cuando hay al menos una reseña real; admite resumen verificable (`REVIEW_SUMMARY`). Guía `docs/MATERIAL-DEL-CLIENTE.md` con qué pedir (reseñas, fotos, logo, datos por confirmar), formatos y dónde va cada cosa.
+- **Verificado:** con la lista vacía la sección no se publica; con un dato de prueba local se ve bien (luego se retiró, nunca se publicó). `astro check` 0 errores, build 75 páginas.
+- **Siguiente posta:** cargar reseñas y fotos reales cuando el dueño las entregue.
+
 ### 2026-11-17 — Sesión 20 (Claude Code)
 - **Evaluación propia antes de empezar:** 7/10. Lo que frenaba: identidad genérica (tipografía y estilo de cualquier fintech), sin elemento gráfico de marca, resultado de la calculadora sin profundidad, páginas internas con el estilo anterior y texto interno todavía en primera persona.
 - **Hecho:** (1) tipografía display con carácter: **Bricolage Grotesque** (eje óptico, autoalojada) en titulares, cifras y resultados; Manrope queda para el texto. (2) **Motivo de marca «techo»** (la Λ de una casa, en línea): bajo los títulos de sección y de página, en las tarjetas de cifras y en el cierre. (3) **Desglose del pago** en el resultado de la calculadora del hero: pago mensual en el tope del rango con barra de capital e interés frente a impuestos y seguro. (4) **Páginas internas con el lenguaje nuevo:** títulos grandes con el techo, tarjetas suaves de 22 px, botones en píldora, formularios y resultados de herramientas y precalificación en tarjetas redondeadas, cabecera translúcida. (5) Texto interno en **voz de empresa** (comparamos, te acompañamos, pregúntanos…).
