@@ -39,7 +39,7 @@ Name "LoanPro365 Mortgages" only. The visual identity is free to replace entirel
 - Real photo of Pablo Samsing on the current site (`pablo-samsing-mortgage.png` at loanpro365.com), to be obtained with permission.
 - NMLS #1486485 (company) and #328337 (Pablo), verifiable on NMLS Consumer Access.
 - Company claims published on loanpro365.com/about-us (read 2026-11-17): over 15 years in business, closes over 98% of the loans it pre-approves, wholesale rates, 24/7 assistance, quick closings, problem resolution, free consultations. Shown as company figures; to be confirmed by the client.
-- Official logo: `loanprologo-new.jpg` ("LoanPro", no 365), used as-is in the header (owner instruction 2026-11-17).
+- Official logo: `loanprologo-new.jpg` ("LoanPro", no 365). On 2026-11-17 the owner asked to fix it: it is now redrawn as crisp text, faithful to the original (blue "Loan", graphite "Pro", italic tagline, no bevel). The JPG stays in `public/brand/` as the reference.
 - Hero video: Pexels clip 32491588 (aerial Florida suburb), Pexels license.
 - No testimonials or review counts: never invent them.
 

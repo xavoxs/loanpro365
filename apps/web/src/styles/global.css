@@ -870,3 +870,17 @@ legend { font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.9rem); font-weight: 700; let
 .review .who { color: var(--ink); }
 .review .who span, .review .src { color: var(--ink-3); font-size: 14px; }
 @media (min-width: 900px) { .review-list { grid-template-columns: repeat(3, 1fr); } }
+
+/* Logo «LoanPro» redibujado, fiel al original: dos tonos (azul real «Loan», grafito «Pro»),
+   lema en cursiva debajo, sin biselado ni sombra. Texto nítido a cualquier resolución. */
+.logo { display: inline-grid; gap: 1px; line-height: 1; text-decoration: none; }
+.logo-word { font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; font-weight: 800; font-size: 1.72rem; letter-spacing: -0.055em; line-height: 0.95; }
+.logo-loan { color: var(--brand); }
+.logo-pro { color: var(--ink-2); }
+.logo-tag { font-family: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif; font-style: italic; font-weight: 600; font-size: 0.6rem; letter-spacing: 0.01em; color: var(--brand); white-space: nowrap; }
+.logo-light .logo-loan, .logo-light .logo-tag { color: var(--brand-on-ink); }
+.logo-light .logo-pro { color: #ffffff; }
+.site-footer .logo { margin-bottom: 14px; }
+.site-footer .logo-word { font-size: 2rem; }
+.site-footer .logo-tag { font-size: 0.7rem; }
+@media (max-width: 359px) { .logo-tag { display: none; } }

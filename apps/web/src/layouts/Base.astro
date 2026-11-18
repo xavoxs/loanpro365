@@ -52,7 +52,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={ROUTES.home[locale]} aria-label="LoanPro365 Mortgages">
-          <img class="brand-logo" src="/brand/loanpro-logo.jpg" alt="LoanPro — residential and commercial financing" width="304" height="87" />
+          <span class="logo" aria-hidden="true"><span class="logo-word"><span class="logo-loan">Loan</span><span class="logo-pro">Pro</span></span><span class="logo-tag">residential and commercial financing</span></span>
         </a>
         <nav aria-label={es ? 'Principal' : 'Main'} class="nav-desktop">
           <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
@@ -83,7 +83,8 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
       <div class="wrap">
         <div class="footer-grid">
           <div>
-            <h2>LoanPro365 Mortgages</h2>
+            <p class="logo logo-light" aria-hidden="true"><span class="logo-word"><span class="logo-loan">Loan</span><span class="logo-pro">Pro</span></span><span class="logo-tag">residential and commercial financing</span></p>
+            <h2 class="visually-hidden">LoanPro365 Mortgages</h2>
             <p>{es ? 'Corredor hipotecario independiente en el sur de Florida. Atención en español e inglés.' : 'Independent mortgage broker in South Florida. Service in English and Spanish.'}</p>
           </div>
           <div>

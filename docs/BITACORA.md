@@ -28,6 +28,11 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 22 (Claude Code)
+- **Incidente corregido:** una reseña de prueba («EJEMPLO DE PRUEBA») se publicó por error unos minutos: el comando que la retiraba fue bloqueado por un control de seguridad (incluía un `rm`) y el despliegue siguió. Se retiró, se volvió a publicar y se comprobó en vivo (0 apariciones). **Regla:** nunca usar datos de prueba en archivos que se despliegan; probar en una copia o verificar antes de desplegar.
+- **Hecho:** logo «LoanPro» redibujado como texto nítido y fiel al original (pedido del dueño: «arregla el logo»): «Loan» en azul #1614B3, «Pro» en grafito #4F4F4F, lema en cursiva «residential and commercial financing», sin biselado; versión clara en el pie. Sustituye al JPG de 304×87 px en la cabecera.
+- **Verificado:** `astro check` 0 errores, build 75 páginas; 1440 y 375 px sin solapes ni scroll horizontal.
+
 ### 2026-11-17 — Sesión 21 (Claude Code)
 - **Hecho:** preparado el sitio para recibir material real del cliente. Sección de reseñas (`components/Reviews.astro`) alimentada por `apps/web/src/data/reviews.ts`: solo aparece cuando hay al menos una reseña real; admite resumen verificable (`REVIEW_SUMMARY`). Guía `docs/MATERIAL-DEL-CLIENTE.md` con qué pedir (reseñas, fotos, logo, datos por confirmar), formatos y dónde va cada cosa.
 - **Verificado:** con la lista vacía la sección no se publica; con un dato de prueba local se ve bien (luego se retiró, nunca se publicó). `astro check` 0 errores, build 75 páginas.
