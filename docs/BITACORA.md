@@ -28,6 +28,12 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 15 (Claude Code, auditoría /impeccable)
+- **Puntaje inicial:** 16/20 (bueno). Accesibilidad 3, rendimiento 3, responsive 3, tokens 3, integridad 4. Sin bloqueantes.
+- **Corregido:** (P1) contraste del subtítulo del hero sobre cuadros claros del video: velo más denso y texto blanco; peor caso 7.8:1. (P2) objetivos táctiles de 44 px en selector de idioma, logo y botón de pausa (eran 38–40 px). (P2) prefijo $ en los campos de dinero de las calculadoras. (P2) `DESIGN.md` y `.impeccable/design.json` actualizados a la cromática del logo (seguían con el azul y marino anteriores). (P3) póster del video de 197 KB a 101 KB.
+- **Verificado sin cambios:** un solo h1 por página, jerarquía de títulos sin saltos, todos los campos con etiqueta, imágenes con alt, `lang` correcto, `aria-live` en resultados, contraste ≥4.5:1 en todo el texto fuera del hero, sin scroll horizontal a 375 px, fuentes solo con el subconjunto latino descargado.
+- **Pendiente (P3):** tamaños de texto fuera de la escala de DESIGN.md (15px, 13px, etc.); el modo «reducir movimiento» apaga todas las transiciones de forma global; no hay modo oscuro (el sitio es solo claro a propósito).
+
 ### 2026-11-17 — Sesión 14 (Claude Code)
 - **Análisis:** la portada de Rocket Mortgage tiene 5 secciones (~4,300 px), una idea y una acción por sección, mucho blanco y un solo color de acento. La nuestra tenía 11 secciones (~6,600 px) con barra superior, franja de íconos, historia, servicios, 4 pasos, calculadoras, costos de Florida, formulario de llamada, FAQ, banda y blog: saturada y sin secuencia.
 - **Hecho:** portada minimalista de 7 secciones (~4,300 px en escritorio): 1 hero con video, titular, una acción y 3 objetivos (comprar, refinanciar, comercial); 2 «Un préstamo para cada meta» (3 tarjetas + enlaces secundarios); 3 «Calcula tus posibilidades» (panel con el estimador en vivo); 4 «Por qué LoanPro365» (15+*, 98%*, 24/7); 5 «Aprende paso a paso» (3 rutas); 6 preguntas frecuentes; 7 cierre con una acción. Textos en `apps/web/src/i18n/landing.ts`. Se quitó la barra superior. El formulario de llamada pasó a la página de Contacto (`components/Callback.astro`).

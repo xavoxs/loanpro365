@@ -2,16 +2,17 @@
 name: LoanPro365
 description: Bilingual South Florida mortgage broker; one number, one action.
 colors:
-  navy-ink: "#0c1f3f"
-  slate-ink: "#3c4b66"
-  muted-slate: "#5d6b84"
+  ink: "#1c1c22"
+  graphite: "#4f4f4f"
+  muted-graphite: "#6b6b72"
   white-ground: "#ffffff"
-  pale-field: "#eef3fb"
-  mist-field: "#f6f8fc"
-  hairline: "#dbe3ef"
-  action-blue: "#1f4fd8"
-  action-blue-deep: "#173fb4"
-  action-blue-soft: "#e6edff"
+  pale-field: "#f1f1fb"
+  mist-field: "#f7f7fa"
+  hairline: "#e4e4ec"
+  logo-blue: "#1614b3"
+  logo-blue-hover: "#0f0d8a"
+  logo-blue-soft: "#ecebfc"
+  logo-blue-deep: "#0b0a5c"
   confirm-green: "#0f7a4a"
   error-red: "#b42318"
 typography:
@@ -143,10 +144,10 @@ Density is calm and generous: wide 72px bands alternate white and a barely-blue 
 Motion is short and decelerating. The signature is the hero estimator: as income or down payment changes, the range counts from its old values to the new ones over 450ms and flashes action blue while it moves, dropping to an instant swap under reduced motion.
 
 **Key Characteristics:**
-- White ground, navy ink, one action blue; green only for affirmative ticks.
+- White ground, near-black ink, logo graphite for secondary text and the logo's royal blue (#1614B3) as the only action color; deep logo blue for footer and dark surfaces; green only for affirmative ticks.
 - Manrope Variable throughout, 800 weight with negative tracking for display and figures, tabular numerals for every amount.
 - 12px controls, 20px panels, pill for the language switch.
-- Soft, navy-tinted two-layer shadows on number-holding panels only.
+- Soft, blue-black tinted two-layer shadows on number-holding panels only.
 - Lucide line icons in tinted tiles or bare, never filled glyphs.
 
 ## Colors

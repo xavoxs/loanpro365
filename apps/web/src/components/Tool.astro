@@ -9,6 +9,8 @@ const x = TOOL_TEXT[locale];
 const alternates = { en: toolPath(tool, 'en'), es: toolPath(tool, 'es') };
 const fields = FIELDS[tool];
 const interactive = tool !== 'glossary';
+// Campos en dólares: llevan el prefijo $ para que se entienda la unidad sin leer la etiqueta.
+const MONEY = new Set(['price', 'downPayment', 'propertyTaxYearly', 'insuranceYearly', 'floodInsuranceYearly', 'hoaMonthly', 'grossMonthlyIncome', 'monthlyDebts', 'loanAmount', 'lenderFees', 'titleAndSettlement', 'prepaidsAndEscrow', 'monthlyRent', 'ownershipCostsYearly', 'closingCosts', 'currentPayment', 'newBalance', 'monthlyPITIA']);
 ---
 <Base locale={locale} title={`${d.tools[tool].name} · LoanPro365`} description={d.tools[tool].desc} alternates={alternates}>
   <h1>{d.tools[tool].name}</h1>
@@ -19,7 +21,11 @@ const interactive = tool !== 'glossary';
     <form class="tool" data-tool={tool} data-locale={locale} novalidate>
       {fields.map((f) =>
         f.kind === 'number' ? (
-          <label>{x.fields[f.name]}<input type="number" inputmode="decimal" min="0" name={f.name} value={f.value} step={f.step ?? '1'} /></label>
+          <label>{x.fields[f.name]}
+            {MONEY.has(f.name)
+              ? <span class="money"><input type="number" inputmode="decimal" min="0" name={f.name} value={f.value} step={f.step ?? '1'} /></span>
+              : <input type="number" inputmode="decimal" min="0" name={f.name} value={f.value} step={f.step ?? '1'} />}
+          </label>
         ) : f.kind === 'check' ? (
           <label class="check"><input type="checkbox" name={f.name} checked={f.value} /> {x.fields[f.name]}</label>
         ) : (
