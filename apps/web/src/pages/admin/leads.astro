@@ -1,0 +1,68 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import Icon from '../../components/Icon.astro';
+import { LEADS, STAGES } from '../../data/demo';
+const fmt = new Intl.NumberFormat('es-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+---
+<Admin title="Gestor de leads" active="leads">
+  <section class="panel">
+    <div class="panel-head">
+      <h2>{LEADS.length} leads</h2>
+      <div class="toolbar" role="search">
+        <input type="search" placeholder="Buscar por nombre, teléfono o ID" aria-label="Buscar leads" data-q />
+        <select aria-label="Filtrar por etapa" data-stage>
+          <option value="">Todas las etapas</option>
+          {STAGES.map((s) => <option value={s.key}>{s.label}</option>)}
+        </select>
+        <select aria-label="Filtrar por objetivo" data-goal>
+          <option value="">Todos los objetivos</option>
+          {['Compra', 'Refinanciación', 'Comercial', 'Inversión'].map((g) => <option value={g}>{g}</option>)}
+        </select>
+        <button class="btn sm" type="button" data-export><Icon name="file-text" size={16} />Exportar CSV</button>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="leads">
+        <thead><tr><th>ID</th><th>Lead</th><th>Objetivo</th><th>Condado</th><th>Crédito</th><th>Origen</th><th>Etapa</th><th class="num">Monto</th><th>Próximo paso</th><th><span class="visually-hidden">Acciones</span></th></tr></thead>
+        <tbody data-rows>
+          {LEADS.map((l) => (
+            <tr data-row data-stage={l.stage} data-goal={l.goal} data-text={`${l.id} ${l.name} ${l.phone}`.toLowerCase()}>
+              <td>{l.id}</td>
+              <td class="who"><strong>{l.name}</strong><span>{l.phone} · {l.lang.toUpperCase()}</span></td>
+              <td>{l.goal}</td>
+              <td>{l.county}</td>
+              <td>{l.score}</td>
+              <td>{l.source}</td>
+              <td><span class={`pill st-${l.stage}`}>{STAGES.find((s) => s.key === l.stage)!.label}</span></td>
+              <td class="num">{fmt.format(l.amount)}</td>
+              <td>{l.next}</td>
+              <td><a class="icon-btn" href={`/admin/chat/`} aria-label={`Abrir chat con ${l.name}`}><Icon name="message-circle" size={18} /></a></td>
+            </tr>
+          ))}
+          <tr class="empty-row" hidden data-empty><td colspan="10">No hay leads con esos filtros.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" data-toast hidden>Demo: la exportación no descarga archivos.</p>
+  </section>
+</Admin>
+
+<script>
+  const q = document.querySelector<HTMLInputElement>('[data-q]')!;
+  const st = document.querySelector<HTMLSelectElement>('[data-stage]')!;
+  const goal = document.querySelector<HTMLSelectElement>('[data-goal]')!;
+  const rows = [...document.querySelectorAll<HTMLTableRowElement>('[data-row]')];
+  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+  const apply = () => {
+    const t = q.value.trim().toLowerCase();
+    let shown = 0;
+    rows.forEach((r) => {
+      const ok = (!t || r.dataset.text!.includes(t)) && (!st.value || r.dataset.stage === st.value) && (!goal.value || r.dataset.goal === goal.value);
+      r.hidden = !ok;
+      if (ok) shown++;
+    });
+    empty.hidden = shown > 0;
+  };
+  [q, st, goal].forEach((el) => el.addEventListener('input', apply));
+  document.querySelector('[data-export]')!.addEventListener('click', () => { document.querySelector<HTMLElement>('[data-toast]')!.hidden = false; });
+</script>

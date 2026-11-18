@@ -1,0 +1,72 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import { METRICS, LEADS, STAGES } from '../../data/demo';
+const max = Math.max(...METRICS.weekly.map((w) => w.leads));
+const fmt = new Intl.NumberFormat('es-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const pipeline = STAGES.filter((s) => s.key !== 'perdido').map((s) => {
+  const items = LEADS.filter((l) => l.stage === s.key);
+  return { ...s, count: items.length, amount: items.reduce((a, l) => a + l.amount, 0) };
+});
+const recent = [...LEADS].sort((a, b) => b.created.localeCompare(a.created)).slice(0, 5);
+---
+<Admin title="Métricas" active="dash">
+  <section class="kpis" aria-label="Indicadores">
+    {METRICS.kpis.map((k) => <div class="kpi"><span>{k.label}</span><strong>{k.value}</strong><em>{k.delta}</em></div>)}
+  </section>
+
+  <div class="grid2">
+    <section class="panel">
+      <div class="panel-head"><h2>Leads y precalificaciones por semana</h2><span class="small">{METRICS.period}</span></div>
+      <div class="bars" role="img" aria-label="Gráfico de barras de leads y precalificaciones por semana">
+        {METRICS.weekly.map((w) => (
+          <div class="bar-group">
+            <div class="bar-pair">
+              <span class="bar" style={`height:${(w.leads / max) * 100}%`} title={`${w.leads} leads`}></span>
+              <span class="bar alt" style={`height:${(w.prequal / max) * 100}%`} title={`${w.prequal} precalificaciones`}></span>
+            </div>
+            <span class="bar-label">{w.w}</span>
+          </div>
+        ))}
+      </div>
+      <div class="legend"><span><i></i>Leads</span><span><i class="alt"></i>Precalificaciones</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>Origen de los leads</h2>
+      <ul class="hbars">
+        {METRICS.sources.map((s) => <li><span class="row"><span>{s.label}</span><span>{s.pct}%</span></span><span class="track"><span class="fill" style={`width:${s.pct}%`}></span></span></li>)}
+      </ul>
+      <h2 style="margin-top:22px">Idioma</h2>
+      <ul class="hbars">
+        {METRICS.langs.map((s) => <li><span class="row"><span>{s.label}</span><span>{s.pct}%</span></span><span class="track"><span class="fill" style={`width:${s.pct}%`}></span></span></li>)}
+      </ul>
+    </section>
+  </div>
+
+  <div class="grid2">
+    <section class="panel">
+      <div class="panel-head"><h2>Leads recientes</h2><a class="link-arrow" href="/admin/leads/">Ver todos</a></div>
+      <div class="table-scroll">
+        <table class="leads" style="min-width:560px">
+          <thead><tr><th>Lead</th><th>Objetivo</th><th>Etapa</th><th class="num">Monto</th></tr></thead>
+          <tbody>
+            {recent.map((l) => (
+              <tr>
+                <td class="who"><strong>{l.name}</strong><span>{l.source} · {l.created}</span></td>
+                <td>{l.goal}</td>
+                <td><span class={`pill st-${l.stage}`}>{STAGES.find((s) => s.key === l.stage)!.label}</span></td>
+                <td class="num">{fmt.format(l.amount)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><h2>Embudo</h2><a class="link-arrow" href="/admin/crm/">Abrir CRM</a></div>
+      <ul class="hbars">
+        {pipeline.map((p) => <li><span class="row"><span>{p.label} · {p.count}</span><span>{fmt.format(p.amount)}</span></span><span class="track"><span class="fill" style={`width:${Math.max(6, (p.count / LEADS.length) * 100)}%`}></span></span></li>)}
+      </ul>
+    </section>
+  </div>
+</Admin>

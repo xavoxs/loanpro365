@@ -1,0 +1,17 @@
+---
+/**
+ * Logo «LoanPro» equilibrado: la palabra y el lema ocupan exactamente el mismo ancho (textLength),
+ * como en el logo original. Azul real «Loan», grafito «Pro», lema en cursiva. SVG nítido a cualquier tamaño.
+ */
+interface Props { variant?: 'dark' | 'light'; class?: string }
+const { variant = 'dark', class: cls } = Astro.props;
+const loan = variant === 'light' ? '#a9a7ff' : '#1614b3';
+const pro = variant === 'light' ? '#ffffff' : '#4f4f4f';
+const tag = variant === 'light' ? '#d4d4e6' : '#1614b3';
+---
+<svg class:list={['logo-svg', cls]} viewBox="0 0 200 60" role="img" aria-label="LoanPro — residential and commercial financing">
+  <text x="0" y="40" textLength="200" lengthAdjust="spacingAndGlyphs" font-family="'Manrope Variable', 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="46" letter-spacing="-1.6">
+    <tspan fill={loan}>Loan</tspan><tspan fill={pro}>Pro</tspan>
+  </text>
+  <text x="1" y="56" textLength="198" lengthAdjust="spacingAndGlyphs" font-family="'Manrope Variable', 'Segoe UI', Arial, sans-serif" font-style="italic" font-weight="600" font-size="10.5" fill={tag}>residential and commercial financing</text>
+</svg>

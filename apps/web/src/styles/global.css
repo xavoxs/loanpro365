@@ -884,3 +884,17 @@ legend { font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.9rem); font-weight: 700; let
 .site-footer .logo-word { font-size: 2rem; }
 .site-footer .logo-tag { font-size: 0.7rem; }
 @media (max-width: 359px) { .logo-tag { display: none; } }
+
+/* Botón de acceso al panel (demo) */
+.header-login { display: none; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; color: var(--ink); font-weight: 700; font-size: 0.95rem; text-decoration: none; }
+.header-login:hover { background: var(--field); color: var(--ink); }
+@media (min-width: 1100px) { .header-login { display: inline-flex; } }
+.nav-mobile .panel .btn.ghost { margin-top: 10px; }
+
+/* Logo SVG equilibrado */
+.logo-svg { display: block; height: auto; overflow: visible; }
+.logo-header { width: 150px; }
+.logo-footer { width: 180px; margin-bottom: 16px; }
+.logo-admin { width: 130px; }
+.auth-logo { display: inline-block; width: 170px; }
+@media (max-width: 359px) { .logo-header { width: 128px; } }

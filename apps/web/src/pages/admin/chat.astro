@@ -1,0 +1,65 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import Icon from '../../components/Icon.astro';
+import { CHATS, QUICK_REPLIES } from '../../data/demo';
+const first = CHATS[0];
+const initials = (n: string) => n.replace(/\(demo\)/, '').trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+---
+<Admin title="WhatsApp · Bandeja de entrada" active="chat">
+  <div class="chat" data-chat>
+    <div class="chat-list" role="tablist" aria-label="Conversaciones">
+      {CHATS.map((c, i) => (
+        <button class="chat-item" type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-id={c.id}>
+          <span class="avatar">{initials(c.name)}</span>
+          <span><strong>{c.name}</strong><span>{c.last}</span></span>
+          <span class="time">{c.time}{c.unread > 0 && <span class="badge">{c.unread}</span>}</span>
+        </button>
+      ))}
+    </div>
+    <section class="chat-pane" aria-live="polite">
+      <div class="chat-pane-head"><span class="avatar" data-avatar>{initials(first.name)}</span><span><strong data-name>{first.name}</strong><small data-phone>{first.phone} · WhatsApp (demo)</small></span></div>
+      <div class="msgs" data-msgs>
+        {first.messages.map((m) => <div class={`msg ${m.from}`}>{m.text}<small>{m.time}</small></div>)}
+      </div>
+      <div class="quick" aria-label="Respuestas rápidas">
+        {QUICK_REPLIES.map((r) => <button type="button" data-quick>{r}</button>)}
+      </div>
+      <form class="composer" data-composer>
+        <input aria-label="Escribe un mensaje" placeholder="Escribe un mensaje (demo, no se envía)" data-input />
+        <button class="btn" type="submit"><Icon name="arrow-right" size={18} /><span class="visually-hidden">Enviar</span></button>
+      </form>
+    </section>
+  </div>
+  <script type="application/json" id="chat-data" set:html={JSON.stringify(CHATS)} />
+</Admin>
+
+<script>
+  type Chat = { id: string; name: string; phone: string; messages: { from: string; text: string; time: string }[] };
+  const data = JSON.parse(document.getElementById('chat-data')!.textContent!) as Chat[];
+  const msgs = document.querySelector<HTMLElement>('[data-msgs]')!;
+  const input = document.querySelector<HTMLInputElement>('[data-input]')!;
+  let current = data[0];
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  const initials = (n: string) => n.replace(/\(demo\)/, '').trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+  const render = () => {
+    msgs.innerHTML = current.messages.map((m) => `<div class="msg ${m.from}">${esc(m.text)}<small>${esc(m.time)}</small></div>`).join('');
+    msgs.scrollTop = msgs.scrollHeight;
+    document.querySelector('[data-name]')!.textContent = current.name;
+    document.querySelector('[data-phone]')!.textContent = `${current.phone} · WhatsApp (demo)`;
+    document.querySelector('[data-avatar]')!.textContent = initials(current.name);
+  };
+  document.querySelectorAll<HTMLButtonElement>('.chat-item').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('.chat-item').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    b.querySelector('.badge')?.remove();
+    current = data.find((c) => c.id === b.dataset.id)!;
+    render();
+  }));
+  const send = (text: string) => {
+    if (!text.trim()) return;
+    const now = new Date();
+    current.messages.push({ from: 'asesor', text: text.trim(), time: `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}` });
+    render();
+  };
+  document.querySelector('[data-composer]')!.addEventListener('submit', (e) => { e.preventDefault(); send(input.value); input.value = ''; });
+  document.querySelectorAll<HTMLButtonElement>('[data-quick]').forEach((b) => b.addEventListener('click', () => send(b.textContent || '')));
+</script>

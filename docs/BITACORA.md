@@ -28,6 +28,13 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 23 (Claude Code)
+- **Panel de demostración (no funcional):** botón «Acceder» en la cabecera (y en el menú móvil) → `/admin/login/` con pestañas Iniciar sesión / Crear cuenta (no pide contraseña ni guarda nada; solo abre el panel). Panel `/admin/` con barra lateral: **Métricas** (KPI, barras semanales, origen de leads, idioma, leads recientes, embudo), **Leads** (tabla con búsqueda y filtros por etapa y objetivo, «Exportar» simulado), **CRM** (kanban de 6 etapas, arrastrar o mover con ← →), **WhatsApp** (bandeja con conversaciones, respuestas rápidas y envío local). Todo con datos ficticios (`src/data/demo.ts`, nombres con «(demo)») y aviso permanente «Modo demo · datos ficticios». Excluido de buscadores: `noindex`, `Disallow: /admin/` y fuera del sitemap.
+- **Video del hero:** Pexels 39105099 (casa moderna al atardecer, luces cálidas) con loop natural: el último segundo se funde con el primero; 387 KB (1280) y 133 KB (720).
+- **Logo equilibrado:** componente `Logo.astro` en SVG; la palabra «LoanPro» y el lema ocupan exactamente el mismo ancho (`textLength`), como el original; variantes oscura y clara (cabecera, pie, panel, acceso).
+- **Verificado:** `astro check` 0 errores, build 80 páginas; navegador: hero, acceso, métricas, filtro de leads (1 resultado al buscar «mendoza»), mover tarjeta en el CRM, cambiar de chat y respuesta rápida; logo a 1440 y 375 px sin scroll horizontal.
+- **Para hacerlo real (siguiente fase):** autenticación (por ejemplo Cloudflare Access), lectura de leads desde D1, API de WhatsApp Business y métricas reales.
+
 ### 2026-11-17 — Sesión 22 (Claude Code)
 - **Incidente corregido:** una reseña de prueba («EJEMPLO DE PRUEBA») se publicó por error unos minutos: el comando que la retiraba fue bloqueado por un control de seguridad (incluía un `rm`) y el despliegue siguió. Se retiró, se volvió a publicar y se comprobó en vivo (0 apariciones). **Regla:** nunca usar datos de prueba en archivos que se despliegan; probar en una copia o verificar antes de desplegar.
 - **Hecho:** logo «LoanPro» redibujado como texto nítido y fiel al original (pedido del dueño: «arregla el logo»): «Loan» en azul #1614B3, «Pro» en grafito #4F4F4F, lema en cursiva «residential and commercial financing», sin biselado; versión clara en el pie. Sustituye al JPG de 304×87 px en la cabecera.

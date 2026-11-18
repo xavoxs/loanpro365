@@ -1,0 +1,50 @@
+---
+/** Acceso y registro DEMO: no valida credenciales ni crea cuentas. Solo lleva al panel de demostración. */
+import '../../styles/global.css';
+import '../../styles/admin.css';
+import Logo from '../../components/Logo.astro';
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Acceso · Panel LoanPro365 (demo)</title>
+  </head>
+  <body class="adm-auth">
+    <main class="auth">
+      <div class="auth-card">
+        <a href="/es/" class="auth-logo" aria-label="Volver al sitio"><Logo /></a>
+        <h1 data-title>Accede a tu panel</h1>
+        <div class="auth-tabs" role="tablist" aria-label="Acceso">
+          <button type="button" role="tab" aria-selected="true" data-tab="login">Iniciar sesión</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="signup">Crear cuenta</button>
+        </div>
+        <p class="auth-note">Demostración: no se piden ni se guardan contraseñas. El botón abre el panel con datos ficticios.</p>
+        <form class="auth-form" action="/admin/" method="get">
+          <label data-signup hidden>Nombre de la empresa o equipo<input name="team" autocomplete="off" placeholder="LoanPro365 Mortgages" /></label>
+          <label>Correo (demo)<input type="email" name="email" autocomplete="off" placeholder="demo@loanpro365.com" /></label>
+          <button class="btn block" type="submit" data-submit>Entrar a la demo</button>
+        </form>
+        <p class="small">Al lanzar la versión real, el acceso usará un proveedor de identidad seguro con verificación en dos pasos.</p>
+      </div>
+    </main>
+    <script>
+      const tabs = document.querySelectorAll<HTMLButtonElement>('[data-tab]');
+      const title = document.querySelector<HTMLElement>('[data-title]')!;
+      const submit = document.querySelector<HTMLButtonElement>('[data-submit]')!;
+      const signup = document.querySelector<HTMLElement>('[data-signup]')!;
+      tabs.forEach((t) => t.addEventListener('click', () => {
+        tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+        const isSignup = t.dataset.tab === 'signup';
+        signup.hidden = !isSignup;
+        title.textContent = isSignup ? 'Crea tu cuenta de equipo' : 'Accede a tu panel';
+        submit.textContent = isSignup ? 'Crear cuenta demo' : 'Entrar a la demo';
+      }));
+      // No enviar datos: solo navegar al panel.
+      document.querySelector('form')!.addEventListener('submit', (e) => { e.preventDefault(); location.href = '/admin/'; });
+    </script>
+  </body>
+</html>

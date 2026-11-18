@@ -9,5 +9,5 @@ export default defineConfig({
     defaultLocale: 'en',
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
-  integrations: [sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en-US', es: 'es-US' } } })],
+  integrations: [sitemap({ filter: (page) => !page.includes('/admin/'), i18n: { defaultLocale: 'en', locales: { en: 'en-US', es: 'es-US' } } })],
 });

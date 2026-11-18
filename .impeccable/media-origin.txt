@@ -3,3 +3,4 @@ loanpro-logo.jpg: official logo copied as-is from https://loanpro365.com/wp-cont
 hero-portrait.mp4 / hero-portrait.jpg: 4:5 crop of Pexels video 32491588 (Pexels license), re-encoded with ffmpeg, no audio (2026-11-17).
 img/tile-homes.jpg: frame at 5s of Pexels video 32491588 (Pexels license), 1200 px (2026-11-17).
 img/buy-family.jpg: Pexels photo 7642037; img/refi-house.jpg: Pexels photo 5177211; img/biz-miami.jpg: Pexels photo 33664887. Pexels license, resized, metadata removed (2026-11-17). tile-homes.jpg removed.
+video/hero-*.mp4 + hero-poster.jpg (v2): Pexels video 39105099 "Luxury Modern Home with Tropical Touches", Pexels license; re-encoded 24 fps with 1 s crossfade loop (end blends into start), no audio (2026-11-17). Replaces Pexels 32491588. hero-portrait.* removed.

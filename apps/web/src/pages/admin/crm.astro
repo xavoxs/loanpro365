@@ -1,0 +1,48 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import { LEADS, STAGES } from '../../data/demo';
+const fmt = new Intl.NumberFormat('es-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+---
+<Admin title="CRM · Embudo de préstamos" active="crm">
+  <p class="small">Arrastra una tarjeta a otra columna, o usa los botones ← →. Demo: los cambios no se guardan al recargar.</p>
+  <div class="kanban" data-board>
+    {STAGES.map((s, i) => (
+      <section class="col" data-col={s.key} aria-label={s.label}>
+        <h2>{s.label}<span data-count>{LEADS.filter((l) => l.stage === s.key).length}</span></h2>
+        {LEADS.filter((l) => l.stage === s.key).map((l) => (
+          <article class="deal" draggable="true" data-deal={l.id}>
+            <strong>{l.name}</strong>
+            <span class="meta"><span>{l.goal} · {l.county}</span><span class="amt">{fmt.format(l.amount)}</span></span>
+            <span class="meta"><span>{l.next}</span><span>{l.owner}</span></span>
+            <span class="move">
+              <button type="button" data-dir="-1" aria-label={`Mover ${l.name} a la etapa anterior`}>←</button>
+              <button type="button" data-dir="1" aria-label={`Mover ${l.name} a la etapa siguiente`}>→</button>
+            </span>
+          </article>
+        ))}
+      </section>
+    ))}
+  </div>
+</Admin>
+
+<script>
+  const cols = [...document.querySelectorAll<HTMLElement>('[data-col]')];
+  const recount = () => cols.forEach((c) => { c.querySelector('[data-count]')!.textContent = String(c.querySelectorAll('[data-deal]').length); });
+  let dragging: HTMLElement | null = null;
+  document.querySelectorAll<HTMLElement>('[data-deal]').forEach((d) => {
+    d.addEventListener('dragstart', () => { dragging = d; });
+    d.addEventListener('dragend', () => { dragging = null; cols.forEach((c) => c.classList.remove('drop')); });
+    d.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach((b) => b.addEventListener('click', () => {
+      const i = cols.indexOf(d.closest('[data-col]') as HTMLElement);
+      const target = cols[Math.min(cols.length - 1, Math.max(0, i + Number(b.dataset.dir)))];
+      target.appendChild(d);
+      recount();
+      b.focus();
+    }));
+  });
+  cols.forEach((c) => {
+    c.addEventListener('dragover', (e) => { e.preventDefault(); c.classList.add('drop'); });
+    c.addEventListener('dragleave', () => c.classList.remove('drop'));
+    c.addEventListener('drop', (e) => { e.preventDefault(); if (dragging) { c.appendChild(dragging); recount(); } c.classList.remove('drop'); });
+  });
+</script>

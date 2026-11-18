@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
+import Logo from '../components/Logo.astro';
 import { COMPANY, ROUTES, t, other, toolPath, type Locale, type ToolKey } from '../i18n';
 
 interface Props {
@@ -52,7 +53,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={ROUTES.home[locale]} aria-label="LoanPro365 Mortgages">
-          <span class="logo" aria-hidden="true"><span class="logo-word"><span class="logo-loan">Loan</span><span class="logo-pro">Pro</span></span><span class="logo-tag">residential and commercial financing</span></span>
+          <Logo class="logo-header" />
         </a>
         <nav aria-label={es ? 'Principal' : 'Main'} class="nav-desktop">
           <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
@@ -61,6 +62,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
         <a class="lang" href={alternates[other(locale)]} hreflang={other(locale)} lang={other(locale)} data-lang={other(locale)}>
           <Icon name="globe" size={16} />{es ? 'EN' : 'ES'}<span class="visually-hidden"> — {d.langSwitch}</span>
         </a>
+        <a class="header-login" href="/admin/login/"><Icon name="lock" size={16} />{es ? 'Acceder' : 'Log in'}</a>
         <a class="btn sm header-cta" href={ROUTES.prequal[locale]}>{prequalLabel}</a>
         <details class="nav-mobile">
           <summary aria-label={es ? 'Abrir menú' : 'Open menu'}>
@@ -72,6 +74,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
               <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}<Icon name="arrow-right" size={18} /></a></li>)}</ul>
             </nav>
             <a class="btn block" href={ROUTES.prequal[locale]}>{prequalLabel}</a>
+            <a class="btn ghost block" href="/admin/login/">{es ? 'Acceder al panel' : 'Log in to the portal'}</a>
           </div>
         </details>
       </div>
@@ -83,7 +86,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
       <div class="wrap">
         <div class="footer-grid">
           <div>
-            <p class="logo logo-light" aria-hidden="true"><span class="logo-word"><span class="logo-loan">Loan</span><span class="logo-pro">Pro</span></span><span class="logo-tag">residential and commercial financing</span></p>
+            <Logo variant="light" class="logo-footer" />
             <h2 class="visually-hidden">LoanPro365 Mortgages</h2>
             <p>{es ? 'Corredor hipotecario independiente en el sur de Florida. Atención en español e inglés.' : 'Independent mortgage broker in South Florida. Service in English and Spanish.'}</p>
           </div>

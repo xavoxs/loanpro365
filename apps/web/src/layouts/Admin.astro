@@ -1,0 +1,50 @@
+---
+/** Panel de administración DEMO. Datos ficticios, sin autenticación real ni conexión a la base. */
+import '../styles/global.css';
+import '../styles/admin.css';
+import Icon from '../components/Icon.astro';
+import Logo from '../components/Logo.astro';
+
+interface Props { title: string; active: 'dash' | 'leads' | 'crm' | 'chat'; }
+const { title, active } = Astro.props;
+const nav = [
+  { key: 'dash', href: '/admin/', icon: 'trending-up', label: 'Métricas' },
+  { key: 'leads', href: '/admin/leads/', icon: 'list-checks', label: 'Leads' },
+  { key: 'crm', href: '/admin/crm/', icon: 'scale', label: 'CRM' },
+  { key: 'chat', href: '/admin/chat/', icon: 'message-circle', label: 'WhatsApp' },
+] as const;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title} · Panel LoanPro365 (demo)</title>
+  </head>
+  <body class="adm">
+    <aside class="adm-side">
+      <a class="adm-brand" href="/admin/" aria-label="Panel LoanPro"><Logo variant="light" class="logo-admin" /><span class="adm-tag">Panel</span></a>
+      <nav aria-label="Panel">
+        <ul>
+          {nav.map((n) => (
+            <li><a href={n.href} aria-current={active === n.key ? 'page' : undefined}><Icon name={n.icon} size={20} />{n.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <div class="adm-side-foot">
+        <a href="/es/"><Icon name="globe" size={18} />Ver sitio</a>
+        <a href="/admin/login/"><Icon name="lock" size={18} />Salir</a>
+      </div>
+    </aside>
+    <div class="adm-main">
+      <div class="adm-demo" role="note"><Icon name="badge-check" size={16} />Modo demo · datos ficticios · nada se guarda ni se envía</div>
+      <header class="adm-top">
+        <h1>{title}</h1>
+        <div class="adm-user"><span class="avatar">PS</span><span>Pablo S.<small>Administrador (demo)</small></span></div>
+      </header>
+      <main class="adm-body"><slot /></main>
+    </div>
+  </body>
+</html>
