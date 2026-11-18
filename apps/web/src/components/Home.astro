@@ -46,6 +46,14 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
       <div class="v4-result" aria-live="polite" hidden data-out>
         <span class="label">{C.result}</span>
         <span class="value" data-range>—</span>
+        <div class="pay" data-pay>
+          <div class="pay-head"><span>{C.pay.h}</span><strong data-pay-total>—</strong></div>
+          <div class="pay-bar" aria-hidden="true"><span class="seg-pi" data-seg-pi></span><span class="seg-ti" data-seg-ti></span></div>
+          <ul class="pay-legend">
+            <li><i class="dot dot-pi"></i>{C.pay.pi}<b data-pay-pi>—</b></li>
+            <li><i class="dot dot-ti"></i>{C.pay.ti}<b data-pay-ti>—</b></li>
+          </ul>
+        </div>
         <a class="btn" href={ROUTES.prequal[locale]} data-est-cta>{C.next}<Icon name="arrow-right" size={18} /></a>
         <p class="note">{C.note}</p>
       </div>
@@ -149,7 +157,7 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
 </Base>
 
 <script>
-  import { affordability } from '@loanpro365/calculators';
+  import { affordability, monthlyPayment } from '@loanpro365/calculators';
 
   // Aparición suave al hacer scroll (desactivada con «reducir movimiento»).
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -214,6 +222,17 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
       outBox.hidden = false;
       started = true;
       animateTo([r.low, r.max]);
+      // Desglose del pago en el tope del rango: capital e interés vs. impuestos y seguro (3% del precio al año).
+      const p = monthlyPayment({ price: r.max, downPayment: Math.min(r.down, r.max), annualRatePct: 6.5, years: 30, propertyTaxYearly: r.max * 0.03, insuranceYearly: 0 });
+      const ti = p.tax;
+      const total = p.principalInterest + ti;
+      const q = (sel: string) => outBox.querySelector<HTMLElement>(sel)!;
+      q('[data-pay-total]').textContent = `${fmt.format(total)}/${form.dataset.locale === 'es' ? 'mes' : 'mo'}`;
+      q('[data-pay-pi]').textContent = fmt.format(p.principalInterest);
+      q('[data-pay-ti]').textContent = fmt.format(ti);
+      const piPct = total > 0 ? (p.principalInterest / total) * 100 : 0;
+      q('[data-seg-pi]').style.flexBasis = `${piPct}%`;
+      q('[data-seg-ti]').style.flexBasis = `${100 - piPct}%`;
     };
     form.addEventListener('submit', (e) => { e.preventDefault(); show(); });
     form.addEventListener('input', () => { if (started) show(); });

@@ -19,20 +19,20 @@ type ContentKey = Exclude<RouteKey, 'home' | 'tools' | 'blog'>;
 const en: Record<ContentKey, PageContent> = {
   buy: {
     title: 'Buy a home in South Florida',
-    lead: 'First home or next home: I compare loan programs and lenders so you see your real options before you make an offer.',
+    lead: 'First home or next home: we compare loan programs and lenders so you see your real options before you make an offer.',
     sections: [
-      { h: 'Loan programs I work with', list: [
+      { h: 'Loan programs we work with', list: [
         'FHA — down payment from 3.5% with a credit score of 580 or higher (HUD Handbook 4000.1).',
         'VA — for eligible veterans and service members, often with no down payment (U.S. Department of Veterans Affairs).',
         'Conventional — including HomeReady, with down payment from 3% for eligible buyers (Fannie Mae).',
-        'Self-employed and ITIN options — ask me which lenders accept your documentation.',
+        'Self-employed and ITIN options — ask us which lenders accept your documentation.',
       ] },
       { h: 'How it works', list: [
         '1. Check what you can afford with the free calculator.',
-        '2. Pre-qualify with me — it takes a few minutes.',
-        '3. I compare lenders and send you the options side by side.',
+        '2. Pre-qualify with us — it takes a few minutes.',
+        '3. We compare lenders and send you the options side by side.',
         '4. You make your offer with a pre-approval letter.',
-        '5. I guide you through appraisal, insurance and closing.',
+        '5. We guide you through appraisal, insurance and closing.',
       ] },
       { h: 'Florida costs to plan for', p: 'Homeowners and wind insurance, flood insurance in some zones, HOA or condo fees, and Florida documentary stamp and intangible taxes at closing. The tools below include them.' },
     ],
@@ -68,7 +68,7 @@ const en: Record<ContentKey, PageContent> = {
     lead: 'Rental property, short-term rental or commercial: financing based on the property’s income, not only yours.',
     sections: [
       { h: 'Options', list: ['DSCR loans — qualify with the property’s rent compared to its payment.', 'Conventional investment property loans.', 'Commercial loans for mixed-use and small commercial properties.'] },
-      { h: 'What lenders look at', p: 'Rent vs. payment (DSCR), down payment, reserves, credit and property type. Requirements vary by lender; I compare them for you.' },
+      { h: 'What lenders look at', p: 'Rent vs. payment (DSCR), down payment, reserves, credit and property type. Requirements vary by lender; we compare them for you.' },
     ],
     cta: 'talk',
     tools: ['dscr'],
@@ -82,7 +82,7 @@ const en: Record<ContentKey, PageContent> = {
         'County and city programs in Broward, Miami-Dade and Palm Beach.',
         'Lender programs such as HomeReady with reduced down payment.',
       ] },
-      { h: 'Important', p: 'Income limits, purchase price limits and funding change during the year. I check what is open today for your county before we count on it.' },
+      { h: 'Important', p: 'Income limits, purchase price limits and funding change during the year. We check what is open today for your county before you count on it.' },
     ],
     cta: 'talk',
     tools: ['assistance', 'affordability'],
@@ -120,7 +120,7 @@ const en: Record<ContentKey, PageContent> = {
   },
   prequal: {
     title: 'Pre-qualify',
-    lead: 'Answer a few questions and I’ll tell you what programs fit you. Our 4-step online pre-qualification is coming soon; meanwhile, start here.',
+    lead: 'Answer a few questions and we’ll tell you which programs fit you. Our 4-step online pre-qualification is coming soon; meanwhile, start here.',
     sections: [
       { h: 'What you’ll need', list: ['Approximate income and monthly debts.', 'How much you have saved for the down payment.', 'Your estimated credit score.'] },
       { h: 'Your privacy', p: 'This website never asks for your Social Security number, date of birth or bank account numbers.' },
@@ -154,20 +154,20 @@ const en: Record<ContentKey, PageContent> = {
 const es: Record<ContentKey, PageContent> = {
   buy: {
     title: 'Compra tu casa en el sur de Florida',
-    lead: 'Primera casa o la siguiente: comparo programas y prestamistas para que veas tus opciones reales antes de hacer una oferta.',
+    lead: 'Primera casa o la siguiente: comparamos programas y prestamistas para que veas tus opciones reales antes de hacer una oferta.',
     sections: [
-      { h: 'Programas con los que trabajo', list: [
+      { h: 'Programas con los que trabajamos', list: [
         'FHA: pago inicial desde 3.5% con puntaje de crédito de 580 o más (Manual HUD 4000.1).',
         'VA: para veteranos y militares elegibles, muchas veces sin pago inicial (Departamento de Asuntos de Veteranos).',
         'Convencional: incluye HomeReady, con pago inicial desde 3% para compradores elegibles (Fannie Mae).',
-        'Opciones para trabajadores independientes y con ITIN: pregúntame qué prestamistas aceptan tus documentos.',
+        'Opciones para trabajadores independientes y con ITIN: pregúntanos qué prestamistas aceptan tus documentos.',
       ] },
       { h: 'Cómo funciona', list: [
         '1. Mira cuánto puedes comprar con la calculadora gratis.',
-        '2. Precalifícate conmigo; toma unos minutos.',
-        '3. Comparo prestamistas y te envío las opciones lado a lado.',
+        '2. Precalifícate con nosotros; toma unos minutos.',
+        '3. Comparamos prestamistas y te enviamos las opciones lado a lado.',
         '4. Haces tu oferta con carta de preaprobación.',
-        '5. Te acompaño en la tasación, el seguro y el cierre.',
+        '5. Te acompañamos en la tasación, el seguro y el cierre.',
       ] },
       { h: 'Costos de Florida que debes prever', p: 'Seguro de hogar y de viento, seguro contra inundación en algunas zonas, cuotas de HOA o condominio, y los impuestos documentales e intangible de Florida al cierre. Las herramientas de abajo los incluyen.' },
     ],
@@ -203,7 +203,7 @@ const es: Record<ContentKey, PageContent> = {
     lead: 'Propiedad de renta, alquiler de corto plazo o comercial: financiamiento según el ingreso de la propiedad, no solo el tuyo.',
     sections: [
       { h: 'Opciones', list: ['Préstamos DSCR: calificas con la renta de la propiedad frente a su pago.', 'Préstamos convencionales para propiedad de inversión.', 'Préstamos comerciales para uso mixto y propiedades comerciales pequeñas.'] },
-      { h: 'Qué miran los prestamistas', p: 'Renta frente a pago (DSCR), pago inicial, reservas, crédito y tipo de propiedad. Los requisitos cambian según el prestamista; yo los comparo por ti.' },
+      { h: 'Qué miran los prestamistas', p: 'Renta frente a pago (DSCR), pago inicial, reservas, crédito y tipo de propiedad. Los requisitos cambian según el prestamista; nosotros los comparamos por ti.' },
     ],
     cta: 'talk',
     tools: ['dscr'],
@@ -217,7 +217,7 @@ const es: Record<ContentKey, PageContent> = {
         'Programas de condados y ciudades en Broward, Miami-Dade y Palm Beach.',
         'Programas de prestamistas como HomeReady, con pago inicial reducido.',
       ] },
-      { h: 'Importante', p: 'Los límites de ingreso, de precio y los fondos cambian durante el año. Reviso qué está abierto hoy en tu condado antes de contar con ello.' },
+      { h: 'Importante', p: 'Los límites de ingreso, de precio y los fondos cambian durante el año. Revisamos qué está abierto hoy en tu condado antes de que cuentes con ello.' },
     ],
     cta: 'talk',
     tools: ['assistance', 'affordability'],
@@ -255,7 +255,7 @@ const es: Record<ContentKey, PageContent> = {
   },
   prequal: {
     title: 'Precalificación',
-    lead: 'Responde unas preguntas y te digo qué programas te sirven. La precalificación en línea de 4 pasos llega pronto; mientras tanto, empieza aquí.',
+    lead: 'Responde unas preguntas y te decimos qué programas te sirven. La precalificación en línea de 4 pasos llega pronto; mientras tanto, empieza aquí.',
     sections: [
       { h: 'Qué vas a necesitar', list: ['Ingreso aproximado y deudas mensuales.', 'Cuánto tienes ahorrado para el pago inicial.', 'Tu puntaje de crédito estimado.'] },
       { h: 'Tu privacidad', p: 'Este sitio nunca te pide número de Seguro Social, fecha de nacimiento ni números de cuenta bancaria.' },

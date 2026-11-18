@@ -116,7 +116,7 @@ const en: Labels = {
   },
   assistance: {
     yes: 'You may be a good candidate. Funding and limits change, so confirm what is open today:',
-    no: 'Most down payment programs require a first-time buyer purchasing a primary residence. Some exceptions exist — ask me.',
+    no: 'Most down payment programs require a first-time buyer purchasing a primary residence. Some exceptions exist — ask us.',
     links: [
       { name: 'Florida Housing Finance Corporation', url: 'https://www.floridahousing.org/', note: 'Statewide first-time buyer programs' },
     ],
@@ -172,7 +172,7 @@ const es: Labels = {
   },
   assistance: {
     yes: 'Podrías ser buen candidato. Los fondos y límites cambian; confirma qué está abierto hoy:',
-    no: 'La mayoría de programas exige ser primer comprador y que sea tu residencia principal. Hay excepciones: pregúntame.',
+    no: 'La mayoría de programas exige ser primer comprador y que sea tu residencia principal. Hay excepciones: pregúntanos.',
     links: [
       { name: 'Florida Housing Finance Corporation', url: 'https://www.floridahousing.org/', note: 'Programas estatales para primeros compradores' },
     ],

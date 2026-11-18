@@ -28,6 +28,12 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 20 (Claude Code)
+- **Evaluación propia antes de empezar:** 7/10. Lo que frenaba: identidad genérica (tipografía y estilo de cualquier fintech), sin elemento gráfico de marca, resultado de la calculadora sin profundidad, páginas internas con el estilo anterior y texto interno todavía en primera persona.
+- **Hecho:** (1) tipografía display con carácter: **Bricolage Grotesque** (eje óptico, autoalojada) en titulares, cifras y resultados; Manrope queda para el texto. (2) **Motivo de marca «techo»** (la Λ de una casa, en línea): bajo los títulos de sección y de página, en las tarjetas de cifras y en el cierre. (3) **Desglose del pago** en el resultado de la calculadora del hero: pago mensual en el tope del rango con barra de capital e interés frente a impuestos y seguro. (4) **Páginas internas con el lenguaje nuevo:** títulos grandes con el techo, tarjetas suaves de 22 px, botones en píldora, formularios y resultados de herramientas y precalificación en tarjetas redondeadas, cabecera translúcida. (5) Texto interno en **voz de empresa** (comparamos, te acompañamos, pregúntanos…).
+- **Verificado:** 17 + 8 pruebas, `astro check` 0 errores, build 75 páginas sin enlaces rotos, detector sin hallazgos; navegador a 1440 y 375 px sin scroll horizontal ni objetivos táctiles por debajo de 44 px. Nota: tras instalar una fuente nueva hay que reiniciar el servidor de desarrollo para verla.
+- **Lo que falta para 9.5 (depende del cliente):** reseñas reales, fotos propias del equipo u oficina, logo actualizado en vector (el dueño pidió mantener el oficial tal cual).
+
 ### 2026-11-17 — Sesión 19 (Claude Code)
 - **Contexto:** calificación 7/10. Quejas: errores de contraste, imagen repetida (el bento usaba un cuadro del mismo video del hero) e imágenes básicas.
 - **Diagnóstico:** el contraste calculado del texto sobre colores sólidos cumple; los fallos estaban en el **texto sobre imagen** (subtítulo y señales del hero sobre partes claras del video, y texto de la tarjeta con foto).

@@ -1,4 +1,5 @@
 @import '@fontsource-variable/manrope/wght.css';
+@import '@fontsource-variable/bricolage-grotesque/opsz.css';
 
 [hidden] { display: none !important; }
 
@@ -776,3 +777,82 @@ a.tile:hover .tile-go { transform: rotate(45deg); }
   .pcard-biz .pbody { align-content: center; }
   .bento .tile-dark { grid-column: 3 / span 2; grid-row: 3; }
 }
+
+/* =================== v5: identidad propia =================== */
+/* Tipografía display con carácter (Bricolage Grotesque, eje óptico) para titulares y cifras; Manrope para el texto. */
+:root {
+  --display: 'Bricolage Grotesque Variable', 'Manrope Variable', 'Segoe UI', system-ui, sans-serif;
+  /* Motivo de marca: el techo (la «Λ» de una casa), dibujado como línea. */
+  --roof: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60'%3E%3Cpath d='M4 56 60 6l56 50' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --roof-blue: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60'%3E%3Cpath d='M4 56 60 6l56 50' fill='none' stroke='%231614b3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+h1, h2, .v4-h2, .tile-stat strong, .stats strong, .v4-result .value, .pbody strong, .tile-body strong, .v4-steps h3, .v4-card strong, .pay-head strong, .result .big, legend {
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'wdth' 92;
+}
+.v4-hero h1 { font-weight: 700; letter-spacing: -0.045em; }
+.v4-h2 { font-weight: 700; }
+
+/* Motivo del techo */
+.tile-stat { position: relative; }
+.tile-stat::after { content: ''; position: absolute; right: 22px; top: 22px; width: 56px; height: 28px; background: var(--roof) center / contain no-repeat; opacity: 0.45; }
+.v4-final { position: relative; overflow: hidden; isolation: isolate; }
+.v4-final::before { content: ''; position: absolute; inset: auto -10% -30% -10%; height: 70%; z-index: -1; opacity: 0.12;
+  background: var(--roof) center bottom / 900px auto no-repeat, var(--roof) 10% bottom / 520px auto no-repeat, var(--roof) 92% bottom / 600px auto no-repeat; }
+.v4-h2::after { content: ''; display: block; width: 44px; height: 22px; margin-top: 18px; background: var(--roof-blue) left center / contain no-repeat; }
+.v4-row-head .v4-h2::after { display: none; }
+
+/* Desglose del pago en el resultado */
+.pay { width: 100%; display: grid; gap: 10px; margin-top: 10px; padding: 16px 18px; border-radius: 16px; background: var(--field-2); text-align: left; }
+.pay-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; font-weight: 700; color: var(--ink-3); }
+.pay-head strong { font-size: 1.4rem; color: var(--ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.pay-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: var(--line); }
+.pay-bar span { display: block; height: 100%; flex: 0 0 50%; }
+.seg-pi { background: var(--brand); }
+.seg-ti { background: #8e8cf0; }
+.pay-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14.5px; color: var(--ink-2); }
+.pay-legend li { display: flex; align-items: center; gap: 8px; }
+.pay-legend b { margin-left: auto; color: var(--ink); font-variant-numeric: tabular-nums; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot-pi { background: var(--brand); }
+.dot-ti { background: #8e8cf0; }
+@media (min-width: 720px) { .pay-legend { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
+
+/* =================== Páginas internas con el lenguaje nuevo =================== */
+main.page { max-width: 960px; padding-top: 56px; padding-bottom: 96px; }
+main.page > h1, main.page .prose h1 { font-size: clamp(2.3rem, 1.5rem + 3.2vw, 4rem); line-height: 1.02; letter-spacing: -0.045em; font-weight: 700; max-width: 18ch; }
+main.page > h1::after { content: ''; display: block; width: 44px; height: 22px; margin-top: 20px; background: var(--roof-blue) left center / contain no-repeat; }
+main.page > .lead { font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem); max-width: 56ch; margin-top: 8px; }
+main.page section { margin-top: 56px; }
+main.page h2 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2.1rem); letter-spacing: -0.03em; font-weight: 700; }
+main.page li { line-height: 1.6; }
+.card, a.card { border: 0; border-radius: 22px; background: var(--field); padding: 24px; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease); }
+a.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); border: 0; }
+.card h2, .card h3, .h3 { font-family: var(--display); font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
+.grid { gap: 14px; }
+.actions .btn { border-radius: 999px; }
+.btn { border-radius: 999px; }
+.btn.block { border-radius: 16px; }
+input, select, textarea { border-radius: 14px; }
+
+/* Herramientas */
+.tool-layout { gap: 28px; }
+.result { border: 0; border-radius: 24px; background: var(--field); padding: 24px; }
+.result .big { font-weight: 700; letter-spacing: -0.04em; color: var(--brand); }
+form.tool { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 24px; }
+
+/* Precalificación */
+.prequal { border-radius: 28px; padding: 32px; box-shadow: var(--shadow-2); border: 1px solid var(--line); }
+legend { font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.9rem); font-weight: 700; letter-spacing: -0.03em; }
+
+/* Blog */
+.post-row { border-radius: 18px; padding: 22px 18px; }
+.path-list .post-row { border-radius: 0; }
+.post-cta { border-radius: 28px; border: 0; background: var(--field); padding: 28px; }
+.path-next { border-radius: 24px; }
+
+/* Cabecera más limpia */
+.site-header { background: rgba(255, 255, 255, 0.9); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); }
+.nav-desktop a { font-weight: 600; }
+.header-cta { border-radius: 999px; }
