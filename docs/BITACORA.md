@@ -28,6 +28,11 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 13 (Claude Code)
+- **Hecho:** Pablo deja de ser tema principal de la portada (pedido del dueño). La sección de historia habla en voz de la empresa («LoanPro365 Mortgages nació para…») y en lugar de su foto muestra datos de la empresa (15+ años*, 98%*, 6 tipos de préstamo, NMLS #1486485). Pablo aparece solo en la página «Conócenos» (antes «Nosotros», ahora `/es/conocenos/`) con una ficha de equipo (foto, rol, NMLS) y en la línea legal del pie.
+- **Regla para próximas sesiones:** la marca protagonista es LoanPro365 Mortgages; no volver a centrar la portada en Pablo.
+- **Verificado:** `astro check` 0 errores/advertencias, build 75 páginas sin enlaces rotos; portada a 1280 y 375 px sin scroll horizontal; ficha de Pablo visible en Conócenos.
+
 ### 2026-11-17 — Sesión 12 (Claude Code)
 - **Hecho:** portada reorganizada con la estructura del modelo nero.jipjip.com (plantilla Astro de servicio local), en el diseño de LoanPro365: barra superior con asistencia 24/7 y teléfono (todas las páginas); hero con video y estimador (se mantiene); franja oscura de confianza con 6 íconos; historia de la empresa con foto de Pablo; «Qué hacemos» en rejilla de 6 servicios; «Cómo funciona» en 4 pasos; bloque «Sin adivinanzas» con lista de ventajas + formulario «¿Quieres que te llamemos?» (nombre, teléfono, condado, mejor hora, qué necesitas, mensaje, consentimiento TCPA, campo trampa) que envía a `/v1/leads` con `sourceTool: callback` y respaldo a WhatsApp; FAQ en dos columnas; banda final oscura con dos botones (Precalifícate + Llamar); tarjetas del blog por ruta. Textos en `apps/web/src/i18n/sections.ts`.
 - **Decisiones:** sin sección de testimonios ni calificación con estrellas del modelo: no hay reseñas reales (no se inventan). Se conservan calculadoras y costos de Florida entre «Cómo funciona» y «te llamamos».

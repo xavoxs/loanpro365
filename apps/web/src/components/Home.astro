@@ -1,6 +1,4 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
@@ -17,7 +15,6 @@ const s = SECTIONS[locale];
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://loanpro365-api.francisco-buenano.workers.dev';
 const es = locale === 'es';
 
-const hasPhoto = fs.existsSync(path.resolve(process.cwd(), 'public/img/pablo.jpg'));
 // El blog se presenta por rutas: se muestra el primer paso de cada una.
 const allPosts = await getCollection('blog', (p) => p.data.lang === locale);
 const posts = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === key).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))[0])
@@ -80,15 +77,14 @@ const featuredTools: { key: ToolKey; icon: string }[] = [
 
   <section class="band story" aria-labelledby="story">
     <div class="wrap story-grid">
-      {hasPhoto
-        ? <img class="story-photo" src="/img/pablo.jpg" alt={`${COMPANY.broker}, LoanPro365`} width="735" height="814" loading="lazy" decoding="async" />
-        : <div class="story-photo" role="img" aria-label={COMPANY.broker}></div>}
       <div>
         <h2 id="story">{s.story.h}</h2>
         {s.story.p.map((x) => <p>{x}</p>)}
-        <p class="story-sign">{s.story.sign}</p>
-        <a class="link-arrow" href={ROUTES.about[locale]}>{s.story.cta}<Icon name="arrow-right" size={18} /></a>
+        <a class="link-arrow story-cta" href={ROUTES.about[locale]}>{s.story.cta}<Icon name="arrow-right" size={18} /></a>
       </div>
+      <dl class="story-facts">
+        {s.story.facts.map((f) => <div><dt>{f.n}</dt><dd>{f.t}</dd></div>)}
+      </dl>
     </div>
   </section>
 

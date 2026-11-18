@@ -25,7 +25,7 @@ export const ROUTES = {
   assistance: { en: '/en/florida-assistance/', es: '/es/ayudas-florida/' },
   tools: { en: '/en/tools/', es: '/es/herramientas/' },
   learn: { en: '/en/learn/', es: '/es/aprende/' },
-  about: { en: '/en/about/', es: '/es/nosotros/' },
+  about: { en: '/en/about/', es: '/es/conocenos/' },
   prequal: { en: '/en/prequalify/', es: '/es/precalificacion/' },
   contact: { en: '/en/contact/', es: '/es/contacto/' },
   legal: { en: '/en/legal/', es: '/es/legal/' },
@@ -98,7 +98,7 @@ const en = {
 type Dict = typeof en;
 const es: Dict = {
   skip: 'Ir al contenido',
-  nav: { buy: 'Comprar casa', refinance: 'Refinanciar', credit: 'Crédito difícil', investors: 'Inversionistas', tools: 'Herramientas', about: 'Nosotros', contact: 'Contacto', commercial: 'Comerciales', blog: 'Blog' },
+  nav: { buy: 'Comprar casa', refinance: 'Refinanciar', credit: 'Crédito difícil', investors: 'Inversionistas', tools: 'Herramientas', about: 'Conócenos', contact: 'Contacto', commercial: 'Comerciales', blog: 'Blog' },
   cta: { primary: 'Ver cuánto puedo comprar', call: 'Llamar', whatsapp: 'WhatsApp', prequal: 'Empezar precalificación', talk: 'Hablar con un asesor' },
   hero: {
     title: 'Hipotecas en el sur de Florida, explicadas en tu idioma',

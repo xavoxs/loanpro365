@@ -18,11 +18,16 @@ const en = {
   story: {
     h: 'A Florida mortgage company, through and through',
     p: [
-      'Pablo Samsing founded LoanPro365 to do mortgages his own way: wholesale rates, real communication and no shortcuts. For more than 15 years* the company has financed first-time buyers, families refinancing, seasoned investors and businesses.',
+      'LoanPro365 Mortgages was built to do mortgages differently: wholesale rates, real communication and no shortcuts. For more than 15 years* we have financed first-time buyers, families refinancing, seasoned investors and businesses.',
       'That is still how we work. You talk to the people who handle your file, in English or Spanish, and when a loan gets complicated we solve it instead of passing it along. Realtors count on us for pre-approvals their buyers can trust and closings that stay on schedule.',
     ],
-    sign: 'Pablo Samsing, Broker/Owner · NMLS #328337',
-    cta: 'About us',
+    facts: [
+      { n: '15+', t: 'years in business*' },
+      { n: '98%', t: 'of pre-approved loans closed*' },
+      { n: '6', t: 'loan types: home, refinance, credit, investment, commercial, assistance' },
+      { n: 'NMLS', t: '#1486485, verifiable on NMLS Consumer Access' },
+    ],
+    cta: 'Meet the company',
   },
   services: { h: 'What we do', d: 'Financing for every stage, from your first home to your next commercial property.', more: 'Learn more' },
   steps: {
@@ -75,11 +80,16 @@ const es: Sections = {
   story: {
     h: 'Una empresa hipotecaria de Florida, de principio a fin',
     p: [
-      'Pablo Samsing fundó LoanPro365 para hacer las hipotecas a su manera: tasas mayoristas, comunicación real y sin atajos. Durante más de 15 años* la empresa ha financiado a primeros compradores, familias que refinancian, inversionistas con experiencia y negocios.',
+      'LoanPro365 Mortgages nació para hacer las hipotecas de otra manera: tasas mayoristas, comunicación real y sin atajos. Durante más de 15 años* hemos financiado a primeros compradores, familias que refinancian, inversionistas con experiencia y negocios.',
       'Así seguimos trabajando. Hablas con las personas que llevan tu expediente, en español o en inglés, y cuando un préstamo se complica lo resolvemos en lugar de pasarlo a otro. Los realtors confían en nosotros por preaprobaciones sólidas y cierres que llegan a tiempo.',
     ],
-    sign: 'Pablo Samsing, corredor y propietario · NMLS #328337',
-    cta: 'Sobre nosotros',
+    facts: [
+      { n: '15+', t: 'años de experiencia*' },
+      { n: '98%', t: 'de los préstamos preaprobados cerrados*' },
+      { n: '6', t: 'tipos de préstamo: vivienda, refinanciación, crédito, inversión, comercial y ayudas' },
+      { n: 'NMLS', t: '#1486485, verificable en NMLS Consumer Access' },
+    ],
+    cta: 'Conócenos',
   },
   services: { h: 'Qué hacemos', d: 'Financiamiento para cada etapa, desde tu primera casa hasta tu próxima propiedad comercial.', more: 'Ver más' },
   steps: {

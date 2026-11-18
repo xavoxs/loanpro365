@@ -27,6 +27,17 @@ const c = PAGES[locale][page];
     </section>
   ))}
 
+  {page === 'about' && (
+    <section class="leader-card" aria-label={locale === 'es' ? 'Nuestro equipo' : 'Our team'}>
+      <img src="/img/pablo.jpg" alt={COMPANY.broker} width="735" height="814" loading="lazy" decoding="async" />
+      <div>
+        <h2 class="h3">{COMPANY.broker}</h2>
+        <p>{locale === 'es' ? 'Corredor y propietario · NMLS #' : 'Broker/Owner · NMLS #'}{COMPANY.nmlsBroker}</p>
+        <p class="small">{locale === 'es' ? 'Lidera el equipo de LoanPro365 y acompaña los expedientes en español e inglés.' : 'Leads the LoanPro365 team and supports files in English and Spanish.'}</p>
+      </div>
+    </section>
+  )}
+
   {page === 'about' || page === 'legal' ? (
     <p><a href={COMPANY.nmlsUrl} rel="noopener">NMLS Consumer Access #{COMPANY.nmlsCompany}</a></p>
   ) : null}
