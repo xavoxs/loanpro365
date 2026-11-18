@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LoanPro365">
+  <!-- Monograma LP adaptado del favicon original: L en azul de acción, P en tinta. -->
+  <rect width="64" height="64" rx="14" fill="#ffffff"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#dbe3ef" stroke-width="1.5"/>
+  <path d="M13 14h8v28h13v8H13z" fill="#1f4fd8"/>
+  <path d="M36 14h9.5a10.5 10.5 0 0 1 0 21H44v-7h1.5a3.5 3.5 0 0 0 0-7H44v29h-8z" fill="#0c1f3f"/>
+</svg>

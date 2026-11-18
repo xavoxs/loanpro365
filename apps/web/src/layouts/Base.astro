@@ -31,6 +31,7 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={site + alternates[locale]} />
@@ -51,8 +52,8 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={ROUTES.home[locale]} aria-label="LoanPro365 Mortgages">
-          <span class="brand-mark"><Icon name="house" size={18} /></span>
-          <span>LoanPro365<small>Mortgages · South Florida</small></span>
+          <img class="brand-mark" src="/brand/mark.svg" alt="" width="36" height="36" />
+          <span class="wordmark"><span class="wm"><span class="wm-loan">Loan</span><span class="wm-pro">Pro</span><span class="wm-365">365</span></span><small>{es ? 'Financiamiento residencial y comercial' : 'Residential & commercial financing'}</small></span>
         </a>
         <nav aria-label={es ? 'Principal' : 'Main'} class="nav-desktop">
           <ul>{nav.map(([k, label]) => <li><a href={ROUTES[k][locale]}>{label}</a></li>)}</ul>
@@ -83,7 +84,8 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
       <div class="wrap">
         <div class="footer-grid">
           <div>
-            <h2>LoanPro365 Mortgages</h2>
+            <p class="wm wm-footer" aria-hidden="true"><span class="wm-loan">Loan</span><span class="wm-pro">Pro</span><span class="wm-365">365</span></p>
+            <h2 class="visually-hidden">LoanPro365 Mortgages</h2>
             <p>{es ? 'Corredor hipotecario independiente en el sur de Florida. Atención en español e inglés.' : 'Independent mortgage broker in South Florida. Service in English and Spanish.'}</p>
           </div>
           <div>
@@ -118,7 +120,10 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
           <p>
             {COMPANY.name} · <a href={COMPANY.nmlsUrl} rel="noopener">NMLS #{COMPANY.nmlsCompany}</a> · {COMPANY.broker}, NMLS #{COMPANY.nmlsBroker}
           </p>
-          <p class="ehl"><Icon name="house" size={16} />{d.trust.ehl}</p>
+          <p class="ehl">
+            <svg viewBox="0 0 64 56" width="28" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M32 2 2 24v6h6v24h48V30h6v-6zM16 28h32v20H16z" /><path fill="currentColor" d="M22 32h20v5H22zM22 40h20v5H22z" /></svg>
+            {d.trust.ehl}
+          </p>
           <p>{d.disclaimer}</p>
         </div>
       </div>

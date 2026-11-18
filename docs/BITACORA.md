@@ -28,6 +28,11 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 8 (Claude Code)
+- **Hecho:** logos originales adaptados al nuevo diseño: wordmark «LoanPro» en dos tonos (Loan azul de acción, Pro tinta) con «365» y el lema original «residential and commercial financing» traducido; monograma LP del favicon redibujado en vector (`public/brand/mark.svg`, `public/favicon.svg`); símbolo de Igualdad de Vivienda redibujado en el pie. Sin biselado ni sombra del logo antiguo.
+- **Verificado:** `astro check` 0 errores; en navegador a 375, 1280 y 1440 px sin desbordes ni solapes (el lema se oculta donde no cabe).
+- **No verificado:** ícono para iPhone (`apple-touch-icon` PNG) aún no existe; solo favicon SVG.
+
 ### 2026-11-15 — Sesión 7 (Claude Code, rediseño con /impeccable)
 - **Hecho:** rediseño completo del sistema visual. `PRODUCT.md` creado con el dueño (acción principal: precalificación; prueba disponible: foto real de Pablo; identidad libre). Dirección elegida por el dueño: el estándar de la categoría al nivel de Better.com y Rocket Mortgage (contrato en `apps/web/.impeccable/surfaces/`). Nueva portada: titular, estimador en vivo (ingreso + ahorros → rango de precio, con conteo animado), tarjeta de Pablo con NMLS, franja de confianza, 3 pasos, caminos de préstamo, herramientas, costos de Florida con fuente, sobre Pablo, preguntas frecuentes y cierre con CTA. Cabecera fija con CTA «Precalifícate», selector EN/ES y menú móvil con panel; pie de 4 columnas con NMLS e igualdad de vivienda; barra fija móvil (Precalifícate + WhatsApp) que en la portada aparece al pasar el botón del hero. Manrope autoalojada, íconos Lucide. La precalificación hereda el sistema, con barra de progreso y datos precargados desde el estimador (sessionStorage, nunca en la URL).
 - **Decisiones:** sin testimonios ni cifras (no existen). La foto de Pablo se usa sola si existe `public/img/pablo.jpg`.
