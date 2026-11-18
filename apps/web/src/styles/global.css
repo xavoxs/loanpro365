@@ -744,3 +744,35 @@ a.tile:hover .tile-go { transform: rotate(45deg); }
 @media (prefers-reduced-motion: reduce) { .js-reveal .reveal:not(.in) { opacity: 1; transform: none; } }
 .v4-bar input { min-height: 44px; }
 .v4-row-head .link-arrow { min-height: 44px; }
+
+/* ===== v5: tarjetas con foto (texto en placa blanca, contraste garantizado) y hero más legible ===== */
+.v4-hero-shade { background:
+  radial-gradient(90% 60% at 50% 48%, rgba(11, 10, 60, 0.78) 0%, rgba(11, 10, 60, 0.62) 60%, rgba(11, 10, 60, 0.55) 100%),
+  linear-gradient(180deg, rgba(11, 10, 60, 0.3) 0%, rgba(11, 10, 60, 0) 25%, rgba(11, 10, 60, 0.55) 100%); }
+.v4-hero h1, .v4-sub, .v4-trust { text-shadow: 0 2px 18px rgba(4, 4, 28, 0.45); }
+.v4-sub, .v4-trust { color: #fff; }
+
+.pcard { position: relative; display: grid; grid-template-rows: minmax(0, 1fr) auto; border-radius: 28px; overflow: hidden; background: #fff; border: 1px solid var(--line); text-decoration: none; color: var(--ink); min-height: 340px; transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease); }
+.pcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); color: var(--ink); }
+.pcard img { width: 100%; height: 100%; min-height: 200px; object-fit: cover; display: block; transition: transform 0.8s var(--ease); }
+.pcard:hover img { transform: scale(1.04); }
+.pbody { display: grid; gap: 6px; padding: 22px 24px 24px; background: #fff; position: relative; z-index: 1; }
+.pbody strong { font-size: clamp(1.3rem, 1.1rem + 0.7vw, 1.7rem); letter-spacing: -0.03em; line-height: 1.1; }
+.pbody span { color: var(--ink-2); font-size: 16px; max-width: 40ch; }
+.pcard .tile-go { background: #fff; color: var(--brand); box-shadow: var(--shadow-1); }
+.pcard-buy img { object-position: 50% 30%; }
+.pcard-biz img { object-position: 50% 40%; }
+@media (min-width: 760px) { .pcard-buy { grid-column: span 2; } .pcard-buy img { max-height: 380px; } }
+@media (min-width: 1040px) {
+  .bento { grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(220px, auto); }
+  .pcard-buy { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+  .pcard-buy img { max-height: none; }
+  .pcard-refi { grid-column: 3 / span 2; grid-row: 1; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; min-height: 0; }
+  .pcard-refi .pbody { align-content: center; }
+  .bento .tile-stat { grid-row: 2; }
+  .bento .tile-stat:not(.tile-stat-alt) { grid-column: 3; }
+  .bento .tile-stat-alt { grid-column: 4; }
+  .pcard-biz { grid-column: 1 / span 2; grid-row: 3; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; min-height: 0; }
+  .pcard-biz .pbody { align-content: center; }
+  .bento .tile-dark { grid-column: 3 / span 2; grid-row: 3; }
+}

@@ -2,3 +2,4 @@ hero-1280.mp4, hero-720.mp4, hero-poster.jpg: Pexels video 32491588 "Aerial view
 loanpro-logo.jpg: official logo copied as-is from https://loanpro365.com/wp-content/uploads/2020/04/loanprologo-new.jpg at the owner request.
 hero-portrait.mp4 / hero-portrait.jpg: 4:5 crop of Pexels video 32491588 (Pexels license), re-encoded with ffmpeg, no audio (2026-11-17).
 img/tile-homes.jpg: frame at 5s of Pexels video 32491588 (Pexels license), 1200 px (2026-11-17).
+img/buy-family.jpg: Pexels photo 7642037; img/refi-house.jpg: Pexels photo 5177211; img/biz-miami.jpg: Pexels photo 33664887. Pexels license, resized, metadata removed (2026-11-17). tile-homes.jpg removed.

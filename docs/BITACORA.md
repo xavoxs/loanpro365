@@ -28,6 +28,12 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 19 (Claude Code)
+- **Contexto:** calificación 7/10. Quejas: errores de contraste, imagen repetida (el bento usaba un cuadro del mismo video del hero) e imágenes básicas.
+- **Diagnóstico:** el contraste calculado del texto sobre colores sólidos cumple; los fallos estaban en el **texto sobre imagen** (subtítulo y señales del hero sobre partes claras del video, y texto de la tarjeta con foto).
+- **Hecho:** tres fotos nuevas y distintas de Pexels (licencia libre): familia con llaves (7642037) para «Compra tu casa», casa de dos pisos en Florida (5177211) para «Refinancia», torres de Miami (33664887) para «Invierte y crece»; optimizadas a 71–182 KB, sin metadatos. Tarjetas con foto arriba y texto en placa blanca (contraste garantizado), zoom suave al pasar el cursor. Velo del hero más denso al centro y sombra de texto; subtítulo y señales en blanco puro. Se eliminó `tile-homes.jpg`.
+- **Verificado:** `astro check` 0 errores, build 75 páginas; 1440 y 375 px sin scroll horizontal; las tres fotos cargan (200, image/jpeg).
+
 ### 2026-11-17 — Sesión 18 (Claude Code)
 - **Contexto:** el dueño calificó 5/10: genérica, parece plantilla antigua, saturada. Referentes revisados: mercury.com y better.com (hero a pantalla completa, titular grande centrado, un solo campo como acción, pocas palabras, bloques de distinto tamaño).
 - **Hecho (portada v4):** hero cinematográfico a pantalla completa con video y velo radial; titular centrado de hasta 5.6 rem; calculadora como **una sola barra** tipo píldora (ingreso | ahorros | Calcular) que despliega una tarjeta con el rango y «Continuar con mi precalificación»; tres señales bajo la barra. Sección **bento** que une préstamos y cifras (foto grande «Compra tu casa», 98%*, refinancia, invierte, 15+*, «Comparamos varios prestamistas por ti»). «Tres pasos hasta tus llaves» en tarjetas. «Aprende antes de decidir» en tarjetas suaves. Preguntas. Cierre con titular grande. Aparición suave al hacer scroll (desactivada con «reducir movimiento»). Menú reducido a 5 entradas (Comprar casa, Refinanciar, Comerciales, Blog, Conócenos). Textos en `apps/web/src/i18n/v4.ts`; estilos `v4-*` y `.bento`/`.tile` en `global.css`. Imagen `public/img/tile-homes.jpg` (cuadro del video de Pexels).
