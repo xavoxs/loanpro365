@@ -2,7 +2,8 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
-import { ROUTES, t, toolPath, TOOL_SLUGS, type Locale, type ToolKey } from '../i18n';
+import { COMPANY, ROUTES, t, toolPath, TOOL_SLUGS, type Locale, type ToolKey } from '../i18n';
+import { SERIES } from '../i18n/series';
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
 const locale = post.data.lang as Locale;
@@ -18,17 +19,20 @@ const alternates = { [locale]: href(post), [otherLang]: twin ? href(twin) : ROUT
 const series = post.data.series
   ? (await getCollection('blog', (p) => p.data.lang === locale && p.data.series === post.data.series)).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
   : [];
+const meta = post.data.series ? SERIES[locale][post.data.series] : undefined;
 const idx = series.findIndex((p) => p.id === post.id);
 const next = idx >= 0 ? series[idx + 1] : undefined;
 const tool = post.data.tool && post.data.tool in TOOL_SLUGS ? (post.data.tool as ToolKey) : undefined;
-const pathName = es ? 'Ruta del comprador' : 'Homebuyer path';
 const stepLabel = (n: number) => (es ? `Paso ${n} de ${series.length}` : `Step ${n} of ${series.length}`);
+// La acción final depende de la ruta: precalificación (vivienda/refinanciación) o asesor (comercial).
+const actionHref = meta?.action === 'advisor' ? COMPANY.whatsappHref : ROUTES.prequal[locale];
+const actionLabel = meta?.actionLabel ?? d.cta.prequal;
 const { Content } = await render(post);
 ---
 <Base locale={locale} title={`${post.data.title} · LoanPro365`} description={post.data.description} alternates={alternates}>
   <p class="small crumb">
     <a href={ROUTES.blog[locale]}>Blog</a>
-    {series.length > 0 && <span> · {pathName} · {stepLabel(idx + 1)}</span>}
+    {meta && <span> · {meta.name} · {stepLabel(idx + 1)}</span>}
   </p>
   <article class="prose">
     <h1>{post.data.title}</h1>
@@ -44,13 +48,13 @@ const { Content } = await render(post);
       </div>
       <div class="post-cta-actions">
         <a class="btn ghost" href={toolPath(tool, locale)}>{d.tools[tool].name}</a>
-        <a class="btn" href={ROUTES.prequal[locale]}>{d.cta.prequal}</a>
+        <a class="btn" href={actionHref} rel={meta?.action === 'advisor' ? 'noopener' : undefined}>{actionLabel}</a>
       </div>
     </aside>
   )}
 
-  {series.length > 0 && (
-    <nav class="learn-path" aria-label={pathName}>
+  {meta && series.length > 0 && (
+    <nav class="learn-path" aria-label={meta.name}>
       {next ? (
         <a class="path-next" href={href(next)}>
           <span class="small">{es ? 'Siguiente' : 'Next'} · {stepLabel(idx + 2)}</span>
@@ -59,9 +63,9 @@ const { Content } = await render(post);
         </a>
       ) : (
         <div class="path-done">
-          <strong>{es ? 'Completaste la ruta del comprador.' : 'You finished the homebuyer path.'}</strong>
-          <p>{es ? 'Ya sabes lo que necesitas. El siguiente paso es conocer tu número real con nuestro equipo.' : 'You know what you need. The next step is getting your real number with our team.'}</p>
-          <a class="btn" href={ROUTES.prequal[locale]}>{d.cta.prequal}<Icon name="arrow-right" size={20} /></a>
+          <strong>{meta.doneTitle}</strong>
+          <p>{meta.doneText}</p>
+          <a class="btn" href={actionHref} rel={meta.action === 'advisor' ? 'noopener' : undefined}>{actionLabel}<Icon name="arrow-right" size={20} /></a>
         </div>
       )}
       <ol class="path-steps">

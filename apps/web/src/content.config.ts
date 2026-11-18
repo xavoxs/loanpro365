@@ -13,7 +13,7 @@ const blog = defineCollection({
     publishedAt: z.coerce.date(),
     source: z.string().optional(),
     /** Ruta de aprendizaje: posición del artículo en la serie (1 = primero). */
-    series: z.enum(['buyer']).optional(),
+    series: z.enum(['buyer', 'refinance', 'commercial']).optional(),
     order: z.number().int().positive().optional(),
     /** Herramienta que el artículo pone en práctica. */
     tool: z.string().optional(),

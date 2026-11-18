@@ -3,47 +3,56 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
 import { ROUTES, type Locale } from '../i18n';
+import { SERIES, SERIES_KEYS } from '../i18n/series';
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const es = locale === 'es';
 const all = await getCollection('blog', (p) => p.data.lang === locale);
-const path = all.filter((p) => p.data.series === 'buyer').sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+const paths = SERIES_KEYS.map((key) => ({
+  key,
+  meta: SERIES[locale][key],
+  posts: all.filter((p) => p.data.series === key).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)),
+})).filter((s) => s.posts.length > 0);
 const rest = all.filter((p) => !p.data.series).sort((a, b) => +b.data.publishedAt - +a.data.publishedAt);
+const url = (slug: string) => `${ROUTES.blog[locale]}${slug}/`;
 const title = es ? 'Blog de LoanPro365' : 'LoanPro365 blog';
 const lead = es
-  ? 'Aprende paso a paso a comprar casa en Florida, desde decidir si te conviene hasta recibir las llaves.'
-  : 'Learn step by step how to buy a home in Florida, from deciding whether it makes sense to getting your keys.';
-const first = path[0] ? `${ROUTES.blog[locale]}${path[0].data.slug}/` : ROUTES.blog[locale];
+  ? 'Elige tu ruta y aprende paso a paso: comprar casa, refinanciar o financiar una propiedad o un negocio en Florida.'
+  : 'Pick your path and learn step by step: buying a home, refinancing, or financing a property or business in Florida.';
 ---
 <Base locale={locale} title={title} description={lead} alternates={ROUTES.blog}>
   <h1>{title}</h1>
   <p class="lead">{lead}</p>
 
-  <section>
-    <h2>{es ? 'Ruta del comprador' : 'Homebuyer path'} · {path.length} {es ? 'pasos' : 'steps'}</h2>
-    <ol class="path-list">
-      {path.map((p, i) => (
-        <li>
-          <a class="post-row" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
-            <span class="n">{i + 1}</span>
-            <span><strong>{p.data.title}</strong><span>{p.data.description}</span></span>
-            <Icon name="arrow-right" size={20} />
-          </a>
-        </li>
-      ))}
-    </ol>
-    <p class="actions">
-      <a class="btn" href={first}>{es ? 'Empezar la ruta' : 'Start the path'}</a>
-      <a class="btn ghost" href={ROUTES.prequal[locale]}>{es ? 'Ir directo a precalificarme' : 'Skip to pre-qualification'}</a>
-    </p>
-  </section>
+  <nav class="path-jump" aria-label={es ? 'Rutas' : 'Paths'}>
+    {paths.map((s) => <a class="btn ghost sm" href={`#${s.key}`}>{s.meta.name}</a>)}
+  </nav>
+
+  {paths.map((s) => (
+    <section id={s.key}>
+      <h2>{s.meta.name} · {s.posts.length} {es ? 'pasos' : 'steps'}</h2>
+      <p>{s.meta.intro}</p>
+      <ol class="path-list">
+        {s.posts.map((p, i) => (
+          <li>
+            <a class="post-row" href={url(p.data.slug)}>
+              <span class="n">{i + 1}</span>
+              <span><strong>{p.data.title}</strong><span>{p.data.description}</span></span>
+              <Icon name="arrow-right" size={20} />
+            </a>
+          </li>
+        ))}
+      </ol>
+      <p class="actions"><a class="btn" href={url(s.posts[0].data.slug)}>{s.meta.start}</a></p>
+    </section>
+  ))}
 
   {rest.length > 0 && (
     <section>
       <h2>{es ? 'Más artículos' : 'More articles'}</h2>
       <div class="post-list">
         {rest.map((p) => (
-          <a class="post-row" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
+          <a class="post-row" href={url(p.data.slug)}>
             <span><strong>{p.data.title}</strong><span>{p.data.description}</span></span>
             <Icon name="arrow-right" size={20} />
           </a>

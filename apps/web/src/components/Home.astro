@@ -6,6 +6,7 @@ import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
 import { COMPANY, ROUTES, t, toolPath, type Locale, type RouteKey, type ToolKey } from '../i18n';
 import { HOME } from '../i18n/home';
+import { SERIES, SERIES_KEYS } from '../i18n/series';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -14,7 +15,10 @@ const h = HOME[locale];
 const es = locale === 'es';
 
 const hasPhoto = fs.existsSync(path.resolve(process.cwd(), 'public/img/pablo.jpg'));
-const posts = (await getCollection('blog', (p) => p.data.lang === locale)).sort((a, b) => +b.data.publishedAt - +a.data.publishedAt).slice(0, 2);
+// El blog se presenta por rutas: se muestra el primer paso de cada una.
+const allPosts = await getCollection('blog', (p) => p.data.lang === locale);
+const posts = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === key).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))[0])
+  .filter((p): p is (typeof allPosts)[number] => Boolean(p));
 const featuredTools: { key: ToolKey; icon: string }[] = [
   { key: 'affordability', icon: 'calculator' },
   { key: 'payment', icon: 'circle-dollar-sign' },
@@ -160,7 +164,7 @@ const stepIcons = ['calculator', 'scale', 'key-round'];
         <div class="post-list">
           {posts.map((p) => (
             <a class="post-row" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
-              <span><strong>{p.data.title}</strong><span>{p.data.description}</span></span>
+              <span>{p.data.series && <span class="small">{SERIES[locale][p.data.series].name}</span>}<strong>{p.data.title}</strong><span>{p.data.description}</span></span>
               <Icon name="arrow-right" size={20} />
             </a>
           ))}

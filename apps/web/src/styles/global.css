@@ -359,3 +359,6 @@ legend { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; margin-bo
 .path-steps .current .n { background: var(--brand); border-color: var(--brand); color: #fff; }
 .path-list { list-style: none; margin: 16px 0 0; padding: 0; border-top: 1px solid var(--line); }
 .path-list .post-row { grid-template-columns: 28px 1fr 20px; }
+
+.path-jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.post-row .small { display: block; font-weight: 700; color: var(--brand); margin-bottom: 2px; }

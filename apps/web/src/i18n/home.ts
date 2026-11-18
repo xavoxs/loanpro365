@@ -78,7 +78,7 @@ const en = {
     points: ['Company NMLS #1486485 · Pablo NMLS #328337', 'Independent broker with access to multiple lenders', 'Licenses verifiable on NMLS Consumer Access'],
     cta: 'About us',
   },
-  blog: { h: 'Guides from our blog', all: 'Read the blog' },
+  blog: { h: 'Learn step by step', all: 'See all learning paths' },
   faq: {
     h: 'Questions people ask first',
     items: [
@@ -164,7 +164,7 @@ const es: Home = {
     points: ['NMLS de la empresa #1486485 · NMLS de Pablo #328337', 'Corredor independiente con acceso a varios prestamistas', 'Licencias verificables en NMLS Consumer Access'],
     cta: 'Sobre nosotros',
   },
-  blog: { h: 'Guías de nuestro blog', all: 'Ir al blog' },
+  blog: { h: 'Aprende paso a paso', all: 'Ver todas las rutas' },
   faq: {
     h: 'Lo que la gente pregunta primero',
     items: [
