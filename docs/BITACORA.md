@@ -28,6 +28,12 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 17 (Claude Code)
+- **Contexto:** el dueño calificó la página con 5/10 y rechazó «Descubre hasta qué precio de casa puedes comprar» (suena mal).
+- **Diagnóstico:** titular traducido; hero oscuro y pesado; cuatro secciones iguales (título centrado + 3 tarjetas pequeñas); letra pequeña; sin imagen después del hero.
+- **Hecho:** titular «Calcula cuánto puedes pagar por tu casa.» / «Know what you can pay for your home.»; hero claro de dos columnas: texto grande a la izquierda con 3 datos (NMLS, idiomas, sin consulta de crédito) y objetivos secundarios; a la derecha el video en marco vertical (nuevo `hero-portrait.mp4`, 703 KB, solo escritorio) con la calculadora encima. Secciones con forma propia: préstamos en filas grandes con encabezado lateral, «Por qué nos eligen» en banda azul profundo con cifras grandes, «Aprende antes de decidir» como lista editorial con íconos, preguntas en dos columnas, cierre con título grande. Texto base a 18 px y títulos de sección más grandes. Portada ~3,900 px en escritorio.
+- **Verificado:** `astro check` 0 errores, build 75 páginas; navegador a 1440 y 375 px sin scroll horizontal; en móvil el botón «Calcular mi presupuesto» dentro de la primera pantalla.
+
 ### 2026-11-17 — Sesión 16 (Claude Code, /copywriter)
 - **Hecho:** nuevo skill local `/copywriter` (`C:\Users\XavoX\.claude\skills\copywriter\SKILL.md`): diagnóstico → redacción → revisión de afirmaciones, sin inventar pruebas, con reglas para sectores regulados y español natural sin calcos. Aplicado al home con el enfoque A «Tu presupuesto»: H1 «Descubre hasta qué precio de casa puedes comprar.» / «See how much home you can afford.»; el estimador sube al hero (campos vacíos, botón «Calcular mi presupuesto», luego rango en vivo y «Continuar con mi precalificación»); objetivos como enlaces en el hero. Títulos nuevos: «¿Qué quieres lograr?», «Lo que ganas trabajando con nosotros» (15+*, 98%*, varios prestamistas por ti), «Entiende el proceso antes de empezar», «Preguntas frecuentes», cierre «Te toma 2 minutos…». Se quitó la sección de calculadora (ya está en el hero); la portada queda en 6 secciones.
 - **Regla de copy:** evitar calcos del inglés («¿Cuánta casa…?» es incorrecto). Usar `/copywriter` para cualquier texto nuevo.

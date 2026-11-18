@@ -19,109 +19,127 @@ const allPosts = await getCollection('blog', (p) => p.data.lang === locale);
 const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === key).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))[0])
   .filter((p): p is (typeof allPosts)[number] => Boolean(p));
 ---
-<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Descubre hasta qué precio de casa puedes comprar en Florida' : 'LoanPro365 Mortgages · See how much home you can afford in Florida'} description={L.hero.sub} alternates={ROUTES.home} full>
-  <!-- 1. Hero: la promesa y su respuesta en la misma pantalla -->
-  <section class="hero hero-video hero-a" aria-labelledby="hero-title">
-    <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="/video/hero-poster.jpg" aria-hidden="true" data-hero-video>
-      <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
-      <source src="/video/hero-1280.mp4" type="video/mp4" />
-    </video>
-    <div class="hero-shade" aria-hidden="true"></div>
-    <button class="video-toggle" type="button" data-video-toggle aria-pressed="false">
-      <span class="visually-hidden">{es ? 'Pausar o reproducir el video de fondo' : 'Pause or play the background video'}</span>
-      <span class="ico-pause"><Icon name="pause" size={16} /></span><span class="ico-play"><Icon name="play" size={16} /></span>
-    </button>
-    <div class="wrap hero-a-inner">
-      <div class="hero-a-copy">
+<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Calcula cuánto puedes pagar por tu casa en Florida' : 'LoanPro365 Mortgages · Know what you can pay for your home in Florida'} description={L.hero.sub} alternates={ROUTES.home} full>
+  <!-- 1. Hero claro: la pregunta a la izquierda, la respuesta sobre la imagen -->
+  <section class="hero-c" aria-labelledby="hero-title">
+    <div class="wrap hero-c-grid">
+      <div class="hero-c-copy">
         <h1 id="hero-title">{L.hero.h1}</h1>
         <p class="lead">{L.hero.sub}</p>
-        <nav class="hero-a-chips" aria-label={L.hero.chipsLabel}>
-          <span class="chips-label">{L.hero.chipsLabel}</span>
-          {L.hero.chips.map((c) => <a href={ROUTES[c.key][locale]}><Icon name={c.icon} size={18} />{c.t}</a>)}
+        <ul class="hero-c-facts">
+          <li><Icon name="badge-check" size={18} />NMLS #{COMPANY.nmlsCompany}</li>
+          <li><Icon name="globe" size={18} />{es ? 'Español e inglés' : 'English & Spanish'}</li>
+          <li><Icon name="lock" size={18} />{es ? 'Sin consulta de crédito' : 'No credit check'}</li>
+        </ul>
+        <nav class="hero-c-goals" aria-label={L.hero.chipsLabel}>
+          <span>{L.hero.chipsLabel}</span>
+          {L.hero.chips.slice(1).map((c) => <a href={ROUTES[c.key][locale]}>{c.t}<Icon name="arrow-right" size={16} /></a>)}
         </nav>
       </div>
 
-      <form class="estimator budget" id="estimator" data-locale={locale} data-prequal novalidate>
-        <h2>{E.title}</h2>
-        <div class="est-fields">
-          <label>{E.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" placeholder="7,000" required /></span></label>
-          <label>{E.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" placeholder="25,000" /></span></label>
+      <div class="hero-c-media">
+        <div class="frame">
+          <video class="frame-video" autoplay muted loop playsinline preload="metadata" poster="/video/hero-portrait.jpg" aria-hidden="true" data-hero-video>
+            <source src="/video/hero-portrait.mp4" type="video/mp4" />
+          </video>
+          <button class="video-toggle" type="button" data-video-toggle aria-pressed="false">
+            <span class="visually-hidden">{es ? 'Pausar o reproducir el video' : 'Pause or play the video'}</span>
+            <span class="ico-pause"><Icon name="pause" size={16} /></span><span class="ico-play"><Icon name="play" size={16} /></span>
+          </button>
         </div>
-        <button class="btn block" type="submit" data-calc>{E.calc}</button>
-        <p class="error" role="alert" hidden data-empty>{E.empty}</p>
-        <div class="est-out" aria-live="polite" hidden data-out>
-          <span class="label">{E.result}</span>
-          <span class="value" data-range>—</span>
-          <a class="btn block" href={ROUTES.prequal[locale]} data-est-cta>{E.next}<Icon name="arrow-right" size={20} /></a>
-        </div>
-        <p class="est-note">{E.note}</p>
-      </form>
+
+        <form class="estimator budget" id="estimator" data-locale={locale} data-prequal novalidate>
+          <h2>{E.title}</h2>
+          <div class="est-fields">
+            <label>{E.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" placeholder="7,000" required /></span></label>
+            <label>{E.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" placeholder="25,000" /></span></label>
+          </div>
+          <button class="btn block" type="submit" data-calc>{E.calc}</button>
+          <p class="error" role="alert" hidden data-empty>{E.empty}</p>
+          <div class="est-out" aria-live="polite" hidden data-out>
+            <span class="label">{E.result}</span>
+            <span class="value" data-range>—</span>
+            <a class="btn block" href={ROUTES.prequal[locale]} data-est-cta>{E.next}<Icon name="arrow-right" size={20} /></a>
+          </div>
+          <p class="est-note">{E.note}</p>
+        </form>
+      </div>
     </div>
   </section>
 
-  <!-- 2. ¿Qué quieres lograr? -->
+  <!-- 2. Tipos de préstamo: filas grandes, una por objetivo -->
   <section class="band" aria-labelledby="goals">
-    <div class="wrap">
-      <h2 id="goals" class="section-title">{L.goals.h}</h2>
-      <p class="section-sub">{L.goals.d}</p>
-      <div class="goal-cards">
+    <div class="wrap split-head">
+      <div class="head">
+        <h2 id="goals">{L.goals.h}</h2>
+        <p>{L.goals.d}</p>
+        <p class="also">{L.goals.also} {L.goals.alsoLinks.map((l, i) => <><a href={ROUTES[l.key][locale]}>{l.t}</a>{i < L.goals.alsoLinks.length - 1 && ' · '}</>)}</p>
+      </div>
+      <div class="goal-rows">
         {L.goals.items.map((g) => (
-          <a class="goal-card" href={ROUTES[g.key][locale]}>
-            <span class="ico"><Icon name={g.icon} size={22} /></span>
-            <h3>{g.t}</h3>
-            <p>{g.d}</p>
+          <a class="goal-row" href={ROUTES[g.key][locale]}>
+            <span class="ico"><Icon name={g.icon} size={24} /></span>
+            <span class="txt"><strong>{g.t}</strong><span>{g.d}</span></span>
             <span class="go" aria-hidden="true"><Icon name="arrow-right" size={20} /></span>
             <span class="visually-hidden">{g.cta}</span>
           </a>
         ))}
       </div>
-      <p class="also">{L.goals.also} {L.goals.alsoLinks.map((l, i) => <><a href={ROUTES[l.key][locale]}>{l.t}</a>{i < L.goals.alsoLinks.length - 1 && ' · '}</>)} · <a href={ROUTES.tools[locale]}>{L.calcAll}</a></p>
     </div>
   </section>
 
-  <!-- 3. Lo que ganas -->
-  <section class="band alt" aria-labelledby="why">
+  <!-- 3. Por qué nos eligen: banda azul con cifras grandes -->
+  <section class="stats-band" aria-labelledby="why">
     <div class="wrap">
-      <h2 id="why" class="section-title">{L.why.h}</h2>
-      <ul class="why3">
+      <h2 id="why">{L.why.h}</h2>
+      <ul class="stats">
         {L.why.items.map((w) => (
           <li>
-            {w.n.startsWith('icon:') ? <span class="why-ico"><Icon name={w.n.slice(5)} size={34} /></span> : <strong>{w.n}</strong>}
+            {w.n.startsWith('icon:') ? <span class="stat-ico"><Icon name={w.n.slice(5)} size={40} /></span> : <strong>{w.n}</strong>}
             <h3>{w.t}</h3>
             <p>{w.d}</p>
           </li>
         ))}
       </ul>
-      <div class="why-foot">
-        <a class="btn ghost" href={ROUTES.about[locale]}>{L.why.cta}</a>
-        <p class="small">{L.why.note}</p>
+      <div class="stats-foot">
+        <a class="link-light" href={ROUTES.about[locale]}>{L.why.cta}<Icon name="arrow-right" size={18} /></a>
+        <span>{L.why.note}</span>
       </div>
     </div>
   </section>
 
-  <!-- 4. Entiende el proceso -->
+  <!-- 4. Aprende: lista editorial -->
   {paths.length > 0 && (
     <section class="band" aria-labelledby="learn">
-      <div class="wrap">
-        <h2 id="learn" class="section-title">{L.learn.h}</h2>
-        <p class="section-sub">{L.learn.d}</p>
-        <div class="blog-cards">
-          {paths.map((p) => (
-            <a class="blog-card" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
-              {p.data.series && <span class="tag">{SERIES[locale][p.data.series].name}</span>}
-              <h3>{p.data.title}</h3>
-              <span class="more">{L.learn.read}<Icon name="arrow-right" size={16} /></span>
-            </a>
-          ))}
+      <div class="wrap split-head">
+        <div class="head">
+          <h2 id="learn">{L.learn.h}</h2>
+          <p>{L.learn.d}</p>
+          <a class="link-arrow" href={ROUTES.blog[locale]}>{h.blog.all}<Icon name="arrow-right" size={18} /></a>
         </div>
+        <ol class="learn-list">
+          {paths.map((p, i) => (
+            <li>
+              <a href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
+                <span class="n"><Icon name={["house", "refresh-cw", "building-2"][i] ?? "book-open"} size={22} /></span>
+                <span class="txt">{p.data.series && <span class="tag">{SERIES[locale][p.data.series].name}</span>}<strong>{p.data.title}</strong></span>
+                <Icon name="arrow-right" size={20} />
+              </a>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   )}
 
   <!-- 5. Preguntas frecuentes -->
   <section class="band alt" aria-labelledby="faq">
-    <div class="wrap faq-narrow">
-      <h2 id="faq" class="section-title">{L.faqTitle}</h2>
+    <div class="wrap split-head">
+      <div class="head">
+        <h2 id="faq">{L.faqTitle}</h2>
+        <p>{es ? '¿No ves tu pregunta? Escríbenos y te respondemos en tu idioma.' : 'Don’t see your question? Message us and we’ll answer in your language.'}</p>
+        <a class="link-arrow" href={COMPANY.whatsappHref} rel="noopener">WhatsApp<Icon name="arrow-right" size={18} /></a>
+      </div>
       <div class="faq">
         {h.faq.items.map((f) => (
           <details>
