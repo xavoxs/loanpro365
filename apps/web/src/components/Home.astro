@@ -11,6 +11,7 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 const h = HOME[locale];
 const L = LANDING[locale];
+const E = L.hero.est;
 const es = locale === 'es';
 
 // Aprende: el primer paso de cada ruta del blog.
@@ -18,9 +19,9 @@ const allPosts = await getCollection('blog', (p) => p.data.lang === locale);
 const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === key).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))[0])
   .filter((p): p is (typeof allPosts)[number] => Boolean(p));
 ---
-<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Hipotecas y préstamos comerciales en Florida' : 'LoanPro365 Mortgages · Florida home and commercial loans'} description={L.hero.sub} alternates={ROUTES.home} full>
-  <!-- 1. Hero: qué es y qué quieres hacer -->
-  <section class="hero hero-video hero-min" aria-labelledby="hero-title">
+<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Descubre hasta qué precio de casa puedes comprar en Florida' : 'LoanPro365 Mortgages · See how much home you can afford in Florida'} description={L.hero.sub} alternates={ROUTES.home} full>
+  <!-- 1. Hero: la promesa y su respuesta en la misma pantalla -->
+  <section class="hero hero-video hero-a" aria-labelledby="hero-title">
     <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="/video/hero-poster.jpg" aria-hidden="true" data-hero-video>
       <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
       <source src="/video/hero-1280.mp4" type="video/mp4" />
@@ -30,22 +31,39 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
       <span class="visually-hidden">{es ? 'Pausar o reproducir el video de fondo' : 'Pause or play the background video'}</span>
       <span class="ico-pause"><Icon name="pause" size={16} /></span><span class="ico-play"><Icon name="play" size={16} /></span>
     </button>
-    <div class="wrap hero-min-inner">
-      <h1 id="hero-title">{L.hero.h1}</h1>
-      <p class="lead">{L.hero.sub}</p>
-      <a class="btn hero-cta" href={ROUTES.prequal[locale]} data-prequal>{L.hero.cta}<Icon name="arrow-right" size={20} /></a>
-      <nav class="goal-chips" aria-label={L.hero.chipsLabel}>
-        {L.hero.chips.map((c) => (
-          <a class="chip" href={ROUTES[c.key][locale]}><span class="ico"><Icon name={c.icon} size={20} /></span>{c.t}<Icon name="arrow-right" size={18} /></a>
-        ))}
-      </nav>
+    <div class="wrap hero-a-inner">
+      <div class="hero-a-copy">
+        <h1 id="hero-title">{L.hero.h1}</h1>
+        <p class="lead">{L.hero.sub}</p>
+        <nav class="hero-a-chips" aria-label={L.hero.chipsLabel}>
+          <span class="chips-label">{L.hero.chipsLabel}</span>
+          {L.hero.chips.map((c) => <a href={ROUTES[c.key][locale]}><Icon name={c.icon} size={18} />{c.t}</a>)}
+        </nav>
+      </div>
+
+      <form class="estimator budget" id="estimator" data-locale={locale} data-prequal novalidate>
+        <h2>{E.title}</h2>
+        <div class="est-fields">
+          <label>{E.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" placeholder="7,000" required /></span></label>
+          <label>{E.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" placeholder="25,000" /></span></label>
+        </div>
+        <button class="btn block" type="submit" data-calc>{E.calc}</button>
+        <p class="error" role="alert" hidden data-empty>{E.empty}</p>
+        <div class="est-out" aria-live="polite" hidden data-out>
+          <span class="label">{E.result}</span>
+          <span class="value" data-range>—</span>
+          <a class="btn block" href={ROUTES.prequal[locale]} data-est-cta>{E.next}<Icon name="arrow-right" size={20} /></a>
+        </div>
+        <p class="est-note">{E.note}</p>
+      </form>
     </div>
   </section>
 
-  <!-- 2. Un préstamo para cada meta -->
+  <!-- 2. ¿Qué quieres lograr? -->
   <section class="band" aria-labelledby="goals">
     <div class="wrap">
       <h2 id="goals" class="section-title">{L.goals.h}</h2>
+      <p class="section-sub">{L.goals.d}</p>
       <div class="goal-cards">
         {L.goals.items.map((g) => (
           <a class="goal-card" href={ROUTES[g.key][locale]}>
@@ -57,41 +75,22 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
           </a>
         ))}
       </div>
-      <p class="also">{L.goals.also} {L.goals.alsoLinks.map((l, i) => <><a href={ROUTES[l.key][locale]}>{l.t}</a>{i < L.goals.alsoLinks.length - 1 && ' · '}</>)}</p>
+      <p class="also">{L.goals.also} {L.goals.alsoLinks.map((l, i) => <><a href={ROUTES[l.key][locale]}>{l.t}</a>{i < L.goals.alsoLinks.length - 1 && ' · '}</>)} · <a href={ROUTES.tools[locale]}>{L.calcAll}</a></p>
     </div>
   </section>
 
-  <!-- 3. Calcula tus posibilidades -->
-  <section class="band band-tight" aria-labelledby="calc">
-    <div class="wrap">
-      <div class="calc-panel">
-        <div class="calc-copy">
-          <h2 id="calc">{L.calc.h}</h2>
-          <p>{L.calc.d}</p>
-          <a class="btn ghost" href={ROUTES.tools[locale]}>{L.calc.all}</a>
-        </div>
-        <form class="estimator" id="estimator" data-locale={locale} novalidate onsubmit="return false">
-          <div class="est-fields">
-            <label>{h.est.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" value="7000" /></span></label>
-            <label>{h.est.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" value="25000" /></span></label>
-          </div>
-          <div class="est-out" aria-live="polite">
-            <span class="label">{h.est.result}</span>
-            <span class="value" data-range>—</span>
-          </div>
-          <a class="btn block" href={ROUTES.prequal[locale]} data-est-cta>{h.est.cta}<Icon name="arrow-right" size={20} /></a>
-          <p class="est-note">{h.est.note}</p>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Por qué LoanPro365 -->
-  <section class="band" aria-labelledby="why">
+  <!-- 3. Lo que ganas -->
+  <section class="band alt" aria-labelledby="why">
     <div class="wrap">
       <h2 id="why" class="section-title">{L.why.h}</h2>
       <ul class="why3">
-        {L.why.items.map((w) => <li><strong>{w.n}</strong><h3>{w.t}</h3><p>{w.d}</p></li>)}
+        {L.why.items.map((w) => (
+          <li>
+            {w.n.startsWith('icon:') ? <span class="why-ico"><Icon name={w.n.slice(5)} size={34} /></span> : <strong>{w.n}</strong>}
+            <h3>{w.t}</h3>
+            <p>{w.d}</p>
+          </li>
+        ))}
       </ul>
       <div class="why-foot">
         <a class="btn ghost" href={ROUTES.about[locale]}>{L.why.cta}</a>
@@ -100,9 +99,9 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
     </div>
   </section>
 
-  <!-- 5. Aprende paso a paso -->
+  <!-- 4. Entiende el proceso -->
   {paths.length > 0 && (
-    <section class="band alt" aria-labelledby="learn">
+    <section class="band" aria-labelledby="learn">
       <div class="wrap">
         <h2 id="learn" class="section-title">{L.learn.h}</h2>
         <p class="section-sub">{L.learn.d}</p>
@@ -119,10 +118,10 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
     </section>
   )}
 
-  <!-- 6. Preguntas -->
-  <section class="band" aria-labelledby="faq">
+  <!-- 5. Preguntas frecuentes -->
+  <section class="band alt" aria-labelledby="faq">
     <div class="wrap faq-narrow">
-      <h2 id="faq" class="section-title">{h.faq.h}</h2>
+      <h2 id="faq" class="section-title">{L.faqTitle}</h2>
       <div class="faq">
         {h.faq.items.map((f) => (
           <details>
@@ -134,7 +133,7 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
     </div>
   </section>
 
-  <!-- 7. Cierre -->
+  <!-- 6. Cierre -->
   <section class="final" aria-labelledby="final">
     <div class="wrap">
       <h2 id="final">{L.final.h}</h2>
@@ -166,21 +165,28 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
     });
   }
 
-  // Estimador en vivo: el rango cuenta de un valor al otro.
+  // Estimador del hero: «Calcular mi presupuesto» muestra el rango; después se actualiza en vivo.
   const form = document.getElementById('estimator') as HTMLFormElement | null;
   if (form) {
+    const outBox = form.querySelector<HTMLElement>('[data-out]')!;
     const out = form.querySelector<HTMLElement>('[data-range]')!;
+    const empty = form.querySelector<HTMLElement>('[data-empty]')!;
     const cta = form.querySelector<HTMLAnchorElement>('[data-est-cta]')!;
+    const incomeEl = form.elements.namedItem('income') as HTMLInputElement;
+    const downEl = form.elements.namedItem('down') as HTMLInputElement;
     const fmt = new Intl.NumberFormat(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let shown = [0, 0];
     let raf = 0;
+    let started = false;
+
     const compute = () => {
-      const income = Number((form.elements.namedItem('income') as HTMLInputElement).value) || 0;
-      const down = Number((form.elements.namedItem('down') as HTMLInputElement).value) || 0;
+      const income = Number(incomeEl.value) || 0;
+      const down = Number(downEl.value) || 0;
       const max = affordability({ grossMonthlyIncome: income, monthlyDebts: 0, downPayment: down, annualRatePct: 6.5, years: 30, housingCostsPctOfPrice: 3 }).maxPrice;
       return { low: Math.floor((max * 0.85) / 1000) * 1000, max, income, down };
     };
+    // Interacción distintiva: el rango cuenta de un valor al otro.
     const animateTo = (target: [number, number]) => {
       cancelAnimationFrame(raf);
       const from = [...shown];
@@ -191,19 +197,27 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
         const k = dur === 0 ? 1 : Math.min(1, (now - start) / dur);
         const e = 1 - Math.pow(1 - k, 4);
         shown = [from[0] + (target[0] - from[0]) * e, from[1] + (target[1] - from[1]) * e];
-        out.textContent = target[1] > 0 ? `${fmt.format(shown[0])} – ${fmt.format(shown[1])}` : '—';
+        out.textContent = `${fmt.format(shown[0])} – ${fmt.format(shown[1])}`;
         if (k < 1) raf = requestAnimationFrame(step);
         else out.classList.remove('tick');
       };
       raf = requestAnimationFrame(step);
     };
-    const render = () => { const r = compute(); animateTo([r.low, r.max]); };
+    const show = () => {
+      const r = compute();
+      if (r.income <= 0) { empty.hidden = false; incomeEl.setAttribute('aria-invalid', 'true'); incomeEl.focus(); return; }
+      empty.hidden = true;
+      incomeEl.removeAttribute('aria-invalid');
+      outBox.hidden = false;
+      started = true;
+      animateTo([r.low, r.max]);
+    };
+    form.addEventListener('submit', (e) => { e.preventDefault(); show(); });
+    form.addEventListener('input', () => { if (started) show(); });
     // Lleva los datos a la precalificación (solo en esta pestaña, nunca en la URL).
     cta.addEventListener('click', () => {
       const r = compute();
       try { sessionStorage.setItem('lp365-est', JSON.stringify({ income: r.income, down: r.down })); } catch {}
     });
-    form.addEventListener('input', render);
-    render();
   }
 </script>

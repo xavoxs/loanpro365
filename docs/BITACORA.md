@@ -28,6 +28,11 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 16 (Claude Code, /copywriter)
+- **Hecho:** nuevo skill local `/copywriter` (`C:\Users\XavoX\.claude\skills\copywriter\SKILL.md`): diagnóstico → redacción → revisión de afirmaciones, sin inventar pruebas, con reglas para sectores regulados y español natural sin calcos. Aplicado al home con el enfoque A «Tu presupuesto»: H1 «Descubre hasta qué precio de casa puedes comprar.» / «See how much home you can afford.»; el estimador sube al hero (campos vacíos, botón «Calcular mi presupuesto», luego rango en vivo y «Continuar con mi precalificación»); objetivos como enlaces en el hero. Títulos nuevos: «¿Qué quieres lograr?», «Lo que ganas trabajando con nosotros» (15+*, 98%*, varios prestamistas por ti), «Entiende el proceso antes de empezar», «Preguntas frecuentes», cierre «Te toma 2 minutos…». Se quitó la sección de calculadora (ya está en el hero); la portada queda en 6 secciones.
+- **Regla de copy:** evitar calcos del inglés («¿Cuánta casa…?» es incorrecto). Usar `/copywriter` para cualquier texto nuevo.
+- **Verificado:** `astro check` 0 errores, build 75 páginas; navegador a 375, 1280 y 1440 px sin scroll horizontal; validación cuando falta el ingreso; cálculo 7,000/25,000 → $305,000–$359,000 y actualización en vivo; en móvil el botón de calcular está dentro de la primera pantalla.
+
 ### 2026-11-17 — Sesión 15 (Claude Code, auditoría /impeccable)
 - **Puntaje inicial:** 16/20 (bueno). Accesibilidad 3, rendimiento 3, responsive 3, tokens 3, integridad 4. Sin bloqueantes.
 - **Corregido:** (P1) contraste del subtítulo del hero sobre cuadros claros del video: velo más denso y texto blanco; peor caso 7.8:1. (P2) objetivos táctiles de 44 px en selector de idioma, logo y botón de pausa (eran 38–40 px). (P2) prefijo $ en los campos de dinero de las calculadoras. (P2) `DESIGN.md` y `.impeccable/design.json` actualizados a la cromática del logo (seguían con el azul y marino anteriores). (P3) póster del video de 197 KB a 101 KB.
