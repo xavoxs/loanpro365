@@ -28,6 +28,12 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 12 (Claude Code)
+- **Hecho:** portada reorganizada con la estructura del modelo nero.jipjip.com (plantilla Astro de servicio local), en el diseño de LoanPro365: barra superior con asistencia 24/7 y teléfono (todas las páginas); hero con video y estimador (se mantiene); franja oscura de confianza con 6 íconos; historia de la empresa con foto de Pablo; «Qué hacemos» en rejilla de 6 servicios; «Cómo funciona» en 4 pasos; bloque «Sin adivinanzas» con lista de ventajas + formulario «¿Quieres que te llamemos?» (nombre, teléfono, condado, mejor hora, qué necesitas, mensaje, consentimiento TCPA, campo trampa) que envía a `/v1/leads` con `sourceTool: callback` y respaldo a WhatsApp; FAQ en dos columnas; banda final oscura con dos botones (Precalifícate + Llamar); tarjetas del blog por ruta. Textos en `apps/web/src/i18n/sections.ts`.
+- **Decisiones:** sin sección de testimonios ni calificación con estrellas del modelo: no hay reseñas reales (no se inventan). Se conservan calculadoras y costos de Florida entre «Cómo funciona» y «te llamamos».
+- **Verificado:** `astro check` 0 errores/advertencias, build 75 páginas; revisión a 1440 y 375 px sin scroll horizontal; envío real del formulario desde la vista previa → registro en D1 con `source_tool = callback`; registro de prueba borrado (0 leads).
+- **Siguiente:** cuando existan reseñas reales (Google), agregar la sección de testimonios con `/v1/reviews`.
+
 ### 2026-11-17 — Sesión 11 (Claude Code)
 - **Hecho:** dos rutas nuevas en el blog, EN/ES. Refinanciación (3 pasos): cuándo conviene y punto de equilibrio, tipos (tasa y plazo, cash-out, FHA Streamline, IRRRL de VA, convencional para quitar seguro), costos/documentos/proceso en Florida (incluye derecho de rescisión de 3 días). Comercial (3 pasos): residencial vs comercial (regla 1–4 unidades, DSCR), cómo evalúan (NOI, DSCR, LTV, experiencia, documentos), financiamiento para negocios (equipos, inventario, flooring, cuentas por cobrar, líneas de crédito). Metadatos de rutas en `apps/web/src/i18n/series.ts`: cada ruta termina en su acción (comprador y refinanciación → precalificación; comercial → asesor por WhatsApp). Índice del blog con las 3 rutas y saltos; la portada muestra el primer paso de cada ruta.
 - **Decisiones:** sin cifras de DSCR o LTV mínimos comerciales (varían por prestamista); impuestos de Florida en refinanciación descritos como «pueden aplicar, confirmar en el Loan Estimate».
