@@ -21,7 +21,7 @@ export interface Review {
   loanType?: 'buy' | 'refinance' | 'commercial' | 'investment';
 }
 
-export const REVIEWS: Review[] = [{ name: 'EJEMPLO DE PRUEBA', city: 'Miramar, FL', rating: 5, text: 'Texto de prueba para revisar el diseño; no se publica.', lang: 'es', source: 'Prueba' }];
+export const REVIEWS: Review[] = [];
 
 /** Resumen público (por ejemplo, de Google). Déjalo en null hasta tener el dato verificado. */
 export const REVIEW_SUMMARY: { rating: number; count: number; source: string; url: string } | null = null;
