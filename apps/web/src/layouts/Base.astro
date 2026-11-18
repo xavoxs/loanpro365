@@ -2,7 +2,6 @@
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import { COMPANY, ROUTES, t, other, toolPath, type Locale, type ToolKey } from '../i18n';
-import { SECTIONS } from '../i18n/sections';
 
 interface Props {
   locale: Locale;
@@ -50,12 +49,6 @@ const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';
   </head>
   <body>
     <a class="skip" href="#main">{d.skip}</a>
-    <div class="topbar">
-      <div class="wrap">
-        <span class="msg">{SECTIONS[locale].topbar}</span>
-        <a href={COMPANY.phoneHref}><Icon name="phone" size={14} />{COMPANY.phone}</a>
-      </div>
-    </div>
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={ROUTES.home[locale]} aria-label="LoanPro365 Mortgages">

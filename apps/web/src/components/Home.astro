@@ -2,196 +2,127 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
-import { COMPANY, ROUTES, t, toolPath, type Locale, type RouteKey, type ToolKey } from '../i18n';
+import { COMPANY, ROUTES, type Locale } from '../i18n';
 import { HOME } from '../i18n/home';
+import { LANDING } from '../i18n/landing';
 import { SERIES, SERIES_KEYS } from '../i18n/series';
-import { SECTIONS } from '../i18n/sections';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
-const d = t(locale);
 const h = HOME[locale];
-const s = SECTIONS[locale];
-const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://loanpro365-api.francisco-buenano.workers.dev';
+const L = LANDING[locale];
 const es = locale === 'es';
 
-// El blog se presenta por rutas: se muestra el primer paso de cada una.
+// Aprende: el primer paso de cada ruta del blog.
 const allPosts = await getCollection('blog', (p) => p.data.lang === locale);
-const posts = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === key).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))[0])
+const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === key).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))[0])
   .filter((p): p is (typeof allPosts)[number] => Boolean(p));
-const featuredTools: { key: ToolKey; icon: string }[] = [
-  { key: 'affordability', icon: 'calculator' },
-  { key: 'payment', icon: 'circle-dollar-sign' },
-  { key: 'closing', icon: 'file-text' },
-  { key: 'rentVsBuy', icon: 'key-round' },
-  { key: 'compare', icon: 'scale' },
-  { key: 'dscr', icon: 'building-2' },
-];
 ---
-<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Hipotecas y préstamos comerciales en Florida' : 'LoanPro365 Mortgages · Florida home and commercial loans'} description={h.sub} alternates={ROUTES.home} full>
-  <section class="hero hero-video" aria-labelledby="hero-title">
+<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Hipotecas y préstamos comerciales en Florida' : 'LoanPro365 Mortgages · Florida home and commercial loans'} description={L.hero.sub} alternates={ROUTES.home} full>
+  <!-- 1. Hero: qué es y qué quieres hacer -->
+  <section class="hero hero-video hero-min" aria-labelledby="hero-title">
     <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="/video/hero-poster.jpg" aria-hidden="true" data-hero-video>
       <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
       <source src="/video/hero-1280.mp4" type="video/mp4" />
     </video>
     <div class="hero-shade" aria-hidden="true"></div>
     <button class="video-toggle" type="button" data-video-toggle aria-pressed="false">
-      <span class="visually-hidden" data-label-pause>{es ? 'Pausar video de fondo' : 'Pause background video'}</span>
+      <span class="visually-hidden">{es ? 'Pausar o reproducir el video de fondo' : 'Pause or play the background video'}</span>
       <span class="ico-pause"><Icon name="pause" size={16} /></span><span class="ico-play"><Icon name="play" size={16} /></span>
     </button>
-
-    <div class="wrap">
-      <div class="hero-copy">
-        <h1 id="hero-title">{h.h1}</h1>
-        <p class="lead">{h.sub}</p>
-      </div>
-      <div class="hero-proof-wrap">
-        <ul class="hero-proof">
-          {h.proof.map((p) => <li><strong>{p.n}</strong><span>{p.t}</span></li>)}
-        </ul>
-        <p class="hero-note">{h.proofNote}</p>
-      </div>
-
-      <form class="estimator" id="estimator" data-locale={locale} novalidate onsubmit="return false">
-        <h2>{h.est.title}</h2>
-        <div class="est-fields">
-          <label>{h.est.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" value="7000" /></span></label>
-          <label>{h.est.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" value="25000" /></span></label>
-        </div>
-        <div class="est-out" aria-live="polite">
-          <span class="label">{h.est.result}</span>
-          <span class="value" data-range>—</span>
-        </div>
-        <a class="btn block" href={ROUTES.prequal[locale]} data-prequal>{h.est.cta}<Icon name="arrow-right" size={20} /></a>
-        <p class="est-alt"><a href={COMPANY.whatsappHref} rel="noopener"><Icon name="message-circle" size={18} />{h.est.or}</a></p>
-        <p class="est-note">{h.est.note}</p>
-      </form>
+    <div class="wrap hero-min-inner">
+      <h1 id="hero-title">{L.hero.h1}</h1>
+      <p class="lead">{L.hero.sub}</p>
+      <a class="btn hero-cta" href={ROUTES.prequal[locale]} data-prequal>{L.hero.cta}<Icon name="arrow-right" size={20} /></a>
+      <nav class="goal-chips" aria-label={L.hero.chipsLabel}>
+        {L.hero.chips.map((c) => (
+          <a class="chip" href={ROUTES[c.key][locale]}><span class="ico"><Icon name={c.icon} size={20} /></span>{c.t}<Icon name="arrow-right" size={18} /></a>
+        ))}
+      </nav>
     </div>
   </section>
 
-  <section class="trust-strip" aria-label={es ? 'Por qué LoanPro365' : 'Why LoanPro365'}>
-    <ul class="wrap">
-      {s.strip.map((x) => <li><span class="ico"><Icon name={x.icon} size={22} /></span>{x.t}</li>)}
-    </ul>
-  </section>
-
-  <section class="band story" aria-labelledby="story">
-    <div class="wrap story-grid">
-      <div>
-        <h2 id="story">{s.story.h}</h2>
-        {s.story.p.map((x) => <p>{x}</p>)}
-        <a class="link-arrow story-cta" href={ROUTES.about[locale]}>{s.story.cta}<Icon name="arrow-right" size={18} /></a>
-      </div>
-      <dl class="story-facts">
-        {s.story.facts.map((f) => <div><dt>{f.n}</dt><dd>{f.t}</dd></div>)}
-      </dl>
-    </div>
-  </section>
-
-  <section class="band alt" aria-labelledby="services">
+  <!-- 2. Un préstamo para cada meta -->
+  <section class="band" aria-labelledby="goals">
     <div class="wrap">
-      <div class="band-head"><h2 id="services">{s.services.h}</h2><p>{s.services.d}</p></div>
-      <div class="service-grid">
-        {h.paths.items.map((p) => (
-          <a class="service" href={ROUTES[p.key as RouteKey][locale]}>
-            <span class="ico"><Icon name={p.icon} size={26} /></span>
-            <h3>{p.t}</h3>
-            <p>{p.d}</p>
-            <span class="more">{s.services.more}<Icon name="arrow-right" size={16} /></span>
+      <h2 id="goals" class="section-title">{L.goals.h}</h2>
+      <div class="goal-cards">
+        {L.goals.items.map((g) => (
+          <a class="goal-card" href={ROUTES[g.key][locale]}>
+            <span class="ico"><Icon name={g.icon} size={22} /></span>
+            <h3>{g.t}</h3>
+            <p>{g.d}</p>
+            <span class="go" aria-hidden="true"><Icon name="arrow-right" size={20} /></span>
+            <span class="visually-hidden">{g.cta}</span>
           </a>
         ))}
       </div>
+      <p class="also">{L.goals.also} {L.goals.alsoLinks.map((l, i) => <><a href={ROUTES[l.key][locale]}>{l.t}</a>{i < L.goals.alsoLinks.length - 1 && ' · '}</>)}</p>
     </div>
   </section>
 
-  <section class="band" aria-labelledby="how">
+  <!-- 3. Calcula tus posibilidades -->
+  <section class="band band-tight" aria-labelledby="calc">
     <div class="wrap">
-      <div class="band-head"><h2 id="how">{s.steps.h}</h2></div>
-      <ol class="steps4">
-        {s.steps.items.map((x, i) => (
-          <li><span class="num">{i + 1}</span><h3>{x.t}</h3><p>{x.d}</p></li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
-  <section class="band alt" aria-labelledby="tools">
-    <div class="wrap">
-      <div class="band-head"><h2 id="tools">{h.tools.h}</h2><p>{h.tools.d}</p></div>
-      <div class="tool-list">
-        {featuredTools.map(({ key, icon }) => (
-          <a class="tool-row" href={toolPath(key, locale)}>
-            <Icon name={icon} size={22} />
-            <span><strong>{d.tools[key].name}</strong><span>{d.tools[key].desc}</span></span>
-            <Icon name="arrow-right" size={18} />
-          </a>
-        ))}
-      </div>
-      <a class="link-arrow" href={ROUTES.tools[locale]}>{h.tools.all}<Icon name="arrow-right" size={18} /></a>
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="florida">
-    <div class="wrap split">
-      <div class="band-head">
-        <h2 id="florida">{h.florida.h}</h2>
-        <p>{h.florida.d}</p>
-        <p><a class="btn ghost" href={toolPath('closing', locale)}>{h.florida.cta}</a></p>
-      </div>
-      <div class="fl-table">
-        {h.florida.items.map((x) => <div><strong>{x.t}</strong><span>{x.d}</span></div>)}
-      </div>
-    </div>
-  </section>
-
-  <section class="band alt" aria-labelledby="callback" id="llamada">
-    <div class="wrap callback-grid">
-      <div>
-        <h2 id="callback">{s.callback.h}</h2>
-        <p class="lead about-lead">{s.callback.d}</p>
-        <ul class="checklist">
-          {s.callback.points.map((x) => (
-            <li><span class="tick"><Icon name="check" size={16} /></span><div><strong>{x.t}</strong><p>{x.d}</p></div></li>
-          ))}
-        </ul>
-      </div>
-      <form class="callback-card" id="callback-form" novalidate data-locale={locale} data-api={apiUrl} data-whatsapp={COMPANY.whatsappHref}>
-        <div class="callback-head">
-          <h3>{s.callback.formTitle}</h3>
-          <p>{s.callback.formSub}</p>
+      <div class="calc-panel">
+        <div class="calc-copy">
+          <h2 id="calc">{L.calc.h}</h2>
+          <p>{L.calc.d}</p>
+          <a class="btn ghost" href={ROUTES.tools[locale]}>{L.calc.all}</a>
         </div>
-        <div class="callback-body">
-          <label>{s.callback.name} *<input name="name" autocomplete="name" required /></label>
-          <label>{s.callback.phone} *<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required /></label>
-          <div class="two">
-            <label>{s.callback.county}
-              <select name="county">{[['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-beach', 'Palm Beach'], ['other', es ? 'Otro' : 'Other']].map(([v, l]) => <option value={v}>{l}</option>)}</select>
-            </label>
-            <label>{s.callback.time}
-              <select name="time">{Object.entries(s.callback.times).map(([v, l]) => <option value={v}>{l}</option>)}</select>
-            </label>
+        <form class="estimator" id="estimator" data-locale={locale} novalidate onsubmit="return false">
+          <div class="est-fields">
+            <label>{h.est.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" value="7000" /></span></label>
+            <label>{h.est.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" value="25000" /></span></label>
           </div>
-          <label>{s.callback.topic}
-            <select name="topic">{Object.entries(s.callback.topics).map(([v, l]) => <option value={v}>{l}</option>)}</select>
-          </label>
-          <label>{s.callback.message}<textarea name="message" rows="3" maxlength="600"></textarea></label>
-          <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
-          <label class="check consent"><input type="checkbox" name="consent" required /> <span>{s.callback.consent}</span></label>
-          <p class="error" role="alert" hidden data-error>{s.callback.required}</p>
-          <button class="btn block" type="submit">{s.callback.send}</button>
-          <div class="callback-done" hidden data-done aria-live="polite"></div>
-        </div>
-      </form>
+          <div class="est-out" aria-live="polite">
+            <span class="label">{h.est.result}</span>
+            <span class="value" data-range>—</span>
+          </div>
+          <a class="btn block" href={ROUTES.prequal[locale]} data-est-cta>{h.est.cta}<Icon name="arrow-right" size={20} /></a>
+          <p class="est-note">{h.est.note}</p>
+        </form>
+      </div>
     </div>
   </section>
 
-  <section class="band" aria-labelledby="faq">
-    <div class="wrap faq-grid">
-      <div class="band-head">
-        <h2 id="faq">{h.faq.h}</h2>
-        <p>{s.faqIntro}</p>
-        <p><a class="btn ghost" href={COMPANY.phoneHref}><Icon name="phone" size={18} />{COMPANY.phone}</a></p>
+  <!-- 4. Por qué LoanPro365 -->
+  <section class="band" aria-labelledby="why">
+    <div class="wrap">
+      <h2 id="why" class="section-title">{L.why.h}</h2>
+      <ul class="why3">
+        {L.why.items.map((w) => <li><strong>{w.n}</strong><h3>{w.t}</h3><p>{w.d}</p></li>)}
+      </ul>
+      <div class="why-foot">
+        <a class="btn ghost" href={ROUTES.about[locale]}>{L.why.cta}</a>
+        <p class="small">{L.why.note}</p>
       </div>
+    </div>
+  </section>
+
+  <!-- 5. Aprende paso a paso -->
+  {paths.length > 0 && (
+    <section class="band alt" aria-labelledby="learn">
+      <div class="wrap">
+        <h2 id="learn" class="section-title">{L.learn.h}</h2>
+        <p class="section-sub">{L.learn.d}</p>
+        <div class="blog-cards">
+          {paths.map((p) => (
+            <a class="blog-card" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
+              {p.data.series && <span class="tag">{SERIES[locale][p.data.series].name}</span>}
+              <h3>{p.data.title}</h3>
+              <span class="more">{L.learn.read}<Icon name="arrow-right" size={16} /></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 6. Preguntas -->
+  <section class="band" aria-labelledby="faq">
+    <div class="wrap faq-narrow">
+      <h2 id="faq" class="section-title">{h.faq.h}</h2>
       <div class="faq">
         {h.faq.items.map((f) => (
           <details>
@@ -203,71 +134,23 @@ const featuredTools: { key: ToolKey; icon: string }[] = [
     </div>
   </section>
 
-  <section class="final-band" aria-labelledby="final">
+  <!-- 7. Cierre -->
+  <section class="final" aria-labelledby="final">
     <div class="wrap">
-      <h2 id="final">{s.finalBand.h}</h2>
+      <h2 id="final">{L.final.h}</h2>
+      <p>{L.final.d}</p>
       <div class="final-actions">
-        <a class="btn ghost-light" href={ROUTES.prequal[locale]}>{s.finalBand.primary}</a>
-        <a class="btn" href={COMPANY.phoneHref}><Icon name="phone" size={18} />{s.finalBand.call} {COMPANY.phone}</a>
+        <a class="btn" href={ROUTES.prequal[locale]}>{L.final.cta}<Icon name="arrow-right" size={20} /></a>
+        <a class="btn ghost-light" href={COMPANY.whatsappHref} rel="noopener">{L.final.talk}</a>
       </div>
     </div>
   </section>
-
-  {posts.length > 0 && (
-    <section class="band" aria-labelledby="blog">
-      <div class="wrap">
-        <div class="band-head"><h2 id="blog">{s.blog.h}</h2><p>{s.blog.d}</p></div>
-        <div class="blog-cards">
-          {posts.map((p) => (
-            <a class="blog-card" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
-              {p.data.series && <span class="tag">{SERIES[locale][p.data.series].name}</span>}
-              <h3>{p.data.title}</h3>
-              <p>{p.data.description}</p>
-              <span class="more">{s.blog.read}<Icon name="arrow-right" size={16} /></span>
-            </a>
-          ))}
-        </div>
-        <p class="more-link"><a class="link-arrow" href={ROUTES.blog[locale]}>{h.blog.all}<Icon name="arrow-right" size={18} /></a></p>
-      </div>
-    </section>
-  )}
 </Base>
 
 <script>
   import { affordability } from '@loanpro365/calculators';
 
-  // Formulario «te llamamos»: envía a /v1/leads con consentimiento; si falla, ofrece WhatsApp.
-  const cb = document.getElementById('callback-form') as HTMLFormElement | null;
-  if (cb) {
-    const err = cb.querySelector<HTMLElement>('[data-error]')!;
-    const done = cb.querySelector<HTMLElement>('[data-done]')!;
-    const T = cb.dataset.locale === 'es'
-      ? { ok: '¡Gracias! Un asesor te llamará pronto.', fail: 'No pudimos enviar tu solicitud. Escríbenos por WhatsApp:', wa: 'Abrir WhatsApp' }
-      : { ok: 'Thank you! An advisor will call you back soon.', fail: 'We couldn’t send your request. Please message us on WhatsApp:', wa: 'Open WhatsApp' };
-    cb.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const f = new FormData(cb);
-      const bad = [...cb.querySelectorAll<HTMLInputElement>('[required]')].find((el) => (el.type === 'checkbox' ? !el.checked : !el.value.trim()));
-      err.hidden = !bad;
-      if (bad) { bad.setAttribute('aria-invalid', 'true'); bad.focus(); return; }
-      const body = {
-        name: String(f.get('name')).trim(), phone: String(f.get('phone')).trim(), locale: cb.dataset.locale, sourceTool: 'callback',
-        consentTcpa: f.get('consent') === 'on', consentTextVersion: 'tcpa-2026-11-v1', website: String(f.get('website') || ''),
-        payload: { county: f.get('county'), time: f.get('time'), topic: f.get('topic'), message: String(f.get('message') || '').slice(0, 600) },
-      };
-      let ok = false;
-      try {
-        const res = await fetch(`${cb.dataset.api}/v1/leads`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-        ok = res.ok;
-      } catch { ok = false; }
-      cb.querySelectorAll<HTMLElement>('label, .btn, .error').forEach((el) => (el.hidden = true));
-      done.hidden = false;
-      const wa = `${cb.dataset.whatsapp}?text=${encodeURIComponent(`${body.name} · ${body.payload.topic} · ${body.payload.time}`)}`;
-      done.innerHTML = ok ? `<p class="big-ok">${T.ok}</p>` : `<p>${T.fail}</p><p><a class="btn" href="${wa}" rel="noopener">${T.wa}</a></p>`;
-    });
-  }
-
-  // Video de fondo: respeta "reducir movimiento" y el ahorro de datos, y se puede pausar.
+  // Video de fondo: respeta «reducir movimiento» y el ahorro de datos, y se puede pausar.
   const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
   const toggle = document.querySelector<HTMLButtonElement>('[data-video-toggle]');
   if (video && toggle) {
@@ -283,24 +166,21 @@ const featuredTools: { key: ToolKey; icon: string }[] = [
     });
   }
 
+  // Estimador en vivo: el rango cuenta de un valor al otro.
   const form = document.getElementById('estimator') as HTMLFormElement | null;
   if (form) {
     const out = form.querySelector<HTMLElement>('[data-range]')!;
-    const cta = form.querySelector<HTMLAnchorElement>('[data-prequal]')!;
+    const cta = form.querySelector<HTMLAnchorElement>('[data-est-cta]')!;
     const fmt = new Intl.NumberFormat(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let shown = [0, 0];
     let raf = 0;
-
     const compute = () => {
       const income = Number((form.elements.namedItem('income') as HTMLInputElement).value) || 0;
       const down = Number((form.elements.namedItem('down') as HTMLInputElement).value) || 0;
       const max = affordability({ grossMonthlyIncome: income, monthlyDebts: 0, downPayment: down, annualRatePct: 6.5, years: 30, housingCostsPctOfPrice: 3 }).maxPrice;
-      const low = Math.floor((max * 0.85) / 1000) * 1000;
-      return { low, max, income, down };
+      return { low: Math.floor((max * 0.85) / 1000) * 1000, max, income, down };
     };
-
-    // Interacción distintiva: el rango cuenta de un valor al otro.
     const animateTo = (target: [number, number]) => {
       cancelAnimationFrame(raf);
       const from = [...shown];
@@ -317,9 +197,8 @@ const featuredTools: { key: ToolKey; icon: string }[] = [
       };
       raf = requestAnimationFrame(step);
     };
-
     const render = () => { const r = compute(); animateTo([r.low, r.max]); };
-    // Lleva los datos a la precalificación para no volver a pedirlos (solo en esta pestaña, nunca en la URL).
+    // Lleva los datos a la precalificación (solo en esta pestaña, nunca en la URL).
     cta.addEventListener('click', () => {
       const r = compute();
       try { sessionStorage.setItem('lp365-est', JSON.stringify({ income: r.income, down: r.down })); } catch {}

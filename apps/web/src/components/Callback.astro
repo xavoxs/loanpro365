@@ -1,0 +1,64 @@
+---
+/** Formulario «¿Quieres que te llamemos?»: envía a /v1/leads con consentimiento TCPA; si falla, ofrece WhatsApp. */
+import { COMPANY, type Locale } from '../i18n';
+import { SECTIONS } from '../i18n/sections';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const es = locale === 'es';
+const s = SECTIONS[locale].callback;
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://loanpro365-api.francisco-buenano.workers.dev';
+const counties = [['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-beach', 'Palm Beach'], ['other', es ? 'Otro' : 'Other']];
+---
+<form class="callback-card" id="callback-form" novalidate data-locale={locale} data-api={apiUrl} data-whatsapp={COMPANY.whatsappHref}>
+  <div class="callback-head">
+    <h2 class="h3">{s.formTitle}</h2>
+    <p>{s.formSub}</p>
+  </div>
+  <div class="callback-body">
+    <label>{s.name} *<input name="name" autocomplete="name" required /></label>
+    <label>{s.phone} *<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required /></label>
+    <div class="two">
+      <label>{s.county}<select name="county">{counties.map(([v, l]) => <option value={v}>{l}</option>)}</select></label>
+      <label>{s.time}<select name="time">{Object.entries(s.times).map(([v, l]) => <option value={v}>{l}</option>)}</select></label>
+    </div>
+    <label>{s.topic}<select name="topic">{Object.entries(s.topics).map(([v, l]) => <option value={v}>{l}</option>)}</select></label>
+    <label>{s.message}<textarea name="message" rows="3" maxlength="600"></textarea></label>
+    <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+    <label class="check consent"><input type="checkbox" name="consent" required /> <span>{s.consent}</span></label>
+    <p class="error" role="alert" hidden data-error>{s.required}</p>
+    <button class="btn block" type="submit">{s.send}</button>
+    <div class="callback-done" hidden data-done aria-live="polite"></div>
+  </div>
+</form>
+
+<script>
+  const cb = document.getElementById('callback-form') as HTMLFormElement | null;
+  if (cb) {
+    const err = cb.querySelector<HTMLElement>('[data-error]')!;
+    const done = cb.querySelector<HTMLElement>('[data-done]')!;
+    const T = cb.dataset.locale === 'es'
+      ? { ok: '¡Gracias! Un asesor te llamará pronto.', fail: 'No pudimos enviar tu solicitud. Escríbenos por WhatsApp:', wa: 'Abrir WhatsApp' }
+      : { ok: 'Thank you! An advisor will call you back soon.', fail: 'We couldn’t send your request. Please message us on WhatsApp:', wa: 'Open WhatsApp' };
+    cb.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = new FormData(cb);
+      const bad = [...cb.querySelectorAll<HTMLInputElement>('[required]')].find((el) => (el.type === 'checkbox' ? !el.checked : !el.value.trim()));
+      err.hidden = !bad;
+      if (bad) { bad.setAttribute('aria-invalid', 'true'); bad.focus(); return; }
+      const body = {
+        name: String(f.get('name')).trim(), phone: String(f.get('phone')).trim(), locale: cb.dataset.locale, sourceTool: 'callback',
+        consentTcpa: f.get('consent') === 'on', consentTextVersion: 'tcpa-2026-11-v1', website: String(f.get('website') || ''),
+        payload: { county: f.get('county'), time: f.get('time'), topic: f.get('topic'), message: String(f.get('message') || '').slice(0, 600) },
+      };
+      let ok = false;
+      try {
+        const res = await fetch(`${cb.dataset.api}/v1/leads`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+        ok = res.ok;
+      } catch { ok = false; }
+      cb.querySelectorAll<HTMLElement>('label, .btn, .error').forEach((el) => (el.hidden = true));
+      done.hidden = false;
+      const wa = `${cb.dataset.whatsapp}?text=${encodeURIComponent(`${body.name} · ${body.payload.topic} · ${body.payload.time}`)}`;
+      done.innerHTML = ok ? `<p class="big-ok">${T.ok}</p>` : `<p>${T.fail}</p><p><a class="btn" href="${wa}" rel="noopener">${T.wa}</a></p>`;
+    });
+  }
+</script>

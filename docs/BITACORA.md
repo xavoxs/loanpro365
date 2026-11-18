@@ -28,6 +28,13 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 14 (Claude Code)
+- **Análisis:** la portada de Rocket Mortgage tiene 5 secciones (~4,300 px), una idea y una acción por sección, mucho blanco y un solo color de acento. La nuestra tenía 11 secciones (~6,600 px) con barra superior, franja de íconos, historia, servicios, 4 pasos, calculadoras, costos de Florida, formulario de llamada, FAQ, banda y blog: saturada y sin secuencia.
+- **Hecho:** portada minimalista de 7 secciones (~4,300 px en escritorio): 1 hero con video, titular, una acción y 3 objetivos (comprar, refinanciar, comercial); 2 «Un préstamo para cada meta» (3 tarjetas + enlaces secundarios); 3 «Calcula tus posibilidades» (panel con el estimador en vivo); 4 «Por qué LoanPro365» (15+*, 98%*, 24/7); 5 «Aprende paso a paso» (3 rutas); 6 preguntas frecuentes; 7 cierre con una acción. Textos en `apps/web/src/i18n/landing.ts`. Se quitó la barra superior. El formulario de llamada pasó a la página de Contacto (`components/Callback.astro`).
+- **Colores:** cromática del logo. Azul real «Loan» #1614B3 (acción), grafito «Pro» #4F4F4F (texto secundario), tinta #1C1C22, azul profundo #0B0A5C (pie y superficies oscuras). Favicon y monograma recoloreados. Se quitaron el azul #1F4FD8 y el marino #0C1F3F anteriores.
+- **Verificado:** `astro check` 0 errores/advertencias, build 75 páginas sin enlaces rotos; navegador a 1440 y 375 px sin scroll horizontal; formulario presente en Contacto.
+- **Regla:** mantener la portada en 7 secciones o menos; cualquier contenido nuevo va a páginas internas.
+
 ### 2026-11-17 — Sesión 13 (Claude Code)
 - **Hecho:** Pablo deja de ser tema principal de la portada (pedido del dueño). La sección de historia habla en voz de la empresa («LoanPro365 Mortgages nació para…») y en lugar de su foto muestra datos de la empresa (15+ años*, 98%*, 6 tipos de préstamo, NMLS #1486485). Pablo aparece solo en la página «Conócenos» (antes «Nosotros», ahora `/es/conocenos/`) con una ficha de equipo (foto, rol, NMLS) y en la línea legal del pie.
 - **Regla para próximas sesiones:** la marca protagonista es LoanPro365 Mortgages; no volver a centrar la portada en Pablo.
