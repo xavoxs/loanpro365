@@ -19,8 +19,8 @@ const d = t(locale);
 const es = locale === 'es';
 const site = Astro.site!.origin;
 const nav = [
-  ['buy', d.nav.buy], ['refinance', d.nav.refinance], ['credit', d.nav.credit],
-  ['commercial', d.nav.commercial], ['tools', d.nav.tools], ['blog', d.nav.blog], ['about', d.nav.about],
+  ['buy', d.nav.buy], ['refinance', d.nav.refinance],
+  ['commercial', d.nav.commercial], ['blog', d.nav.blog], ['about', d.nav.about],
 ] as const;
 const footerTools: ToolKey[] = ['affordability', 'payment', 'closing', 'rentVsBuy', 'compare'];
 const prequalLabel = es ? 'Precalifícate' : 'Pre-qualify';

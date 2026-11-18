@@ -4,142 +4,126 @@ import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
 import { COMPANY, ROUTES, type Locale } from '../i18n';
 import { HOME } from '../i18n/home';
-import { LANDING } from '../i18n/landing';
+import { V4COPY } from '../i18n/v4';
 import { SERIES, SERIES_KEYS } from '../i18n/series';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const h = HOME[locale];
-const L = LANDING[locale];
-const E = L.hero.est;
+const C = V4COPY[locale];
+const B = C.bento;
 const es = locale === 'es';
 
-// Aprende: el primer paso de cada ruta del blog.
 const allPosts = await getCollection('blog', (p) => p.data.lang === locale);
 const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === key).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))[0])
   .filter((p): p is (typeof allPosts)[number] => Boolean(p));
+const pathIcons = ['house', 'refresh-cw', 'building-2'];
 ---
-<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Calcula cuánto puedes pagar por tu casa en Florida' : 'LoanPro365 Mortgages · Know what you can pay for your home in Florida'} description={L.hero.sub} alternates={ROUTES.home} full>
-  <!-- 1. Hero claro: la pregunta a la izquierda, la respuesta sobre la imagen -->
-  <section class="hero-c" aria-labelledby="hero-title">
-    <div class="wrap hero-c-grid">
-      <div class="hero-c-copy">
-        <h1 id="hero-title">{L.hero.h1}</h1>
-        <p class="lead">{L.hero.sub}</p>
-        <ul class="hero-c-facts">
-          <li><Icon name="badge-check" size={18} />NMLS #{COMPANY.nmlsCompany}</li>
-          <li><Icon name="globe" size={18} />{es ? 'Español e inglés' : 'English & Spanish'}</li>
-          <li><Icon name="lock" size={18} />{es ? 'Sin consulta de crédito' : 'No credit check'}</li>
-        </ul>
-        <nav class="hero-c-goals" aria-label={L.hero.chipsLabel}>
-          <span>{L.hero.chipsLabel}</span>
-          {L.hero.chips.slice(1).map((c) => <a href={ROUTES[c.key][locale]}>{c.t}<Icon name="arrow-right" size={16} /></a>)}
-        </nav>
+<Base locale={locale} title={es ? 'LoanPro365 Mortgages · Calcula cuánto puedes pagar por tu casa en Florida' : 'LoanPro365 Mortgages · Know what you can pay for your home in Florida'} description={C.sub} alternates={ROUTES.home} full>
+  <!-- Hero cinematográfico: titular centrado y un solo campo -->
+  <section class="v4-hero" aria-labelledby="hero-title">
+    <video class="v4-hero-bg" autoplay muted loop playsinline preload="metadata" poster="/video/hero-poster.jpg" aria-hidden="true" data-hero-video>
+      <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
+      <source src="/video/hero-1280.mp4" type="video/mp4" />
+    </video>
+    <div class="v4-hero-shade" aria-hidden="true"></div>
+    <button class="video-toggle" type="button" data-video-toggle aria-pressed="false">
+      <span class="visually-hidden">{es ? 'Pausar o reproducir el video de fondo' : 'Pause or play the background video'}</span>
+      <span class="ico-pause"><Icon name="pause" size={16} /></span><span class="ico-play"><Icon name="play" size={16} /></span>
+    </button>
+
+    <div class="wrap v4-hero-inner">
+      <h1 id="hero-title" class="reveal">{C.h1}</h1>
+      <p class="v4-sub reveal">{C.sub}</p>
+
+      <form class="v4-bar reveal" id="estimator" data-locale={locale} data-prequal novalidate>
+        <label class="field"><span>{C.bar.income}</span><span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" placeholder="7,000" required /></span></label>
+        <label class="field"><span>{C.bar.down}</span><span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" placeholder="25,000" /></span></label>
+        <button class="btn" type="submit" data-calc>{C.bar.calc}<Icon name="arrow-right" size={18} /></button>
+      </form>
+      <p class="v4-error" role="alert" hidden data-empty>{C.empty}</p>
+
+      <div class="v4-result" aria-live="polite" hidden data-out>
+        <span class="label">{C.result}</span>
+        <span class="value" data-range>—</span>
+        <a class="btn" href={ROUTES.prequal[locale]} data-est-cta>{C.next}<Icon name="arrow-right" size={18} /></a>
+        <p class="note">{C.note}</p>
       </div>
 
-      <div class="hero-c-media">
-        <div class="frame">
-          <video class="frame-video" autoplay muted loop playsinline preload="metadata" poster="/video/hero-portrait.jpg" aria-hidden="true" data-hero-video>
-            <source src="/video/hero-portrait.mp4" type="video/mp4" />
-          </video>
-          <button class="video-toggle" type="button" data-video-toggle aria-pressed="false">
-            <span class="visually-hidden">{es ? 'Pausar o reproducir el video' : 'Pause or play the video'}</span>
-            <span class="ico-pause"><Icon name="pause" size={16} /></span><span class="ico-play"><Icon name="play" size={16} /></span>
-          </button>
-        </div>
-
-        <form class="estimator budget" id="estimator" data-locale={locale} data-prequal novalidate>
-          <h2>{E.title}</h2>
-          <div class="est-fields">
-            <label>{E.income}<span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" placeholder="7,000" required /></span></label>
-            <label>{E.down}<span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" placeholder="25,000" /></span></label>
-          </div>
-          <button class="btn block" type="submit" data-calc>{E.calc}</button>
-          <p class="error" role="alert" hidden data-empty>{E.empty}</p>
-          <div class="est-out" aria-live="polite" hidden data-out>
-            <span class="label">{E.result}</span>
-            <span class="value" data-range>—</span>
-            <a class="btn block" href={ROUTES.prequal[locale]} data-est-cta>{E.next}<Icon name="arrow-right" size={20} /></a>
-          </div>
-          <p class="est-note">{E.note}</p>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. Tipos de préstamo: filas grandes, una por objetivo -->
-  <section class="band" aria-labelledby="goals">
-    <div class="wrap split-head">
-      <div class="head">
-        <h2 id="goals">{L.goals.h}</h2>
-        <p>{L.goals.d}</p>
-        <p class="also">{L.goals.also} {L.goals.alsoLinks.map((l, i) => <><a href={ROUTES[l.key][locale]}>{l.t}</a>{i < L.goals.alsoLinks.length - 1 && ' · '}</>)}</p>
-      </div>
-      <div class="goal-rows">
-        {L.goals.items.map((g) => (
-          <a class="goal-row" href={ROUTES[g.key][locale]}>
-            <span class="ico"><Icon name={g.icon} size={24} /></span>
-            <span class="txt"><strong>{g.t}</strong><span>{g.d}</span></span>
-            <span class="go" aria-hidden="true"><Icon name="arrow-right" size={20} /></span>
-            <span class="visually-hidden">{g.cta}</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Por qué nos eligen: banda azul con cifras grandes -->
-  <section class="stats-band" aria-labelledby="why">
-    <div class="wrap">
-      <h2 id="why">{L.why.h}</h2>
-      <ul class="stats">
-        {L.why.items.map((w) => (
-          <li>
-            {w.n.startsWith('icon:') ? <span class="stat-ico"><Icon name={w.n.slice(5)} size={40} /></span> : <strong>{w.n}</strong>}
-            <h3>{w.t}</h3>
-            <p>{w.d}</p>
-          </li>
-        ))}
+      <ul class="v4-trust reveal">
+        {C.trust.map((t) => <li><Icon name="check" size={16} />{t}</li>)}
       </ul>
-      <div class="stats-foot">
-        <a class="link-light" href={ROUTES.about[locale]}>{L.why.cta}<Icon name="arrow-right" size={18} /></a>
-        <span>{L.why.note}</span>
-      </div>
     </div>
   </section>
 
-  <!-- 4. Aprende: lista editorial -->
-  {paths.length > 0 && (
-    <section class="band" aria-labelledby="learn">
-      <div class="wrap split-head">
-        <div class="head">
-          <h2 id="learn">{L.learn.h}</h2>
-          <p>{L.learn.d}</p>
-          <a class="link-arrow" href={ROUTES.blog[locale]}>{h.blog.all}<Icon name="arrow-right" size={18} /></a>
+  <!-- Bento: tipos de préstamo + pruebas en una sola rejilla -->
+  <section class="v4-section" aria-labelledby="bento">
+    <div class="wrap">
+      <h2 id="bento" class="v4-h2 reveal">{B.h}</h2>
+      <div class="bento">
+        <a class="tile tile-photo reveal" href={ROUTES[B.buy.key][locale]} style="--img: url('/img/tile-homes.jpg')">
+          <span class="tile-ico"><Icon name="house" size={22} /></span>
+          <span class="tile-body"><strong>{B.buy.t}</strong><span>{B.buy.d}</span></span>
+          <span class="tile-go" aria-hidden="true"><Icon name="arrow-up-right" size={20} /></span>
+        </a>
+        <div class="tile tile-stat reveal"><strong>{B.stat1.n}</strong><span>{B.stat1.d}</span></div>
+        <a class="tile tile-soft reveal" href={ROUTES[B.refi.key][locale]}>
+          <span class="tile-ico"><Icon name="refresh-cw" size={22} /></span>
+          <span class="tile-body"><strong>{B.refi.t}</strong><span>{B.refi.d}</span></span>
+          <span class="tile-go" aria-hidden="true"><Icon name="arrow-up-right" size={20} /></span>
+        </a>
+        <a class="tile tile-soft reveal" href={ROUTES[B.biz.key][locale]}>
+          <span class="tile-ico"><Icon name="building-2" size={22} /></span>
+          <span class="tile-body"><strong>{B.biz.t}</strong><span>{B.biz.d}</span></span>
+          <span class="tile-go" aria-hidden="true"><Icon name="arrow-up-right" size={20} /></span>
+        </a>
+        <div class="tile tile-stat tile-stat-alt reveal"><strong>{B.stat2.n}</strong><span>{B.stat2.d}</span></div>
+        <div class="tile tile-dark reveal">
+          <span class="tile-ico"><Icon name="scale" size={22} /></span>
+          <span class="tile-body"><strong>{B.lenders.t}</strong><span>{B.lenders.d}</span></span>
         </div>
-        <ol class="learn-list">
+      </div>
+      <p class="v4-note">{B.note}</p>
+    </div>
+  </section>
+
+  <!-- Tres pasos -->
+  <section class="v4-section v4-tint" aria-labelledby="steps">
+    <div class="wrap">
+      <h2 id="steps" class="v4-h2 reveal">{C.steps.h}</h2>
+      <ol class="v4-steps">
+        {C.steps.items.map((s, i) => <li class="reveal"><span class="num">{i + 1}</span><h3>{s.t}</h3><p>{s.d}</p></li>)}
+      </ol>
+      <p class="v4-center reveal"><a class="btn" href={ROUTES.prequal[locale]}>{C.steps.cta}<Icon name="arrow-right" size={18} /></a></p>
+    </div>
+  </section>
+
+  <!-- Aprende -->
+  {paths.length > 0 && (
+    <section class="v4-section" aria-labelledby="learn">
+      <div class="wrap">
+        <div class="v4-row-head reveal">
+          <h2 id="learn" class="v4-h2">{C.learn.h}</h2>
+          <a class="link-arrow" href={ROUTES.blog[locale]}>{C.learn.all}<Icon name="arrow-right" size={18} /></a>
+        </div>
+        <div class="v4-cards">
           {paths.map((p, i) => (
-            <li>
-              <a href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
-                <span class="n"><Icon name={["house", "refresh-cw", "building-2"][i] ?? "book-open"} size={22} /></span>
-                <span class="txt">{p.data.series && <span class="tag">{SERIES[locale][p.data.series].name}</span>}<strong>{p.data.title}</strong></span>
-                <Icon name="arrow-right" size={20} />
-              </a>
-            </li>
+            <a class="v4-card reveal" href={`${ROUTES.blog[locale]}${p.data.slug}/`}>
+              <span class="tile-ico"><Icon name={pathIcons[i] ?? 'book-open'} size={22} /></span>
+              {p.data.series && <span class="tag">{SERIES[locale][p.data.series].name}</span>}
+              <strong>{p.data.title}</strong>
+              <span class="tile-go" aria-hidden="true"><Icon name="arrow-up-right" size={18} /></span>
+            </a>
           ))}
-        </ol>
+        </div>
       </div>
     </section>
   )}
 
-  <!-- 5. Preguntas frecuentes -->
-  <section class="band alt" aria-labelledby="faq">
-    <div class="wrap split-head">
-      <div class="head">
-        <h2 id="faq">{L.faqTitle}</h2>
-        <p>{es ? '¿No ves tu pregunta? Escríbenos y te respondemos en tu idioma.' : 'Don’t see your question? Message us and we’ll answer in your language.'}</p>
-        <a class="link-arrow" href={COMPANY.whatsappHref} rel="noopener">WhatsApp<Icon name="arrow-right" size={18} /></a>
-      </div>
+  <!-- Preguntas -->
+  <section class="v4-section v4-tint" aria-labelledby="faq">
+    <div class="wrap v4-faq">
+      <h2 id="faq" class="v4-h2 reveal">{C.faq}</h2>
       <div class="faq">
         {h.faq.items.map((f) => (
           <details>
@@ -151,14 +135,14 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
     </div>
   </section>
 
-  <!-- 6. Cierre -->
-  <section class="final" aria-labelledby="final">
+  <!-- Cierre -->
+  <section class="v4-final" aria-labelledby="final">
     <div class="wrap">
-      <h2 id="final">{L.final.h}</h2>
-      <p>{L.final.d}</p>
-      <div class="final-actions">
-        <a class="btn" href={ROUTES.prequal[locale]}>{L.final.cta}<Icon name="arrow-right" size={20} /></a>
-        <a class="btn ghost-light" href={COMPANY.whatsappHref} rel="noopener">{L.final.talk}</a>
+      <h2 id="final" class="reveal">{C.final.h}</h2>
+      <p class="reveal">{C.final.d}</p>
+      <div class="v4-final-actions reveal">
+        <a class="btn btn-light" href={ROUTES.prequal[locale]}>{C.final.cta}<Icon name="arrow-right" size={18} /></a>
+        <a class="btn ghost-light" href={COMPANY.whatsappHref} rel="noopener">{C.final.talk}</a>
       </div>
     </div>
   </section>
@@ -167,37 +151,40 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
 <script>
   import { affordability } from '@loanpro365/calculators';
 
+  // Aparición suave al hacer scroll (desactivada con «reducir movimiento»).
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const items = document.querySelectorAll<HTMLElement>('.reveal');
+  if (!reduce && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('js-reveal');
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    items.forEach((el) => io.observe(el));
+  }
+
   // Video de fondo: respeta «reducir movimiento» y el ahorro de datos, y se puede pausar.
   const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
   const toggle = document.querySelector<HTMLButtonElement>('[data-video-toggle]');
   if (video && toggle) {
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches || conn?.saveData) {
-      video.removeAttribute('autoplay');
-      video.pause();
-      toggle.setAttribute('aria-pressed', 'true');
-    }
+    if (reduce || conn?.saveData) { video.removeAttribute('autoplay'); video.pause(); toggle.setAttribute('aria-pressed', 'true'); }
     toggle.addEventListener('click', () => {
       if (video.paused) { video.play().catch(() => {}); toggle.setAttribute('aria-pressed', 'false'); }
       else { video.pause(); toggle.setAttribute('aria-pressed', 'true'); }
     });
   }
 
-  // Estimador del hero: «Calcular mi presupuesto» muestra el rango; después se actualiza en vivo.
+  // Barra de cálculo: «Calcular» muestra el rango; después se actualiza en vivo.
   const form = document.getElementById('estimator') as HTMLFormElement | null;
-  if (form) {
-    const outBox = form.querySelector<HTMLElement>('[data-out]')!;
-    const out = form.querySelector<HTMLElement>('[data-range]')!;
-    const empty = form.querySelector<HTMLElement>('[data-empty]')!;
-    const cta = form.querySelector<HTMLAnchorElement>('[data-est-cta]')!;
+  const outBox = document.querySelector<HTMLElement>('[data-out]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  if (form && outBox && empty) {
+    const out = outBox.querySelector<HTMLElement>('[data-range]')!;
+    const cta = outBox.querySelector<HTMLAnchorElement>('[data-est-cta]')!;
     const incomeEl = form.elements.namedItem('income') as HTMLInputElement;
     const downEl = form.elements.namedItem('down') as HTMLInputElement;
     const fmt = new Intl.NumberFormat(form.dataset.locale === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let shown = [0, 0];
     let raf = 0;
     let started = false;
-
     const compute = () => {
       const income = Number(incomeEl.value) || 0;
       const down = Number(downEl.value) || 0;
@@ -209,15 +196,13 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
       cancelAnimationFrame(raf);
       const from = [...shown];
       const start = performance.now();
-      const dur = reduce ? 0 : 450;
-      out.classList.add('tick');
+      const dur = reduce ? 0 : 500;
       const step = (now: number) => {
         const k = dur === 0 ? 1 : Math.min(1, (now - start) / dur);
         const e = 1 - Math.pow(1 - k, 4);
         shown = [from[0] + (target[0] - from[0]) * e, from[1] + (target[1] - from[1]) * e];
         out.textContent = `${fmt.format(shown[0])} – ${fmt.format(shown[1])}`;
         if (k < 1) raf = requestAnimationFrame(step);
-        else out.classList.remove('tick');
       };
       raf = requestAnimationFrame(step);
     };
@@ -232,7 +217,6 @@ const paths = SERIES_KEYS.map((key) => allPosts.filter((p) => p.data.series === 
     };
     form.addEventListener('submit', (e) => { e.preventDefault(); show(); });
     form.addEventListener('input', () => { if (started) show(); });
-    // Lleva los datos a la precalificación (solo en esta pestaña, nunca en la URL).
     cta.addEventListener('click', () => {
       const r = compute();
       try { sessionStorage.setItem('lp365-est', JSON.stringify({ income: r.income, down: r.down })); } catch {}

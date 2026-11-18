@@ -28,6 +28,12 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-17 — Sesión 18 (Claude Code)
+- **Contexto:** el dueño calificó 5/10: genérica, parece plantilla antigua, saturada. Referentes revisados: mercury.com y better.com (hero a pantalla completa, titular grande centrado, un solo campo como acción, pocas palabras, bloques de distinto tamaño).
+- **Hecho (portada v4):** hero cinematográfico a pantalla completa con video y velo radial; titular centrado de hasta 5.6 rem; calculadora como **una sola barra** tipo píldora (ingreso | ahorros | Calcular) que despliega una tarjeta con el rango y «Continuar con mi precalificación»; tres señales bajo la barra. Sección **bento** que une préstamos y cifras (foto grande «Compra tu casa», 98%*, refinancia, invierte, 15+*, «Comparamos varios prestamistas por ti»). «Tres pasos hasta tus llaves» en tarjetas. «Aprende antes de decidir» en tarjetas suaves. Preguntas. Cierre con titular grande. Aparición suave al hacer scroll (desactivada con «reducir movimiento»). Menú reducido a 5 entradas (Comprar casa, Refinanciar, Comerciales, Blog, Conócenos). Textos en `apps/web/src/i18n/v4.ts`; estilos `v4-*` y `.bento`/`.tile` en `global.css`. Imagen `public/img/tile-homes.jpg` (cuadro del video de Pexels).
+- **Auditoría:** sin contraste bajo (texto fuera del hero ≥4.5:1), sin saltos de títulos, sin scroll horizontal a 375 px, detector de diseño sin hallazgos; se ampliaron a 44 px los campos de la barra y el enlace «Todas las guías». En móvil el botón «Calcular» queda dentro de la primera pantalla.
+- **Pendiente:** limpiar estilos de portadas anteriores que ya no se usan en `global.css` (hero-a, hero-c, goal-rows, stats-band…).
+
 ### 2026-11-17 — Sesión 17 (Claude Code)
 - **Contexto:** el dueño calificó la página con 5/10 y rechazó «Descubre hasta qué precio de casa puedes comprar» (suena mal).
 - **Diagnóstico:** titular traducido; hero oscuro y pesado; cuatro secciones iguales (título centrado + 3 tarjetas pequeñas); letra pequeña; sin imagen después del hero.
