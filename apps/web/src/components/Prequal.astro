@@ -20,7 +20,7 @@ const T = {
     s3: 'You', income: 'Gross monthly household income', debts: 'Monthly debt payments (cards, car, loans)',
     score: 'Estimated credit score', scores: { '760': '740 or more', '700': '680–739', '640': '620–679', '590': '580–619', '540': '500–579', '480': 'Below 500 / not sure' },
     veteran: 'Veteran or active military', first: 'First-time buyer',
-    s4: 'Your results and contact', estimate: 'Estimated price range you could afford', programs: 'Programs that may fit',
+    s4: 'Your results and contact', estimate: 'Estimated price range you could afford', short: 'Not enough yet with these numbers', shortHelp: 'Debts or income leave no room for a payment today. Send your details anyway: we can review options like paying down debt or adding a co-borrower.', programs: 'Programs that may fit',
     name: 'Full name', phone: 'Mobile phone', email: 'Email (optional)', prefer: 'Preferred language',
     consent: 'I agree that LoanPro365 Mortgages may contact me by phone, text or WhatsApp at the number provided, including by automated means, about my mortgage inquiry. Consent is not a condition of any purchase or loan. Message and data rates may apply. I can opt out at any time by replying STOP.',
     ok: 'Thank you! Our team will contact you soon.', fail: 'We could not send your information. Please send it on WhatsApp:', whatsapp: 'Send on WhatsApp',
@@ -36,7 +36,7 @@ const T = {
     s3: 'Tú', income: 'Ingreso mensual bruto del hogar', debts: 'Pagos mensuales de deudas (tarjetas, auto, préstamos)',
     score: 'Puntaje de crédito estimado', scores: { '760': '740 o más', '700': '680–739', '640': '620–679', '590': '580–619', '540': '500–579', '480': 'Menos de 500 / no sé' },
     veteran: 'Veterano o militar activo', first: 'Primer comprador',
-    s4: 'Tus resultados y contacto', estimate: 'Rango de precio estimado que podrías pagar', programs: 'Programas que podrían servirte',
+    s4: 'Tus resultados y contacto', estimate: 'Rango de precio estimado que podrías pagar', short: 'Con estos datos aún no alcanza', shortHelp: 'Las deudas o el ingreso no dejan margen para una cuota hoy. Envíanos tus datos igual: podemos revisar opciones como bajar deudas o sumar un codeudor.', programs: 'Programas que podrían servirte',
     name: 'Nombre completo', phone: 'Celular', email: 'Correo (opcional)', prefer: 'Idioma preferido',
     consent: 'Acepto que LoanPro365 Mortgages me contacte por teléfono, mensaje de texto o WhatsApp al número indicado, incluso por medios automatizados, sobre mi consulta hipotecaria. El consentimiento no es condición para ninguna compra ni préstamo. Pueden aplicar tarifas de mensajes y datos. Puedo darme de baja en cualquier momento respondiendo STOP.',
     ok: '¡Gracias! Nuestro equipo te contactará pronto.', fail: 'No pudimos enviar tu información. Envíala por WhatsApp:', whatsapp: 'Enviar por WhatsApp',
@@ -77,7 +77,7 @@ const counties = [['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-b
     <fieldset data-step="4" hidden>
       <legend>{T.s4}</legend>
       <div class="result" data-summary></div>
-      <label>{T.name}<input name="name" autocomplete="name" required /></label>
+      <label>{T.name}<input name="name" autocomplete="name" required pattern=".*\p{L}{2,}.*" /></label>
       <label>{T.phone}<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required /></label>
       <label>{T.email}<input type="email" name="email" autocomplete="email" /></label>
       <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
@@ -149,8 +149,11 @@ const counties = [['broward', 'Broward'], ['miami-dade', 'Miami-Dade'], ['palm-b
   function summarize() {
     const r = results();
     const low = Math.floor((r.maxPrice * 0.85) / 1000) * 1000;
+    const short = r.maxPrice < 50000;
     $<HTMLElement>('[data-summary]').innerHTML =
-      `<p>${esc(T.estimate)}</p><p class="big">${money(low)} – ${money(r.maxPrice)}</p>` +
+      (short
+        ? `<p class="big">${esc(T.short)}</p><p>${esc(T.shortHelp)}</p>`
+        : `<p>${esc(T.estimate)}</p><p class="big">${money(low)} – ${money(r.maxPrice)}</p>`) +
       (r.programs.length ? `<p>${esc(T.programs)}: <strong>${r.programs.map((p) => T.programNames[p]).join(', ')}</strong></p>` : '');
   }
 

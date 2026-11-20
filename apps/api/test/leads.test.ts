@@ -53,3 +53,35 @@ describe('protecciones y aviso', () => {
     expect(m.subject).toContain('broward');
   });
 });
+
+describe('admin API', () => {
+  const fakeDb = {
+    prepare: () => ({ bind() { return this; }, all: async () => ({ results: [] }), first: async () => ({ n: 0, stage: 'nuevo' }), run: async () => ({}) }),
+    batch: async () => [],
+  } as any;
+  const aenv = { ...env, ADMIN_TOKEN: 'clave-de-prueba-larga', DB: fakeDb };
+  const get = (path: string, token?: string, e: any = aenv) =>
+    app.request(path, { headers: token ? { authorization: `Bearer ${token}` } : {} }, e);
+
+  it('rejects names without letters', async () => {
+    expect((await post({ ...valid, name: '2000000' })).status).toBe(400);
+  });
+  it('returns 503 when no admin token is configured', async () => {
+    expect((await get('/v1/admin/leads', 'x', env)).status).toBe(503);
+  });
+  it('requires the right bearer token', async () => {
+    expect((await get('/v1/admin/leads')).status).toBe(401);
+    expect((await get('/v1/admin/leads', 'mala')).status).toBe(401);
+    expect((await get('/v1/admin/leads', 'clave-de-prueba-larga')).status).toBe(200);
+  });
+  it('returns metrics', async () => {
+    const r = await get('/v1/admin/metrics', 'clave-de-prueba-larga');
+    expect(r.status).toBe(200);
+    expect((await r.json()).total).toBe(0);
+  });
+  it('validates stage on PATCH', async () => {
+    const patch = (stage: string) => app.request('/v1/admin/leads/abc', { method: 'PATCH', headers: { authorization: 'Bearer clave-de-prueba-larga', 'content-type': 'application/json' }, body: JSON.stringify({ stage }) }, aenv);
+    expect((await patch('inventado')).status).toBe(400);
+    expect((await patch('contactado')).status).toBe(200);
+  });
+});

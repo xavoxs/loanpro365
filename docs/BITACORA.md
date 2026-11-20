@@ -188,3 +188,12 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 - **Notas / riesgos:**
 Y actualizar "Estado actual" y "Siguiente posta".
 -->
+
+## 2026-11-20 · Panel conectado a leads reales
+
+- Migración `0002_pipeline.sql` aplicada en D1 remoto: columnas `stage`/`updated_at` y tabla `lead_events`.
+- API: `/v1/admin/*` protegido con `Authorization: Bearer <ADMIN_TOKEN>` (secreto del Worker, comparación en tiempo constante; 503 si no hay clave). Endpoints: `GET /v1/admin/leads?q=&stage=`, `PATCH /v1/admin/leads/:id` (etapa + evento en batch), `GET /v1/admin/metrics`. CORS admite PATCH y Authorization.
+- Validación: el nombre exige letras (API y formulario). Estimador del hero y precalificación muestran «aún no alcanza» si el tope < $50,000.
+- Panel: /admin/login/ tiene «Clave del panel (datos reales)»; la clave vive solo en sessionStorage. /admin/leads/ muestra leads reales con cambio de etapa. Métricas, CRM y WhatsApp siguen en demo.
+- Pendiente del usuario: `cd apps/api && npx wrangler secret put ADMIN_TOKEN` (la IA nunca ve la clave). Pendiente técnico: conectar métricas y CRM a la API; Cloudflare Access como segunda capa.
+- Tests: 13 en la API.

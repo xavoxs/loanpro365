@@ -3,6 +3,7 @@
 import '../../styles/global.css';
 import '../../styles/admin.css';
 import Logo from '../../components/Logo.astro';
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://loanpro365-api.francisco-buenano.workers.dev';
 ---
 <!doctype html>
 <html lang="es">
@@ -28,7 +29,12 @@ import Logo from '../../components/Logo.astro';
           <label>Correo (demo)<input type="email" name="email" autocomplete="off" placeholder="demo@loanpro365.com" /></label>
           <button class="btn block" type="submit" data-submit>Entrar a la demo</button>
         </form>
-        <p class="small">Al lanzar la versión real, el acceso usará un proveedor de identidad seguro con verificación en dos pasos.</p>
+        <form class="auth-form" data-real data-api={apiUrl}>
+          <label>Clave del panel (datos reales)<input type="password" name="key" autocomplete="current-password" required /></label>
+          <button class="btn block ghost" type="submit">Ver leads reales</button>
+          <p class="small" data-err hidden role="alert"></p>
+        </form>
+        <p class="small">La clave se guarda solo en esta pestaña y se borra al cerrarla.</p>
       </div>
     </main>
     <script>
@@ -45,6 +51,19 @@ import Logo from '../../components/Logo.astro';
       }));
       // No enviar datos: solo navegar al panel.
       document.querySelector('form')!.addEventListener('submit', (e) => { e.preventDefault(); location.href = '/admin/'; });
+      const real = document.querySelector<HTMLFormElement>('[data-real]')!;
+      const err = real.querySelector<HTMLElement>('[data-err]')!;
+      real.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const key = (new FormData(real).get('key') as string).trim();
+        err.hidden = true;
+        try {
+          const r = await fetch(`${real.dataset.api}/v1/admin/metrics`, { headers: { authorization: `Bearer ${key}` } });
+          if (r.ok) { sessionStorage.setItem('lp365-admin', key); location.href = '/admin/leads/'; return; }
+          err.textContent = r.status === 401 ? 'Clave incorrecta.' : r.status === 503 ? 'El panel real aún no tiene clave configurada.' : 'No se pudo conectar.';
+        } catch { err.textContent = 'No se pudo conectar.'; }
+        err.hidden = false;
+      });
     </script>
   </body>
 </html>

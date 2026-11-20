@@ -236,6 +236,13 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
       incomeEl.removeAttribute('aria-invalid');
       outBox.hidden = false;
       started = true;
+      // Con estos datos no alcanza para una vivienda: lo decimos claro en vez de mostrar un rango absurdo.
+      if (r.max < 50000) {
+        cancelAnimationFrame(raf); shown = [0, 0];
+        out.textContent = form.dataset.locale === 'es' ? 'Con estos datos aún no alcanza' : 'Not enough yet with these numbers';
+        ['[data-pay-total]', '[data-pay-pi]', '[data-pay-ti]'].forEach((sel) => (outBox.querySelector<HTMLElement>(sel)!.textContent = '—'));
+        return;
+      }
       animateTo([r.low, r.max]);
       // Desglose del pago en el tope del rango: capital e interés vs. impuestos y seguro (3% del precio al año).
       const p = monthlyPayment({ price: r.max, downPayment: Math.min(r.down, r.max), annualRatePct: 6.5, years: 30, propertyTaxYearly: r.max * 0.03, insuranceYearly: 0 });
