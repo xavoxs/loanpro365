@@ -28,6 +28,13 @@ La entrada más reciente va arriba. No se borran entradas anteriores; si algo ca
 
 ## Entradas
 
+### 2026-11-20 — Sesión 24 (Claude Code, rendimiento)
+- **Medición inicial (sitio en vivo):** LCP 3.7 s (el titular del hero esperaba la animación de aparición); fotos JPG de 71–182 KB sin versiones por tamaño; póster 45 KB; video de 387 KB descargado al inicio; Bricolage con eje óptico 77 KB; CSS 68 KB con reglas de portadas viejas.
+- **Hecho:** (1) **AVIF** en dos tamaños (640 y 1200 px) con JPG de respaldo mediante `components/Pic.astro` (`<picture>` + `srcset`/`sizes`): buy-family 12–25 KB, refi-house 20–41 KB, biz-miami 28–51 KB, pablo 18–27 KB; respaldos JPG reducidos. (2) **Póster AVIF** del hero (16 KB) como imagen principal; el **video se carga después del evento `load`** (720 px en móvil, 1280 en escritorio) y aparece con fundido; no se descarga con «reducir movimiento» o ahorro de datos. (3) **LCP:** el titular, el subtítulo, la barra y las señales del hero ya no usan la animación de aparición. (4) **Bricolage** pasa a la variante de solo grosor (`wght.css`, 41 KB). (5) **CSS** depurado con un script que elimina reglas cuyas clases no existen en el código: 273 reglas, 68 KB → 43 KB (12 KB con Brotli); `admin.css` intacto.
+- **Medición final (en vivo):** LCP 0.2 s (póster), CLS 0.014, DOMContentLoaded 0.33 s, `load` 0.4 s; AVIF servidos con `image/avif`.
+- **Verificado:** 17 + 8 pruebas, `astro check` 0 errores, build 80 páginas; revisión visual de portada, calculadora, precalificación, blog, Conócenos y panel a 1440 y 375 px.
+- **Regla:** toda imagen nueva va por `Pic.astro` con sus versiones `-640.avif`, `-1200.avif` y `.jpg`.
+
 ### 2026-11-17 — Sesión 23 (Claude Code)
 - **Panel de demostración (no funcional):** botón «Acceder» en la cabecera (y en el menú móvil) → `/admin/login/` con pestañas Iniciar sesión / Crear cuenta (no pide contraseña ni guarda nada; solo abre el panel). Panel `/admin/` con barra lateral: **Métricas** (KPI, barras semanales, origen de leads, idioma, leads recientes, embudo), **Leads** (tabla con búsqueda y filtros por etapa y objetivo, «Exportar» simulado), **CRM** (kanban de 6 etapas, arrastrar o mover con ← →), **WhatsApp** (bandeja con conversaciones, respuestas rápidas y envío local). Todo con datos ficticios (`src/data/demo.ts`, nombres con «(demo)») y aviso permanente «Modo demo · datos ficticios». Excluido de buscadores: `noindex`, `Disallow: /admin/` y fuera del sitemap.
 - **Video del hero:** Pexels 39105099 (casa moderna al atardecer, luces cálidas) con loop natural: el último segundo se funde con el primero; 387 KB (1280) y 133 KB (720).

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Callback from './Callback.astro';
+import Pic from './Pic.astro';
 import { COMPANY, ROUTES, t, toolPath, type Locale } from '../i18n';
 import { PAGES, type ContentKey } from '../i18n/pages';
 interface Props { locale: Locale; page: ContentKey }
@@ -31,7 +32,7 @@ const c = PAGES[locale][page];
 
   {page === 'about' && (
     <section class="leader-card" aria-label={locale === 'es' ? 'Nuestro equipo' : 'Our team'}>
-      <img src="/img/pablo.jpg" alt={COMPANY.broker} width="735" height="814" loading="lazy" decoding="async" />
+      <Pic name="pablo" alt={COMPANY.broker} width={735} height={814} sizes="112px" />
       <div>
         <h2 class="h3">{COMPANY.broker}</h2>
         <p>{locale === 'es' ? 'Corredor y propietario · NMLS #' : 'Broker/Owner · NMLS #'}{COMPANY.nmlsBroker}</p>

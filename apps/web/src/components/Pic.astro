@@ -1,0 +1,21 @@
+---
+/**
+ * Imagen optimizada: AVIF en dos tamaños (640 y 1200 px) con JPG de respaldo para navegadores antiguos.
+ * Los archivos viven en public/img como <name>-640.avif, <name>-1200.avif y <name>.jpg.
+ */
+interface Props {
+  name: string;
+  alt: string;
+  width: number;
+  height: number;
+  sizes?: string;
+  class?: string;
+  eager?: boolean;
+}
+const { name, alt, width, height, sizes = '(min-width: 1040px) 50vw, 100vw', class: cls, eager = false } = Astro.props;
+---
+<picture>
+  <source type="image/avif" srcset={`/img/${name}-640.avif 640w, /img/${name}-1200.avif 1200w`} sizes={sizes} />
+  <img src={`/img/${name}.jpg`} alt={alt} width={width} height={height} class={cls}
+    loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
+</picture>

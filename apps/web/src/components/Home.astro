@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
 import Reviews from './Reviews.astro';
+import Pic from './Pic.astro';
 import { COMPANY, ROUTES, type Locale } from '../i18n';
 import { HOME } from '../i18n/home';
 import { V4COPY } from '../i18n/v4';
@@ -23,10 +24,11 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
 <Base locale={locale} title={es ? 'LoanPro365 Mortgages · Calcula cuánto puedes pagar por tu casa en Florida' : 'LoanPro365 Mortgages · Know what you can pay for your home in Florida'} description={C.sub} alternates={ROUTES.home} full>
   <!-- Hero cinematográfico: titular centrado y un solo campo -->
   <section class="v4-hero" aria-labelledby="hero-title">
-    <video class="v4-hero-bg" autoplay muted loop playsinline preload="metadata" poster="/video/hero-poster.jpg" aria-hidden="true" data-hero-video>
-      <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
-      <source src="/video/hero-1280.mp4" type="video/mp4" />
-    </video>
+    <picture class="v4-hero-poster" aria-hidden="true">
+      <source type="image/avif" srcset="/video/hero-poster.avif" />
+      <img src="/video/hero-poster.jpg" alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
+    </picture>
+    <video class="v4-hero-bg" muted loop playsinline preload="none" aria-hidden="true" data-hero-video data-src-sm="/video/hero-720.mp4" data-src-lg="/video/hero-1280.mp4"></video>
     <div class="v4-hero-shade" aria-hidden="true"></div>
     <button class="video-toggle" type="button" data-video-toggle aria-pressed="false">
       <span class="visually-hidden">{es ? 'Pausar o reproducir el video de fondo' : 'Pause or play the background video'}</span>
@@ -34,10 +36,10 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
     </button>
 
     <div class="wrap v4-hero-inner">
-      <h1 id="hero-title" class="reveal">{C.h1}</h1>
-      <p class="v4-sub reveal">{C.sub}</p>
+      <h1 id="hero-title">{C.h1}</h1>
+      <p class="v4-sub">{C.sub}</p>
 
-      <form class="v4-bar reveal" id="estimator" data-locale={locale} data-prequal novalidate>
+      <form class="v4-bar" id="estimator" data-locale={locale} data-prequal novalidate>
         <label class="field"><span>{C.bar.income}</span><span class="money"><input name="income" type="number" inputmode="numeric" min="0" step="100" placeholder="7,000" required /></span></label>
         <label class="field"><span>{C.bar.down}</span><span class="money"><input name="down" type="number" inputmode="numeric" min="0" step="1000" placeholder="25,000" /></span></label>
         <button class="btn" type="submit" data-calc>{C.bar.calc}<Icon name="arrow-right" size={18} /></button>
@@ -59,7 +61,7 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
         <p class="note">{C.note}</p>
       </div>
 
-      <ul class="v4-trust reveal">
+      <ul class="v4-trust">
         {C.trust.map((t) => <li><Icon name="check" size={16} />{t}</li>)}
       </ul>
     </div>
@@ -71,19 +73,19 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
       <h2 id="bento" class="v4-h2 reveal">{B.h}</h2>
       <div class="bento">
         <a class="pcard pcard-buy reveal" href={ROUTES[B.buy.key][locale]}>
-          <img src="/img/buy-family.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async" />
+          <Pic name="buy-family" alt="" width={1200} height={800} sizes="(min-width: 1040px) 50vw, 100vw" />
           <span class="pbody"><strong>{B.buy.t}</strong><span>{B.buy.d}</span></span>
           <span class="tile-go" aria-hidden="true"><Icon name="arrow-up-right" size={20} /></span>
         </a>
         <a class="pcard pcard-refi reveal" href={ROUTES[B.refi.key][locale]}>
-          <img src="/img/refi-house.jpg" alt="" width="1000" height="667" loading="lazy" decoding="async" />
+          <Pic name="refi-house" alt="" width={1000} height={667} sizes="(min-width: 1040px) 25vw, 100vw" />
           <span class="pbody"><strong>{B.refi.t}</strong><span>{B.refi.d}</span></span>
           <span class="tile-go" aria-hidden="true"><Icon name="arrow-up-right" size={20} /></span>
         </a>
         <div class="tile tile-stat reveal"><strong>{B.stat1.n}</strong><span>{B.stat1.d}</span></div>
         <div class="tile tile-stat tile-stat-alt reveal"><strong>{B.stat2.n}</strong><span>{B.stat2.d}</span></div>
         <a class="pcard pcard-biz reveal" href={ROUTES[B.biz.key][locale]}>
-          <img src="/img/biz-miami.jpg" alt="" width="900" height="1350" loading="lazy" decoding="async" />
+          <Pic name="biz-miami" alt="" width={900} height={1350} sizes="(min-width: 1040px) 25vw, 100vw" />
           <span class="pbody"><strong>{B.biz.t}</strong><span>{B.biz.d}</span></span>
           <span class="tile-go" aria-hidden="true"><Icon name="arrow-up-right" size={20} /></span>
         </a>
@@ -177,7 +179,16 @@ const pathIcons = ['house', 'refresh-cw', 'building-2'];
   const toggle = document.querySelector<HTMLButtonElement>('[data-video-toggle]');
   if (video && toggle) {
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-    if (reduce || conn?.saveData) { video.removeAttribute('autoplay'); video.pause(); toggle.setAttribute('aria-pressed', 'true'); }
+    if (reduce || conn?.saveData) { toggle.setAttribute('aria-pressed', 'true'); }
+    else {
+      // El video llega después del contenido: no compite con el titular ni con la calculadora.
+      const start = () => {
+        video.src = matchMedia('(max-width: 767px)').matches ? video.dataset.srcSm! : video.dataset.srcLg!;
+        video.addEventListener('playing', () => video.classList.add('is-playing'), { once: true });
+        video.play().catch(() => {});
+      };
+      if (document.readyState === 'complete') setTimeout(start, 300); else addEventListener('load', () => setTimeout(start, 300), { once: true });
+    }
     toggle.addEventListener('click', () => {
       if (video.paused) { video.play().catch(() => {}); toggle.setAttribute('aria-pressed', 'false'); }
       else { video.pause(); toggle.setAttribute('aria-pressed', 'true'); }
